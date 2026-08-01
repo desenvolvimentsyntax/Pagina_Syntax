@@ -3,16 +3,18 @@ import { notFound } from "next/navigation";
 
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
+import { PageShell } from "@/components/layout/PageShell";
 import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 import { ContatoSection } from "@/components/sections/ContatoSection";
 import { DiferenciaisSection } from "@/components/sections/DiferenciaisSection";
+import { EcossistemaSection } from "@/components/sections/EcossistemaSection";
 import { HeroSection } from "@/components/sections/HeroSection";
+import { MetodoSection } from "@/components/sections/MetodoSection";
 import { ProdutosSection } from "@/components/sections/ProdutosSection";
 import { ProjetosSection } from "@/components/sections/ProjetosSection";
 import { QuemSomosSection } from "@/components/sections/QuemSomosSection";
 import { SegmentosSection } from "@/components/sections/SegmentosSection";
 import { SolucoesSection } from "@/components/sections/SolucoesSection";
-import { TecnologiasSection } from "@/components/sections/TecnologiasSection";
 import {
   OG_LOCALE,
   alternatesDe,
@@ -67,17 +69,20 @@ export default async function HomePage({
     <>
       <Header />
 
-      <main>
-        <HeroSection />
-        <SegmentosSection />
-        <QuemSomosSection />
-        <SolucoesSection />
-        <ProdutosSection />
-        <TecnologiasSection />
-        <DiferenciaisSection />
-        <ProjetosSection />
-        <ContatoSection />
-      </main>
+      <PageShell>
+        <main>
+          <HeroSection />
+          <SegmentosSection />
+          <QuemSomosSection />
+          <SolucoesSection />
+          <MetodoSection />
+          <ProdutosSection />
+          <EcossistemaSection />
+          <DiferenciaisSection />
+          <ProjetosSection />
+          <ContatoSection />
+        </main>
+      </PageShell>
 
       <Footer />
       <WhatsAppButton />

@@ -140,49 +140,76 @@ Antes de assumir que um componente não existe, confira:
 
 ## §4 — Design tokens
 
+**O site é escuro.** Não existe versão clara — o `<html>` carrega
+`data-theme="dark"` fixo e não há alternância de tema.
+
 A v3 tematiza por **variáveis CSS semânticas em `oklch`** — não por objeto de
-tema JS e não por hex. Os tokens abaixo são a paleta original já convertida,
-sobrescrevendo as variáveis do HeroUI em `app/globals.css`, **depois** dos dois
-`@import` do §2:
+tema JS e não por hex. Os tokens abaixo sobrescrevem os do HeroUI em
+`app/globals.css`, **depois** dos dois `@import` do §2:
 
 ```css
 :root,
-[data-theme="light"] {
-  --background: oklch(1 0 0);                 /* #FFFFFF — base da página   */
-  --foreground: oklch(0.2077 0.0398 265.75);  /* #0F172A — texto forte      */
-  --surface: oklch(0.9842 0.0034 247.86);     /* #F8FAFC — seção alternada
-                                                 e fundo padrão de Card     */
-  --surface-foreground: var(--foreground);
-  --accent: oklch(0.5461 0.2152 262.88);      /* #2563EB — ação primária    */
-  --accent-foreground: oklch(1 0 0);
-  --border: oklch(0.9288 0.0126 255.51);      /* #E2E8F0 — divisórias       */
-  --radius: 0.5rem;                           /* base dos raios, ver §3.7   */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --background: oklch(0.1947 0.0225 276.15); /* #12141F — topo do gradiente */
+  --foreground: oklch(1 0 0);                /* branco — só títulos         */
+  --foreground-base: oklch(0.9449 0.0133 262.38); /* #E8EDF6 — corpo        */
+  --muted: oklch(0.7025 0.0342 260.01);      /* #93A0B5 — texto de apoio    */
+
+  --sheet: oklch(0.1719 0.0186 259.66);      /* #0B1018 — a folha central   */
+  --slate: oklch(0.7107 0.0351 256.79);      /* base das translucidezes     */
+
+  --surface: color-mix(in oklab, var(--slate) 5%, transparent);
+  --surface-secondary: color-mix(in oklab, var(--slate) 9%, transparent);
+  --overlay: oklch(0.2153 0.0311 267.09);    /* OPACO — ver abaixo          */
+
+  --accent: oklch(0.5461 0.2152 262.88);     /* #2563EB — só preenchimento  */
+  --accent-soft-foreground: oklch(0.7137 0.1434 254.62); /* #60A5FA — texto */
+  --focus: var(--accent-soft-foreground);
+  --link: var(--accent-soft-foreground);
+
+  --border: color-mix(in oklab, var(--slate) 14%, transparent);
+  --radius: 0.75rem;                         /* base dos raios, ver §3.7    */
 }
 ```
 
-Notas de tradução da paleta antiga:
+Regras que caem desse bloco — quebrar qualquer uma delas quebra o tema:
 
-- **`primary` virou `accent`.** Na v3 a classe é `bg-accent` / `text-accent`.
-  `bg-primary` não existe — `primary` lá é *variante de Button*, não cor.
-- **`--color-primary-500` (#3B82F6) sai da lista.** A v3 calcula
-  `--accent-hover` sozinha via `color-mix`. Não defina hover à mão. (Curiosidade
-  útil: #3B82F6 é `oklch(0.6231 0.188 259.81)`, praticamente o `--accent` padrão
-  da v3 — a paleta já estava alinhada.)
-- **`ink` virou `foreground`**; `text-ink/70` vira `text-foreground/70`.
-- Um `Card` herda `--surface`. Numa seção que já é `bg-surface`, o card some —
-  nesse caso use `variant="secondary"` ou apoie na `--border`.
-- Dark mode: a v3 traz `[data-theme="dark"]` pronto. **Não** defina esse bloco
-  enquanto não decidirmos suportar os dois temas (§16).
+- **O bloco entra SEM `@layer`.** O HeroUI importa suas variáveis em
+  `@layer theme`, a camada de menor precedência; CSS sem camada vence qualquer
+  camada. Não use `!important` nem infle especificidade para "ganhar" dele.
+- **`data-theme="dark"` no `<html>` é obrigatório**, e não é decoração: é o que
+  traz do HeroUI o `color-scheme`, o `--surface-shadow` zerado (sem ele todo
+  `Card` ganha um halo preto) e os status clareados. Redefinir só o `:root` com
+  valores escuros herdaria tudo isso errado.
+- **As superfícies são translúcidas.** É o que mantém `Card` visível sobre a
+  folha; opacas na cor dela, os cards sumiriam.
+- **`--overlay` é OPACO.** `Modal`, `Drawer`, `Tooltip` e `Popover` flutuam
+  sobre conteúdo arbitrário — translúcido ali deixa o texto ilegível.
+- **`text-accent` não existe na prática.** `#2563EB` sobre a folha dá 3,69:1 e
+  reprova. Todo accent em TEXTO é `text-accent-soft-foreground` (7,50:1).
+  `bg-accent` continua valendo para preenchimento.
+- **`primary` é variante de Button, não cor.** `bg-primary` não existe.
 
-**Tipografia:** Inter.
-- Display / H1: 600–700, `tracking-tight`
-- H2 de seção: 600, `tracking-tight`
-- Corpo: 400, `leading-relaxed`
-- Label / overline: 500, `uppercase`, `tracking-wide`, `text-sm`
+Tokens de marca fora da escala semântica ficam no `@theme` do `globals.css`:
+`--color-accent-2`, `--color-accent-strong`, `--color-accent-violet`,
+`--color-sheet`, `--color-micro`, `--color-panel*` (mockups), `--color-footer*`,
+`--color-whatsapp`, `--color-ondark*`, `--color-hairline*`.
 
-**Ritmo de seção:** `py-24` no desktop, `py-16` no mobile. Alterne fundo
-`bg-background` (branco) / `bg-surface` (#F8FAFC) entre seções consecutivas
-para criar separação sem precisar de bordas.
+**Tipografia:**
+- Display / H1 / H2 de seção: **Sora** (`font-display`), 600, `tracking-[-0.03em]`
+- Corpo: **Instrument Sans** (`font-sans`), 400, `leading-relaxed`
+- Label / overline / números: **IBM Plex Mono** (`font-mono`), 500, `uppercase`,
+  `tracking-[0.1em]`, `text-xs`
+
+Sora e Instrument Sans são variáveis: **não passe `weight`** no `next/font`, ou
+os pesos 600/800 somem. IBM Plex Mono não é variável — ali `weight` é obrigatório.
+
+**Ritmo de seção:** `py-24` no desktop, `py-16` no mobile. **Não alterne fundo
+entre seções** — todas flutuam sobre a folha do `PageShell` e a separação vem de
+hairline (`border-border`) e translucidez. Seção com `bg-background` ou
+`bg-surface` própria abre um retângulo visível na folha.
 
 ---
 
@@ -235,28 +262,23 @@ seções no mesmo componente.
 Toda seção da home segue esta estrutura. Não improvise variações.
 
 ```tsx
-<section id="produtos" className="py-16 md:py-24 bg-surface">
+<section id="produtos" className="py-16 md:py-24">
   <div className="mx-auto max-w-7xl px-6">
-    {/* Overline — opcional */}
-    <p className="text-sm font-medium uppercase tracking-wide text-accent">
-      Nossos produtos
-    </p>
-
-    {/* Título */}
-    <h2 className="mt-3 text-4xl font-semibold tracking-tight text-foreground">
-      ...
-    </h2>
-
-    {/* Subtítulo — máximo 2 linhas */}
-    <p className="mt-4 max-w-2xl text-lg leading-relaxed text-foreground/70">
-      ...
-    </p>
+    {/* Cabeçalho: use o SectionHeading, não recrie a hierarquia */}
+    <SectionHeading overline="Produtos" titulo="..." subtitulo="..." />
 
     {/* Conteúdo */}
     <div className="mt-16">...</div>
   </div>
 </section>
 ```
+
+`SectionHeading` (`components/ui/`) já monta overline em `font-mono`
+`text-accent-soft-foreground`, H2 em `font-display` e subtítulo em
+`text-foreground-base/70`. Não duplique isso à mão.
+
+**A seção não tem fundo próprio** (§4): quem dá o fundo é o `PageShell`, que
+envolve o `<main>` em `app/[locale]/page.tsx`.
 
 Container: `max-w-7xl` sempre. Padding lateral: `px-6`.
 
@@ -319,6 +341,19 @@ Meta: Lighthouse Performance > 95.
   para scroll reveal). A v3 não usa `framer-motion` e o projeto também não —
   ver §2. Se uma animação específica não sair em CSS, justifique antes de
   instalar; e então só em componente client, só na seção que precisa.
+
+**Desvio autorizado — `ParticleCanvas`.** A rede de partículas atrás do hero é
+a única animação do site em `<canvas>`: nós com posição própria e linhas entre
+vizinhos não saem em CSS. Foi aprovada no redesign do tema escuro, com estas
+travas — mexer nelas exige nova decisão:
+
+- não monta sob `prefers-reduced-motion: reduce`;
+- não monta abaixo de 768px;
+- só monta depois da hidratação, então fica fora do caminho do LCP;
+- `cancelAnimationFrame` no cleanup e em `visibilitychange: hidden`;
+- `aria-hidden`, fora da ordem de leitura.
+
+Não use esse desvio como precedente para outras animações.
 - Nada de biblioteca de parallax pesada.
 - Sem layout shift: toda imagem com `width`/`height` ou `fill` + container
   com aspecto definido.
@@ -331,8 +366,16 @@ Meta: Lighthouse Performance > 95.
 - Formato: `.webp` (fallback automático do Next).
 - Screenshots dos sistemas: usar prints reais, nunca mockup genérico
   inventado. Se não houver print, avise — não invente interface.
-- Logo da Syntax: **não alterar**. Manter a atual.
+- **Logo:** use `components/ui/MarcaSyntax.tsx` — mosaico de quadrados em SVG
+  inline + lettering em tipografia do site. É desvio consciente do "não alterar
+  o logo": o PNG oficial
+  (`syntaxsistemas.com.br/template/pw-images/syntax-sistemas.png`) tem o
+  lettering em cinza-escuro sobre fundo claro e fica ilegível sobre a folha
+  `#0B1018`. O mosaico azul, que é a parte reconhecível da marca, foi
+  preservado. Quando existir a versão clara oficial, a troca é local a esse
+  arquivo — não espalhe `<img>` de logo pelo código.
 - Fontes via `next/font/google`, com `display: "swap"` e `subsets: ["latin"]`.
+  Ver §4 para quais aceitam `weight` e quais não.
 
 ---
 
@@ -388,15 +431,13 @@ codar nada.**
 
 | Fatia | Escopo | Status |
 |---|---|---|
-| 0 | Scaffold (Next + Tailwind v4 + HeroUI v3) + tokens + Header + Footer | ⬜ |
-| 1 | Hero | ⬜ |
-| 2 | Segmentos atendidos | ⬜ |
-| 3 | Produtos | ⬜ |
-| 4 | Como funciona + Recursos | ⬜ |
-| 5 | Portfólio + Depoimentos | ⬜ |
-| 6 | CTA + Formulário + Footer completo | ⬜ |
-| 7 | Páginas de solução (SEO) | ⬜ |
-| 8 | Responsivo mobile + Lighthouse | ⬜ |
+| 0 | Scaffold (Next + Tailwind v4 + HeroUI v3) + tokens + Header + Footer | ✅ |
+| 1 | Home completa em tema claro (9 seções) | ✅ |
+| 2 | Redesign para o tema escuro: tokens, fontes, `PageShell`, marca | ✅ |
+| 3 | Redesign das 8 seções + Método + Ecossistema | ✅ |
+| 4 | Páginas de solução (SEO) | ⬜ |
+| 5 | Conteúdo `es-PY` (§18) — hoje `src/content/es-PY/` não existe | ⬜ |
+| 6 | Lighthouse: Performance > 95, Acessibilidade 100 | ⬜ |
 
 Uma fatia por branch: `feat/fatia-1-hero`.
 
@@ -429,10 +470,36 @@ Os casos já conhecidos estão no §3.1 (`Navbar`, `Divider`, `Textarea`).
 **Clique não dispara / não funciona pelo teclado**
 Você usou `onClick`. Na v3 é `onPress` (§3, regra 4).
 
-**Dark mode aplicando sem ser pedido**
-Na v3 o tema escuro entra por `class="dark"` / `data-theme="dark"` no `<html>`.
-Para fixar claro: não emita esses atributos e não defina o bloco
-`[data-theme="dark"]` no CSS (§4).
+**Tudo virou claro / os `Card` ganharam halo preto**
+Sumiu o `data-theme="dark"` do `<html>` (§4). Ele não é decoração: é o que traz
+do HeroUI o `color-scheme`, o `--surface-shadow` zerado e os status clareados.
+
+**Um `Card` (ou uma caixa) sumiu dentro da folha**
+Foi pintado com fundo opaco na cor da folha. As superfícies do tema são
+translúcidas de propósito (§4) — use `bg-surface` / `bg-surface-secondary` e
+deixe a folha aparecer por baixo, ou apoie na `--border`.
+
+**Uma seção abriu um retângulo visível na folha**
+Ela tem `bg-background` ou `bg-surface` própria. Seção não tem fundo (§7): quem
+dá o fundo é o `PageShell`.
+
+**O hover do `Button` primário não muda nada**
+`.button--primary` não declara `background-color` — declara `--button-bg` /
+`--button-bg-hover`, e é a `.button` base que aplica a cor. O gradiente do tema
+é `background-image`, então o hover precisa trocar a **imagem**, não a cor.
+
+**Texto azul ilegível sobre a folha**
+É `text-accent` (`#2563EB`, 3,69:1). Troque por `text-accent-soft-foreground`
+(`#60A5FA`, 7,50:1) — §4.
+
+**`Chip` saiu sem fundo, parecendo texto solto**
+É `variant="tertiary"` — ela define `--chip-bg: transparent` por design. Para
+pílula visível use `secondary` (o padrão) ou `soft` com `color`.
+
+**Uma classe de cor simplesmente não aplica**
+O token não existe mais. Os `--color-ink*` foram substituídos por
+`--color-panel*` quando o site virou escuro. O Tailwind v4 não acusa erro:
+a classe só não é gerada.
 
 **`next/image` com imagem externa quebrando**
 Domínio precisa estar em `images.remotePatterns` no `next.config`.

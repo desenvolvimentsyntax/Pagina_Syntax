@@ -1,9 +1,11 @@
 "use client";
 
-import { Button, Drawer, Separator } from "@heroui/react";
+import { Button, Drawer, Separator, buttonVariants } from "@heroui/react";
 import { Menu } from "lucide-react";
 import { useEffect, useState } from "react";
 
+import { CtaLink } from "@/components/ui/CtaLink";
+import { MarcaSyntax } from "@/components/ui/MarcaSyntax";
 import { navAcoes, navPrincipal, empresa, contato } from "@/content/pt-BR/site";
 
 /**
@@ -44,16 +46,20 @@ export function Header() {
   }, []);
 
   return (
-    <header
-      className={`sticky top-0 z-40 transition-[background-color,border-color,box-shadow] duration-300 ${
-        rolado
-          ? "border-b border-border bg-background/85 backdrop-blur-md"
-          : "border-b border-transparent bg-background"
-      }`}
-    >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
+    <header className="sticky top-0 z-40 px-3 pt-3 sm:px-5 sm:pt-4 lg:px-8">
+      {/* Pill de vidro flutuante: o fundo translúcido só ganha corpo ao rolar,
+          senão o blur come o glow do hero logo abaixo. */}
+      <div
+        className={`mx-auto flex h-[66px] max-w-[1360px] items-center justify-between rounded-full pr-3 pl-5 transition-[background-color,box-shadow] duration-300 sm:pr-4 sm:pl-6 ${
+          rolado
+            ? "bg-surface-secondary shadow-[inset_0_1px_0_rgb(255_255_255/0.08),0_18px_40px_-24px_rgb(0_0_0/0.85)] backdrop-blur-[14px]"
+            : "bg-surface shadow-[inset_0_1px_0_rgb(255_255_255/0.06)] backdrop-blur-[14px]"
+        }`}
+      >
         <div className="flex items-center gap-8 xl:gap-10">
-          <Marca />
+          <a href="#topo" aria-label="Página inicial">
+            <MarcaSyntax />
+          </a>
 
           <nav
             aria-label="Navegação principal"
@@ -66,8 +72,8 @@ export function Header() {
                 aria-current={secaoAtiva === item.secao ? "true" : undefined}
                 className={`whitespace-nowrap transition-colors ${
                   secaoAtiva === item.secao
-                    ? "font-medium text-accent"
-                    : "text-foreground/65 hover:text-foreground"
+                    ? "text-accent-soft-foreground font-medium"
+                    : "text-foreground-base/70 hover:text-foreground"
                 }`}
               >
                 {item.rotulo}
@@ -77,12 +83,11 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-3">
-          <a
-            href={navAcoes.contato.href}
-            className="hidden h-10 items-center rounded-lg bg-accent px-4 text-sm font-medium whitespace-nowrap text-accent-foreground transition-colors hover:bg-accent/90 sm:inline-flex"
-          >
-            {navAcoes.contato.rotulo}
-          </a>
+          <span className="hidden sm:inline-flex">
+            <CtaLink href={navAcoes.contato.href} tamanho="md">
+              {navAcoes.contato.rotulo}
+            </CtaLink>
+          </span>
 
           <MenuMobile
             aberto={menuAberto}
@@ -92,23 +97,6 @@ export function Header() {
         </div>
       </div>
     </header>
-  );
-}
-
-function Marca() {
-  return (
-    <a href="#topo" className="flex items-center gap-2.5" aria-label="Página inicial">
-      <span
-        aria-hidden
-        className="flex size-[30px] items-center justify-center rounded-lg bg-accent font-mono text-[15px] font-medium text-accent-foreground"
-      >
-        &lt;/&gt;
-      </span>
-      <span className="text-[17px] font-semibold tracking-tight whitespace-nowrap text-foreground">
-        {empresa.nome}{" "}
-        <span className="font-normal text-foreground/60">{empresa.sobrenome}</span>
-      </span>
-    </a>
   );
 }
 
@@ -146,7 +134,7 @@ function MenuMobile({
                     key={item.rotulo}
                     href={item.href}
                     onClick={aoNavegar}
-                    className="rounded-lg px-3 py-3 text-base text-foreground transition-colors hover:bg-surface"
+                    className="text-foreground-base hover:bg-surface-secondary rounded-lg px-3 py-3 text-base transition-colors"
                   >
                     {item.rotulo}
                   </a>
@@ -155,7 +143,7 @@ function MenuMobile({
 
               <Separator className="my-3" />
 
-              <p className="px-3 text-sm text-foreground/60">
+              <p className="text-muted px-3 text-sm">
                 {contato.telefone} · {empresa.matriz}
               </p>
             </Drawer.Body>
@@ -165,11 +153,12 @@ function MenuMobile({
                 Fechar
               </Button>
               {/* Âncora, não Button: `render` tipa as props como <button> e o
-                  ref não é compatível com <a>. Mesmo motivo do CtaLink. */}
+                  ref não é compatível com <a>. Mesmas classes, via
+                  buttonVariants — e aqui ela precisa fechar o Drawer. */}
               <a
                 href={navAcoes.contato.href}
                 onClick={aoNavegar}
-                className="inline-flex h-10 items-center justify-center rounded-lg bg-accent px-4 text-sm font-medium text-accent-foreground transition-colors hover:bg-accent/90"
+                className={buttonVariants({ variant: "primary", size: "md" })}
               >
                 {navAcoes.contato.rotulo}
               </a>

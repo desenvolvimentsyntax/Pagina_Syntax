@@ -13,7 +13,7 @@ import { produtos } from "@/content/pt-BR/home";
  */
 export function ProdutosSection() {
   return (
-    <section id="produtos" className="bg-background py-16 md:py-24">
+    <section id="produtos" className="py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-6">
         <Reveal>
           <SectionHeading
@@ -59,7 +59,7 @@ function NovaGeracao() {
   return (
     <div className="flex flex-col gap-6">
       {/* Destaque: E-Syntax com painel ilustrativo escuro */}
-      <div className="grid items-center gap-8 rounded-2xl border border-border bg-surface/60 p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
+      <div className="grid items-center gap-8 rounded-2xl border-border bg-surface border p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
         <div>
           <Chip color="accent" variant="soft">
             {esyntax.selo}
@@ -68,14 +68,14 @@ function NovaGeracao() {
           <h3 className="mt-4 text-2xl font-semibold tracking-tight text-foreground">
             {esyntax.nome}
           </h3>
-          <p className="mt-3 max-w-md text-base leading-relaxed text-foreground/70">
+          <p className="mt-3 max-w-md text-base leading-relaxed text-foreground-base/70">
             {esyntax.descricao}
           </p>
 
           <ul className="mt-5 flex flex-col gap-2.5">
             {esyntax.pontos.map((ponto) => (
-              <li key={ponto} className="flex items-start gap-2.5 text-[15px] text-foreground/80">
-                <Check aria-hidden className="mt-0.5 size-4 shrink-0 text-accent" />
+              <li key={ponto} className="flex items-start gap-2.5 text-[15px] text-foreground-base/80">
+                <Check aria-hidden className="mt-0.5 size-4 shrink-0 text-accent-soft-foreground" />
                 {ponto}
               </li>
             ))}
@@ -83,7 +83,7 @@ function NovaGeracao() {
 
           <a
             href={esyntax.cta.href}
-            className="mt-6 inline-flex items-center gap-1.5 text-[15px] font-medium text-accent hover:underline"
+            className="mt-6 inline-flex items-center gap-1.5 text-[15px] font-medium text-accent-soft-foreground hover:underline"
           >
             {esyntax.cta.rotulo}
             <ArrowUpRight aria-hidden className="size-4" />
@@ -101,13 +101,13 @@ function NovaGeracao() {
               href={produto.href}
               target="_blank"
               rel="noreferrer noopener"
-              className="group flex h-full flex-col rounded-2xl border border-border bg-background p-6 transition-[border-color,box-shadow] hover:border-accent/35 hover:shadow-[0_16px_32px_-20px_rgb(15_23_42_/_0.25)]"
+              className="group flex h-full flex-col rounded-2xl border-border bg-surface border p-6 transition-[border-color,box-shadow] hover:border-accent-soft-foreground/40 hover:shadow-[0_20px_40px_-24px_rgb(0_0_0/0.75)]"
             >
               <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
                   <span
                     aria-hidden
-                    className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-accent/10 font-mono text-sm font-medium text-accent"
+                    className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-accent/15 font-mono text-sm font-medium text-accent-soft-foreground"
                   >
                     {produto.sigla}
                   </span>
@@ -115,7 +115,7 @@ function NovaGeracao() {
                     <h4 className="text-lg font-semibold tracking-tight whitespace-nowrap text-foreground">
                       {produto.nome}
                     </h4>
-                    <p className="mt-0.5 font-mono text-[10.5px] text-foreground/50">
+                    <p className="mt-0.5 font-mono text-[10.5px] text-muted">
                       {produto.dominio}
                     </p>
                   </div>
@@ -131,7 +131,7 @@ function NovaGeracao() {
                 </Chip>
               </div>
 
-              <p className="mt-4 text-[14.5px] leading-relaxed text-foreground/70">
+              <p className="mt-4 text-[14.5px] leading-relaxed text-foreground-base/70">
                 {produto.descricao}
               </p>
 
@@ -156,11 +156,11 @@ function LinhaConsolidada() {
       {produtos.consolidada.map((produto) => (
         <li
           key={produto.nome}
-          className="flex h-full flex-col rounded-2xl border border-border bg-background p-6"
+          className="flex h-full flex-col rounded-2xl border-border bg-surface border p-6"
         >
           <span
             aria-hidden
-            className="flex size-10 items-center justify-center rounded-lg bg-surface font-mono text-sm font-medium text-foreground/70"
+            className="flex size-10 items-center justify-center rounded-lg bg-surface font-mono text-sm font-medium text-foreground-base/70"
           >
             {produto.sigla}
           </span>
@@ -168,7 +168,7 @@ function LinhaConsolidada() {
           <h3 className="mt-4 text-lg font-semibold tracking-tight text-foreground">
             {produto.nome}
           </h3>
-          <p className="mt-2 flex-1 text-[14.5px] leading-relaxed text-foreground/70">
+          <p className="mt-2 flex-1 text-[14.5px] leading-relaxed text-foreground-base/70">
             {produto.descricao}
           </p>
 
