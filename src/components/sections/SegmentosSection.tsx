@@ -14,7 +14,7 @@ export function SegmentosSection() {
         <ul className="flex flex-wrap items-center gap-2.5">
           {segmentos.itens.map((item) => (
             <li key={item}>
-              <Chip variant="tertiary">{item}</Chip>
+              <Chip variant="secondary">{item}</Chip>
             </li>
           ))}
         </ul>

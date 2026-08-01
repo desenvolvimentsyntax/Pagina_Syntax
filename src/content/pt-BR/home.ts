@@ -8,8 +8,11 @@
  * de cliente foi inventado (§11/§13).
  *
  * ⚠️ PENDENTE DE CONFIRMAÇÃO COM A SYNTAX:
- * - `tecnologias.chips`: stack real dos produtos (a lista atual é a do site
- *   novo + web moderna; confirmar antes de publicar).
+ * - `ecossistema.abas[].chips`: stack real dos produtos (a lista atual é a do
+ *   site novo + web moderna; confirmar antes de publicar). Vale para as três
+ *   abas.
+ * - `metodo.etapas`: o processo descrito é o fluxo padrão de uma software
+ *   house; confirmar que corresponde ao da Syntax antes de publicar.
  * - Conteúdo dos painéis ilustrativos (`mockup`, `produtos.esyntax.painel`):
  *   são demonstração decorativa (role="img"), não afirmação comercial.
  */
@@ -221,19 +224,66 @@ export const produtos = {
   ],
 } as const;
 
-export const tecnologias = {
-  overline: "Tecnologia",
+export const metodo = {
+  overline: "O jeito Syntax",
+  titulo: "Como um sistema nosso sai do papel",
+  subtitulo:
+    "Quatro etapas, sem surpresa no meio do caminho. Você sabe o que vem a seguir desde a primeira conversa.",
+  etapas: [
+    {
+      icone: "diagnostico",
+      titulo: "Entendemos a operação",
+      texto:
+        "Sentamos com quem usa o sistema todo dia e mapeamos onde o processo trava hoje.",
+    },
+    {
+      icone: "proposta",
+      titulo: "Desenhamos a solução",
+      texto:
+        "Você recebe o escopo, o prazo e o valor por escrito antes de qualquer linha de código.",
+    },
+    {
+      icone: "desenvolvimento",
+      titulo: "Construímos e implantamos",
+      texto:
+        "Entregas em partes, com a sua equipe testando desde cedo e treinada na virada.",
+    },
+    {
+      icone: "suporte",
+      titulo: "Acompanhamos depois",
+      texto:
+        "Quem atende é quem desenvolveu. O sistema evolui junto com a sua operação.",
+    },
+  ],
+} as const;
+
+export const ecossistema = {
+  overline: "Ecossistema",
   titulo: "Base moderna, sem modismo",
-  texto:
+  subtitulo:
     "Construímos com ferramentas maduras e mantidas pelo mercado — o que garante segurança, velocidade e facilidade de evolução.",
-  chips: [
-    "React",
-    "Next.js",
-    "TypeScript",
-    "Node.js",
-    "PostgreSQL",
-    "APIs REST",
-    "Nuvem",
+  abas: [
+    {
+      id: "nuvem",
+      rotulo: "Nuvem",
+      texto:
+        "Seus sistemas rodam no navegador, sem instalação. Acesse da loja, do escritório ou do celular, com os dados sempre atualizados.",
+      chips: ["Nuvem", "React", "Next.js", "Acesso por navegador"],
+    },
+    {
+      id: "apis",
+      rotulo: "APIs e integrações",
+      texto:
+        "Seus sistemas conversam entre si. Nada de redigitar no financeiro o que já foi digitado no pedido.",
+      chips: ["APIs REST", "Node.js", "TypeScript", "Integrações"],
+    },
+    {
+      id: "erp",
+      rotulo: "Gestão e ERP",
+      texto:
+        "Pedido, estoque, faturamento e documento fiscal no mesmo lugar, com histórico de tudo que passou pela operação.",
+      chips: ["PostgreSQL", "Documentos fiscais", "Multi-loja", "Força de vendas"],
+    },
   ],
 } as const;
 

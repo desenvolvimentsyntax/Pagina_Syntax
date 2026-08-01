@@ -38,12 +38,17 @@ export interface ItemNav {
   secao: string;
 }
 
+/*
+ * Seis itens é o teto: com sete o menu estoura em 1024px. "Diferenciais" saiu
+ * daqui quando Método e Ecossistema entraram — a seção continua na página.
+ */
 export const navPrincipal: readonly ItemNav[] = [
   { rotulo: "Quem somos", href: "#quem-somos", secao: "quem-somos" },
   { rotulo: "Soluções", href: "#solucoes", secao: "solucoes" },
+  { rotulo: "Método", href: "#metodo", secao: "metodo" },
   { rotulo: "Produtos", href: "#produtos", secao: "produtos" },
+  { rotulo: "Ecossistema", href: "#ecossistema", secao: "ecossistema" },
   { rotulo: "Projetos", href: "#projetos", secao: "projetos" },
-  { rotulo: "Diferenciais", href: "#diferenciais", secao: "diferenciais" },
 ] as const;
 
 export const navAcoes = {
