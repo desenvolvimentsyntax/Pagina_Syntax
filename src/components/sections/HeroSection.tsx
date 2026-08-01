@@ -9,7 +9,7 @@ export function HeroSection() {
     <section id="topo" className="relative">
       <ParticleCanvas />
 
-      <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 pt-16 pb-16 md:pt-24 md:pb-24 lg:grid-cols-[minmax(0,540px)_1fr] lg:gap-14">
+      <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-5 md:px-6 pt-16 pb-16 md:pt-24 md:pb-24 lg:grid-cols-[minmax(0,540px)_1fr] lg:gap-14">
         <div className="animate-rise">
           <p className="border-accent-soft-foreground/25 bg-accent/10 text-accent-soft-foreground inline-flex items-center gap-2 rounded-full border py-1.5 pr-3.5 pl-2.5 text-[13px] font-medium">
             <span

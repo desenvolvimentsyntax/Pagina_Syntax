@@ -27,7 +27,7 @@ const ICONES: Record<string, LucideIcon> = {
 export function MetodoSection() {
   return (
     <section id="metodo" className="py-16 md:py-24">
-      <div className="mx-auto max-w-7xl px-6">
+      <div className="mx-auto max-w-7xl px-5 md:px-6">
         <Reveal>
           <SectionHeading
             overline={metodo.overline}

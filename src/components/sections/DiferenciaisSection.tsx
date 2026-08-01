@@ -15,7 +15,7 @@ const ICONES: Record<string, LucideIcon> = {
 export function DiferenciaisSection() {
   return (
     <section id="diferenciais" className="py-16 md:py-24">
-      <div className="mx-auto max-w-7xl px-6">
+      <div className="mx-auto max-w-7xl px-5 md:px-6">
         <Reveal>
           <SectionHeading
             overline={diferenciais.overline}

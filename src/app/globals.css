@@ -141,6 +141,17 @@
     background-image: linear-gradient(180deg, var(--accent), var(--color-accent-strong));
   }
 
+  /* Abas compactas no mobile: com px-4 e text-sm as listas de Produtos e
+     Ecossistema estouram a viewport em 320px e o HeroUI liga um botão de
+     scroll de 16px — pior que encolher o rótulo. min-w-20 idem. */
+  @media (max-width: 767px) {
+    .tabs__tab {
+      min-width: 0;
+      padding-inline: 0.625rem;
+      font-size: 13px;
+    }
+  }
+
   /* CTA sobre painel colorido (a faixa .cta-gradiente): ali as variantes do
      tema somem, porque foram calibradas contra a folha e não contra o azul. */
   .button--inverso {
@@ -266,9 +277,29 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Âncoras param abaixo do header flutuante. */
+/* Âncoras param abaixo do header — que muda de altura no mobile. */
 section[id] {
-  scroll-margin-top: 6.5rem;
+  scroll-margin-top: 4.5rem;
+}
+
+@media (min-width: 768px) {
+  section[id] {
+    scroll-margin-top: 6.5rem;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Faixa horizontal deslizante (Segmentos no mobile): uma linha com scroll
+   manual — sem animação (§10) — e fade nas bordas avisando que há mais.
+--------------------------------------------------------------------------- */
+.faixa-scroll {
+  overflow-x: auto;
+  scrollbar-width: none;
+  mask-image: linear-gradient(90deg, transparent, #000 24px, #000 calc(100% - 24px), transparent);
+}
+
+.faixa-scroll::-webkit-scrollbar {
+  display: none;
 }
 
 /* Foco visível em tudo que é interativo (CLAUDE.md §9).

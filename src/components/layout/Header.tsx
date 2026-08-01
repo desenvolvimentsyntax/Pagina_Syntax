@@ -46,18 +46,19 @@ export function Header() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 px-3 pt-3 sm:px-5 sm:pt-4 lg:px-8">
-      {/* Pill de vidro flutuante: o fundo translúcido só ganha corpo ao rolar,
-          senão o blur come o glow do hero logo abaixo. */}
+    <header className="sticky top-0 z-40 px-0 pt-0 md:px-5 md:pt-4 lg:px-8">
+      {/* Pill de vidro flutuante em md+; no mobile vira barra full-bleed,
+          coerente com a folha sem moldura. O fundo translúcido só ganha corpo
+          ao rolar, senão o blur come o glow do hero logo abaixo. */}
       <div
-        className={`mx-auto flex h-[66px] max-w-[1360px] items-center justify-between rounded-full pr-3 pl-5 transition-[background-color,box-shadow] duration-300 sm:pr-4 sm:pl-6 ${
+        className={`mx-auto flex h-14 max-w-[1360px] items-center justify-between pr-3 pl-5 transition-[background-color,box-shadow] duration-300 md:h-[66px] md:rounded-full md:pr-4 md:pl-6 ${
           rolado
             ? "bg-surface-secondary shadow-[inset_0_1px_0_rgb(255_255_255/0.08),0_18px_40px_-24px_rgb(0_0_0/0.85)] backdrop-blur-[14px]"
             : "bg-surface shadow-[inset_0_1px_0_rgb(255_255_255/0.06)] backdrop-blur-[14px]"
         }`}
       >
         <div className="flex items-center gap-8 xl:gap-10">
-          <a href="#topo" aria-label="Página inicial">
+          <a href="#topo" aria-label="Página inicial" className="flex min-h-11 items-center">
             <MarcaSyntax />
           </a>
 

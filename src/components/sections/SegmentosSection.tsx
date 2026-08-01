@@ -6,7 +6,7 @@ import { segmentos } from "@/content/pt-BR/home";
 export function SegmentosSection() {
   return (
     <section aria-label={segmentos.rotulo} className="border-border border-y">
-      <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-9 lg:flex-row lg:items-center lg:gap-10">
+      <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 md:px-6 py-9 lg:flex-row lg:items-center lg:gap-10">
         <h2 className="text-micro font-mono text-xs font-medium tracking-[0.1em] whitespace-nowrap uppercase">
           {segmentos.rotulo}
         </h2>

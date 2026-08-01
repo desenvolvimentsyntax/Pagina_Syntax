@@ -30,7 +30,7 @@ const ICONES: Record<string, LucideIcon> = {
 export function SolucoesSection() {
   return (
     <section id="solucoes" className="py-16 md:py-24">
-      <div className="mx-auto max-w-7xl px-6">
+      <div className="mx-auto max-w-7xl px-5 md:px-6">
         <Reveal>
           <SectionHeading
             overline={solucoes.overline}

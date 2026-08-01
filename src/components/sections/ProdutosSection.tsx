@@ -14,7 +14,7 @@ import { produtos } from "@/content/pt-BR/home";
 export function ProdutosSection() {
   return (
     <section id="produtos" className="py-16 md:py-24">
-      <div className="mx-auto max-w-7xl px-6">
+      <div className="mx-auto max-w-7xl px-5 md:px-6">
         <Reveal>
           <SectionHeading
             overline={produtos.overline}

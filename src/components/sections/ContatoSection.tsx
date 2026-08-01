@@ -48,7 +48,7 @@ const CANAIS = [
 export function ContatoSection() {
   return (
     <section id="contato" className="py-16 md:py-24">
-      <div className="mx-auto max-w-7xl px-6">
+      <div className="mx-auto max-w-7xl px-5 md:px-6">
         <Reveal>
           {/* O CTA de fechamento é o cabeçalho desta seção, não uma seção
               própria: dois CTAs seguidos no fim da página se anulam. */}
@@ -74,7 +74,7 @@ export function ContatoSection() {
         </Reveal>
       </div>
 
-      <div className="mx-auto mt-16 grid max-w-7xl gap-12 px-6 lg:grid-cols-[minmax(0,420px)_1fr] lg:gap-16">
+      <div className="mx-auto mt-16 grid max-w-7xl gap-12 px-5 md:px-6 lg:grid-cols-[minmax(0,420px)_1fr] lg:gap-16">
         <Reveal>
           <h3 className="text-micro font-mono text-xs font-medium tracking-[0.1em] uppercase">
             {contatoSecao.canaisTitulo}

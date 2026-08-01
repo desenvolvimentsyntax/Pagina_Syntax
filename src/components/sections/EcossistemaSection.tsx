@@ -14,7 +14,7 @@ import { ecossistema } from "@/content/pt-BR/home";
 export function EcossistemaSection() {
   return (
     <section id="ecossistema" className="py-16 md:py-24">
-      <div className="mx-auto max-w-7xl px-6">
+      <div className="mx-auto max-w-7xl px-5 md:px-6">
         <Reveal>
           <SectionHeading
             overline={ecossistema.overline}

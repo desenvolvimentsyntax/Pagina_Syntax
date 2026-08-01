@@ -16,7 +16,7 @@ export function Footer() {
 
   return (
     <footer className="bg-footer text-footer-foreground">
-      <div className="mx-auto max-w-7xl px-6 py-16">
+      <div className="mx-auto max-w-7xl px-5 md:px-6 py-16">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[minmax(0,1.6fr)_1fr_1.2fr]">
           <div>
             <MarcaSyntax tamanho="lg" />

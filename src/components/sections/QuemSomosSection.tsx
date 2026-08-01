@@ -6,7 +6,7 @@ import { quemSomos } from "@/content/pt-BR/home";
 export function QuemSomosSection() {
   return (
     <section id="quem-somos" className="py-16 md:py-24">
-      <div className="mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-[minmax(0,1.25fr)_1fr] lg:gap-20">
+      <div className="mx-auto grid max-w-7xl gap-12 px-5 md:px-6 lg:grid-cols-[minmax(0,1.25fr)_1fr] lg:gap-20">
         <Reveal>
           <SectionHeading
             overline={quemSomos.overline}
