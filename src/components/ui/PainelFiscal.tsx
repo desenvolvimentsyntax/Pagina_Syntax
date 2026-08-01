@@ -27,9 +27,9 @@ export function PainelFiscal() {
           <span className="hidden h-6 items-center truncate rounded-md bg-hairline px-3 font-mono text-[10.5px] text-ondark-soft sm:flex">
             {painel.url}
           </span>
-          <span className="ml-auto flex shrink-0 items-center gap-1.5 text-[10.5px] whitespace-nowrap text-ondark-soft">
-            <span className="size-1.5 rounded-full bg-positive" />
-            {painel.status}
+          <span className="ml-auto flex min-w-0 items-center gap-1.5 text-[10.5px] text-ondark-soft">
+            <span className="size-1.5 shrink-0 rounded-full bg-positive" />
+            <span className="truncate">{painel.status}</span>
           </span>
         </div>
 
@@ -38,7 +38,7 @@ export function PainelFiscal() {
             <div className="text-[15px] font-semibold tracking-tight text-ondark whitespace-nowrap">
               {painel.titulo}
             </div>
-            <span className="rounded-md bg-accent px-2.5 py-1.5 text-[11px] whitespace-nowrap text-accent-foreground">
+            <span className="hidden rounded-md bg-accent px-2.5 py-1.5 text-[11px] whitespace-nowrap text-accent-foreground sm:inline">
               Emitir NF-e
             </span>
           </div>

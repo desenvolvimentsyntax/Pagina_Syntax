@@ -48,20 +48,20 @@ const CANAIS = [
 export function ContatoSection() {
   return (
     <section id="contato" className="py-16 md:py-24">
-      <div className="mx-auto max-w-7xl px-6">
+      <div className="mx-auto max-w-7xl px-5 md:px-6">
         <Reveal>
           {/* O CTA de fechamento é o cabeçalho desta seção, não uma seção
               própria: dois CTAs seguidos no fim da página se anulam. */}
-          <div className="cta-gradiente relative overflow-hidden rounded-[20px] px-6 py-14 text-center sm:px-12 md:py-20">
+          <div className="cta-gradiente relative -mx-5 overflow-hidden px-5 py-10 text-center sm:px-12 md:mx-0 md:rounded-[20px] md:py-20">
             <p className="font-mono text-xs font-medium tracking-[0.1em] text-white/70 uppercase">
               {contatoSecao.overline}
             </p>
 
-            <h2 className="font-display mx-auto mt-4 max-w-3xl text-3xl leading-[1.08] font-semibold tracking-[-0.03em] text-balance text-white md:text-[52px]">
+            <h2 className="font-display mx-auto mt-4 max-w-3xl text-[28px] leading-[1.12] font-semibold tracking-[-0.03em] text-pretty text-white md:text-[52px] md:leading-[1.08]">
               {contatoSecao.titulo}
             </h2>
 
-            <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-pretty text-white/80">
+            <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-pretty text-white/80 md:mt-5 md:text-lg">
               {contatoSecao.subtitulo}
             </p>
 
@@ -74,7 +74,7 @@ export function ContatoSection() {
         </Reveal>
       </div>
 
-      <div className="mx-auto mt-16 grid max-w-7xl gap-12 px-6 lg:grid-cols-[minmax(0,420px)_1fr] lg:gap-16">
+      <div className="mx-auto mt-12 grid max-w-7xl gap-10 px-5 md:mt-16 md:gap-12 md:px-6 lg:grid-cols-[minmax(0,420px)_1fr] lg:gap-16">
         <Reveal>
           <h3 className="text-micro font-mono text-xs font-medium tracking-[0.1em] uppercase">
             {contatoSecao.canaisTitulo}
@@ -113,7 +113,7 @@ export function ContatoSection() {
         <Reveal atraso={80}>
           <div
             id="formulario"
-            className="border-border bg-surface-secondary rounded-2xl border p-6 sm:p-8"
+            className="border-border bg-surface-secondary rounded-2xl border p-4 sm:p-8"
           >
             <h3 className="font-display text-foreground text-xl font-semibold tracking-tight">
               {contatoSecao.form.titulo}

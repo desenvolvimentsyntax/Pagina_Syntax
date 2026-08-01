@@ -14,7 +14,7 @@ import { ecossistema } from "@/content/pt-BR/home";
 export function EcossistemaSection() {
   return (
     <section id="ecossistema" className="py-16 md:py-24">
-      <div className="mx-auto max-w-7xl px-6">
+      <div className="mx-auto max-w-7xl px-5 md:px-6">
         <Reveal>
           <SectionHeading
             overline={ecossistema.overline}
@@ -28,7 +28,9 @@ export function EcossistemaSection() {
             <Tabs.List aria-label="Ecossistema de tecnologia">
               {ecossistema.abas.map((aba) => (
                 <Tabs.Tab key={aba.id} id={aba.id}>
-                  {aba.rotulo}
+                  {/* Rótulo completo não cabe na lista em 320px */}
+                  <span className="sm:hidden">{aba.rotuloCurto}</span>
+                  <span className="hidden sm:inline">{aba.rotulo}</span>
                   <Tabs.Indicator />
                 </Tabs.Tab>
               ))}
@@ -36,8 +38,8 @@ export function EcossistemaSection() {
           </Tabs.ListContainer>
 
           {ecossistema.abas.map((aba) => (
-            <Tabs.Panel key={aba.id} id={aba.id} className="pt-8">
-              <div className="border-border bg-surface grid items-center gap-8 rounded-2xl border p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+            <Tabs.Panel key={aba.id} id={aba.id} className="pt-6 md:pt-8">
+              <div className="border-border bg-surface grid items-center gap-8 rounded-2xl border p-4 sm:p-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
                 <p className="text-foreground-base/70 max-w-md text-base leading-relaxed">
                   {aba.texto}
                 </p>

@@ -90,7 +90,7 @@ function Conteudo() {
             {mockup.cabecalho.subtitulo}
           </div>
         </div>
-        <div className="flex shrink-0 gap-1.5">
+        <div className="hidden shrink-0 gap-1.5 sm:flex">
           <span className="border-hairline bg-panel-raised text-ondark-soft rounded-md border px-2.5 py-1 text-[10px]">
             30 dias
           </span>
@@ -100,16 +100,16 @@ function Conteudo() {
         </div>
       </div>
 
-      <div className="mt-3.5 grid grid-cols-3 gap-2.5">
+      <div className="mt-3.5 grid grid-cols-2 gap-2.5 min-[400px]:grid-cols-3">
         {mockup.indicadores.map((kpi) => (
           <div
             key={kpi.rotulo}
-            className="border-hairline bg-panel-raised rounded-xl border p-3"
+            className="border-hairline bg-panel-raised min-w-0 rounded-xl border p-3 last:hidden min-[400px]:last:block"
           >
             <div className="text-ondark-soft text-[10px] leading-tight">
               {kpi.rotulo}
             </div>
-            <div className="mt-1.5 text-lg font-semibold tracking-tight text-ondark whitespace-nowrap sm:text-xl">
+            <div className="mt-1.5 truncate text-base font-semibold tracking-tight text-ondark sm:text-xl">
               {kpi.valor}
             </div>
             <div
@@ -139,7 +139,7 @@ function Grafico() {
         <div className="text-ondark text-[11.5px] font-medium whitespace-nowrap">
           {grafico.titulo}
         </div>
-        <div className="flex shrink-0 items-center gap-3 text-[9.5px] whitespace-nowrap text-ondark-soft">
+        <div className="flex shrink-0 flex-col items-end gap-1 text-[9.5px] whitespace-nowrap text-ondark-soft sm:flex-row sm:items-center sm:gap-3">
           <span className="inline-flex items-center gap-1.5">
             <span className="size-[7px] rounded-[2px] bg-accent" />
             {grafico.legenda.auto}
@@ -155,7 +155,7 @@ function Grafico() {
         {grafico.automatico.map((auto, i) => (
           <div
             key={grafico.meses[i]}
-            className="flex h-full flex-1 flex-col justify-end gap-[3px]"
+            className={`h-full flex-1 flex-col justify-end gap-[3px] ${i < 4 ? "hidden sm:flex" : "flex"}`}
           >
             <div
               className="origin-bottom animate-grow rounded-t-[3px] bg-accent"
@@ -170,8 +170,10 @@ function Grafico() {
       </div>
 
       <div className="text-ondark-dim mt-2 flex justify-between font-mono text-[9px]">
-        {grafico.meses.map((mes) => (
-          <span key={mes}>{mes}</span>
+        {grafico.meses.map((mes, i) => (
+          <span key={mes} className={i < 4 ? "hidden sm:inline" : undefined}>
+            {mes}
+          </span>
         ))}
       </div>
     </div>

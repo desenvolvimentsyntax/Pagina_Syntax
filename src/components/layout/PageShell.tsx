@@ -5,14 +5,17 @@ import type { ReactNode } from "react";
  * página (.fundo-pagina, no globals.css). É ela que dá a profundidade do §4 —
  * as seções não alternam mais fundo branco/cinza, todas flutuam aqui dentro.
  *
+ * No mobile a folha é full-bleed: moldura de 12px não lê em 320px e rouba 26px
+ * de largura útil — o radius, a borda lateral e o respiro só entram em md+.
+ *
  * As camadas decorativas (grid e glow) são absolutas e `pointer-events-none`
  * para não interceptar clique nem entrar na ordem de leitura (§9).
  * Server Component: não há estado nem evento (§3.9).
  */
 export function PageShell({ children }: { children: ReactNode }) {
   return (
-    <div className="px-3 pb-px sm:px-5 lg:px-8">
-      <div className="border-border bg-sheet relative mx-auto max-w-[1440px] overflow-hidden rounded-[18px] border shadow-[0_60px_120px_-50px_rgb(0_0_0/0.9)]">
+    <div className="px-0 pb-px md:px-5 lg:px-8">
+      <div className="border-border bg-sheet relative mx-auto max-w-[1440px] overflow-hidden border-y shadow-[0_60px_120px_-50px_rgb(0_0_0/0.9)] md:rounded-[18px] md:border-x">
         {/* Grid pattern de 88px — hairline duplo, horizontal e vertical. */}
         <div
           aria-hidden

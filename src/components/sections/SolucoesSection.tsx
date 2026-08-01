@@ -26,11 +26,18 @@ const ICONES: Record<string, LucideIcon> = {
   apis: Braces,
 };
 
-/** Grade das oito frentes de desenvolvimento. Cards HeroUI (§3, mapa de uso). */
+/**
+ * As oito frentes de desenvolvimento.
+ *
+ * No mobile é um ÍNDICE: lista com divide-y, ícone-tile à esquerda e número
+ * `01–08` em mono à direita — oito cards empilhados eram 1.960px de coluna
+ * monótona em 320. Em sm+ volta a grade de Card (§3, mapa de uso). É o único
+ * índice da página; não replicar o padrão em outra seção.
+ */
 export function SolucoesSection() {
   return (
     <section id="solucoes" className="py-16 md:py-24">
-      <div className="mx-auto max-w-7xl px-6">
+      <div className="mx-auto max-w-7xl px-5 md:px-6">
         <Reveal>
           <SectionHeading
             overline={solucoes.overline}
@@ -39,7 +46,41 @@ export function SolucoesSection() {
           />
         </Reveal>
 
-        <ul className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {/* Índice — só < sm */}
+        <Reveal className="sm:hidden">
+          <ol className="divide-border border-border mt-10 divide-y border-y">
+            {solucoes.itens.map((item, i) => {
+              const Icone = ICONES[item.icone];
+
+              return (
+                <li key={item.titulo} className="flex items-start gap-4 py-4">
+                  <span
+                    aria-hidden
+                    className="bg-accent/15 text-accent-soft-foreground mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-lg"
+                  >
+                    {Icone ? <Icone className="size-4.5" /> : null}
+                  </span>
+
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-foreground text-[15px] font-semibold tracking-tight">
+                      {item.titulo}
+                    </h3>
+                    <p className="text-foreground-base/70 mt-1 text-[13px] leading-relaxed">
+                      {item.texto}
+                    </p>
+                  </div>
+
+                  <span aria-hidden className="text-micro mt-1 font-mono text-xs">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                </li>
+              );
+            })}
+          </ol>
+        </Reveal>
+
+        {/* Grade de cards — sm+ */}
+        <ul className="mt-14 hidden gap-5 sm:grid sm:grid-cols-2 lg:grid-cols-4">
           {solucoes.itens.map((item, i) => {
             const Icone = ICONES[item.icone];
 
