@@ -256,7 +256,7 @@ export function FormOrcamento() {
         )}
       />
 
-      <Button type="submit" isPending={isSubmitting} className="mt-1 h-12">
+      <Button type="submit" isPending={isSubmitting} className="mt-1 h-12 w-full sm:w-auto">
         {isSubmitting ? form.enviando : form.botao}
       </Button>
 

@@ -31,7 +31,7 @@ export function ProjetosSection() {
           {projetos.itens.map((item, i) => (
             <li key={item.titulo} className="h-full">
               <Reveal atraso={i * 60} className="h-full">
-                <div className="flex h-full flex-col rounded-2xl border-border bg-surface border p-6">
+                <div className="flex h-full flex-col rounded-2xl border-border bg-surface border p-4 sm:p-6">
                   <div>
                     <Chip
                       size="sm"
@@ -51,7 +51,7 @@ export function ProjetosSection() {
 
                   <a
                     href={item.cta.href}
-                    className="mt-5 inline-flex items-center gap-1.5 text-[15px] font-medium text-accent-soft-foreground hover:underline"
+                    className="mt-3 inline-flex items-center gap-1.5 py-3 text-[15px] font-medium text-accent-soft-foreground hover:underline"
                     {...(item.cta.externo
                       ? { target: "_blank", rel: "noreferrer noopener" }
                       : {})}

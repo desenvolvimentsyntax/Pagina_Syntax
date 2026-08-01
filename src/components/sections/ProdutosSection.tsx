@@ -59,7 +59,7 @@ function NovaGeracao() {
   return (
     <div className="flex flex-col gap-6">
       {/* Destaque: E-Syntax com painel ilustrativo escuro */}
-      <div className="grid items-center gap-8 rounded-2xl border-border bg-surface border p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
+      <div className="grid items-center gap-6 sm:gap-8 rounded-2xl border-border bg-surface border p-4 sm:p-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
         <div>
           <Chip color="accent" variant="soft">
             {esyntax.selo}
@@ -83,14 +83,16 @@ function NovaGeracao() {
 
           <a
             href={esyntax.cta.href}
-            className="mt-6 inline-flex items-center gap-1.5 text-[15px] font-medium text-accent-soft-foreground hover:underline"
+            className="mt-4 inline-flex items-center gap-1.5 py-3 text-[15px] font-medium text-accent-soft-foreground hover:underline"
           >
             {esyntax.cta.rotulo}
             <ArrowUpRight aria-hidden className="size-4" />
           </a>
         </div>
 
-        <PainelFiscal />
+        <div className="order-first lg:order-none">
+          <PainelFiscal />
+        </div>
       </div>
 
       {/* Dex e PDV */}
@@ -101,10 +103,10 @@ function NovaGeracao() {
               href={produto.href}
               target="_blank"
               rel="noreferrer noopener"
-              className="group flex h-full flex-col rounded-2xl border-border bg-surface border p-6 transition-[border-color,box-shadow] hover:border-accent-soft-foreground/40 hover:shadow-[0_20px_40px_-24px_rgb(0_0_0/0.75)]"
+              className="group flex h-full flex-col rounded-2xl border-border bg-surface border p-4 sm:p-6 transition-[border-color,box-shadow] hover:border-accent-soft-foreground/40 hover:shadow-[0_20px_40px_-24px_rgb(0_0_0/0.75)]"
             >
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+                <div className="flex min-w-0 items-center gap-3">
                   <span
                     aria-hidden
                     className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-accent/15 font-mono text-sm font-medium text-accent-soft-foreground"
@@ -112,7 +114,7 @@ function NovaGeracao() {
                     {produto.sigla}
                   </span>
                   <div>
-                    <h4 className="text-lg font-semibold tracking-tight whitespace-nowrap text-foreground">
+                    <h4 className="text-lg font-semibold tracking-tight text-foreground">
                       {produto.nome}
                     </h4>
                     <p className="mt-0.5 font-mono text-[10.5px] text-muted">
@@ -156,7 +158,7 @@ function LinhaConsolidada() {
       {produtos.consolidada.map((produto) => (
         <li
           key={produto.nome}
-          className="flex h-full flex-col rounded-2xl border-border bg-surface border p-6"
+          className="flex h-full flex-col rounded-2xl border-border bg-surface border p-4 sm:p-6"
         >
           <span
             aria-hidden
