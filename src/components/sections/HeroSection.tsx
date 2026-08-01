@@ -16,7 +16,7 @@ export function HeroSection() {
     <section id="topo" className="relative">
       <ParticleCanvas />
 
-      <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-5 pt-12 pb-16 md:px-6 md:pt-24 md:pb-24 lg:grid-cols-[minmax(0,540px)_1fr] lg:gap-14">
+      <div className="relative mx-auto grid max-w-7xl items-center gap-8 px-5 pt-12 pb-16 md:gap-12 md:px-6 md:pt-24 md:pb-24 lg:grid-cols-[minmax(0,540px)_1fr] lg:gap-14">
         <div className="animate-rise">
           <p className="border-accent-soft-foreground/25 bg-accent/10 text-accent-soft-foreground inline-flex max-w-full items-center gap-2 rounded-full border py-1.5 pr-3.5 pl-2.5 text-[13px] font-medium">
             <span
@@ -53,7 +53,7 @@ export function HeroSection() {
             {hero.indicadores.map((item) => (
               <div
                 key={item.rotulo}
-                className="flex min-w-0 flex-col-reverse px-2.5 py-3.5 sm:px-5 sm:py-4"
+                className="flex min-w-0 flex-col-reverse justify-end px-2.5 py-3.5 sm:px-5 sm:py-4"
               >
                 <dt className="text-micro mt-1 font-mono text-[10px] leading-snug sm:text-[11px]">
                   {item.rotulo}

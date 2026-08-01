@@ -52,7 +52,7 @@ export function ContatoSection() {
         <Reveal>
           {/* O CTA de fechamento é o cabeçalho desta seção, não uma seção
               própria: dois CTAs seguidos no fim da página se anulam. */}
-          <div className="cta-gradiente relative -mx-5 overflow-hidden px-5 py-12 text-center sm:px-12 md:mx-0 md:rounded-[20px] md:py-20">
+          <div className="cta-gradiente relative -mx-5 overflow-hidden px-5 py-10 text-center sm:px-12 md:mx-0 md:rounded-[20px] md:py-20">
             <p className="font-mono text-xs font-medium tracking-[0.1em] text-white/70 uppercase">
               {contatoSecao.overline}
             </p>

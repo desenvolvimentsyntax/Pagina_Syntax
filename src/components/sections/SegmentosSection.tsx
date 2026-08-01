@@ -16,7 +16,13 @@ export function SegmentosSection() {
           {segmentos.rotulo}
         </h2>
 
-        <ul className="faixa-scroll -mx-5 flex items-center gap-2.5 px-5 md:mx-0 md:flex-wrap md:overflow-visible md:px-0 md:[mask-image:none]">
+        {/* tabIndex 0: região rolável precisa ser alcançável por teclado
+            (axe scrollable-region-focusable) — setas rolam a faixa. */}
+        <ul
+          tabIndex={0}
+          aria-label={segmentos.rotulo}
+          className="faixa-scroll -mx-5 flex items-center gap-2.5 px-5 md:mx-0 md:flex-wrap md:overflow-visible md:px-0 md:[mask-image:none]"
+        >
           {segmentos.itens.map((item) => (
             <li key={item} className="shrink-0 md:shrink">
               <Chip variant="secondary">{item}</Chip>

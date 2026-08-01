@@ -27,7 +27,7 @@ export function ProjetosSection() {
           />
         </Reveal>
 
-        <ul className="mt-14 grid gap-5 md:grid-cols-3">
+        <ul className="mt-10 grid gap-4 md:mt-14 md:grid-cols-3 md:gap-5">
           {projetos.itens.map((item, i) => (
             <li key={item.titulo} className="h-full">
               <Reveal atraso={i * 60} className="h-full">

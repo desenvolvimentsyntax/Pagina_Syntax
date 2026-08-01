@@ -41,7 +41,7 @@ export function QuemSomosSection() {
             {quemSomos.fatos.map((fato) => (
               <div
                 key={fato.rotulo}
-                className="flex min-w-0 flex-col-reverse px-2.5 py-3.5 sm:px-5 sm:py-4 lg:px-7 lg:py-6"
+                className="flex min-w-0 flex-col-reverse justify-end px-2.5 py-3.5 sm:px-5 sm:py-4 lg:px-7 lg:py-6"
               >
                 <dt className="text-micro mt-1 font-mono text-[10px] leading-snug sm:text-[11px]">
                   {fato.rotulo}

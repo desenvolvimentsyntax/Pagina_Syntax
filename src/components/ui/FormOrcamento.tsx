@@ -111,8 +111,8 @@ export function FormOrcamento() {
   }
 
   return (
-    <Form onSubmit={handleSubmit(aoEnviar)} className="grid gap-5">
-      <div className="grid gap-5 sm:grid-cols-2">
+    <Form onSubmit={handleSubmit(aoEnviar)} className="grid gap-4 sm:gap-5">
+      <div className="grid gap-4 sm:grid-cols-2 sm:gap-5">
         <Controller
           control={control}
           name="nome"
@@ -152,7 +152,7 @@ export function FormOrcamento() {
         />
       </div>
 
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2 sm:gap-5">
         <Controller
           control={control}
           name="email"

@@ -116,7 +116,7 @@ function MenuMobile({
         isIconOnly
         variant="ghost"
         aria-label="Abrir menu"
-        className="text-foreground lg:hidden"
+        className="text-foreground size-11 lg:hidden"
       >
         <Menu aria-hidden className="size-5" />
       </Button>

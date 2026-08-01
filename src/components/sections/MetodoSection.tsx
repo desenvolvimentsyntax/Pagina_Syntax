@@ -39,7 +39,7 @@ export function MetodoSection() {
         {/* Abaixo de lg a timeline é VERTICAL: a linha em gradiente corre na
             coluna dos dots (before: no <ol>) e cada etapa se pendura nela.
             Em lg vira horizontal — em 768 quatro colunas quebram os títulos. */}
-        <ol className="mt-10 flex flex-col gap-10 md:mt-16 lg:grid lg:grid-cols-4 lg:gap-6">
+        <ol className="mt-10 flex flex-col gap-8 md:mt-16 lg:grid lg:grid-cols-4 lg:gap-6">
           {metodo.etapas.map((etapa, i) => {
             const Icone = ICONES[etapa.icone];
             const ultima = i === metodo.etapas.length - 1;
@@ -50,7 +50,7 @@ export function MetodoSection() {
                 className={`relative pl-16 lg:pl-0 ${
                   ultima
                     ? ""
-                    : "after:from-accent after:to-accent-soft-foreground/35 after:absolute after:top-[52px] after:-bottom-8 after:left-[21px] after:w-px after:bg-gradient-to-b lg:after:hidden"
+                    : "after:from-accent after:to-accent-soft-foreground/35 after:absolute after:top-[52px] after:-bottom-6 after:left-[21px] after:w-px after:bg-gradient-to-b lg:after:hidden"
                 }`}
               >
                 <Reveal atraso={i * 60}>

@@ -42,7 +42,7 @@ export function Footer() {
                 <li key={item.rotulo}>
                   <a
                     href={item.href}
-                    className="text-footer-muted inline-block py-2 transition-colors hover:text-footer-foreground"
+                    className="text-footer-muted inline-block py-2.5 transition-colors hover:text-footer-foreground"
                   >
                     {item.rotulo}
                   </a>
@@ -51,7 +51,7 @@ export function Footer() {
               <li>
                 <a
                   href="#contato"
-                  className="text-footer-muted inline-block py-2 transition-colors hover:text-footer-foreground"
+                  className="text-footer-muted inline-block py-2.5 transition-colors hover:text-footer-foreground"
                 >
                   Contato
                 </a>
@@ -67,7 +67,7 @@ export function Footer() {
               <li>
                 <a
                   href={contato.telefoneHref}
-                  className="text-footer-muted inline-flex items-center gap-2 py-2 transition-colors hover:text-footer-foreground"
+                  className="text-footer-muted inline-flex items-center gap-2 py-2.5 transition-colors hover:text-footer-foreground"
                 >
                   <Phone aria-hidden className="text-accent-soft-foreground size-4 shrink-0" />
                   {contato.telefone}
@@ -78,7 +78,7 @@ export function Footer() {
                   href={contato.whatsappHref}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="text-footer-muted inline-flex items-center gap-2 py-2 transition-colors hover:text-footer-foreground"
+                  className="text-footer-muted inline-flex items-center gap-2 py-2.5 transition-colors hover:text-footer-foreground"
                 >
                   <MessageCircle aria-hidden className="text-accent-soft-foreground size-4 shrink-0" />
                   {contato.celular} · WhatsApp
@@ -87,7 +87,7 @@ export function Footer() {
               <li>
                 <a
                   href={contato.telefonePyHref}
-                  className="text-footer-muted inline-flex items-center gap-2 py-2 transition-colors hover:text-footer-foreground"
+                  className="text-footer-muted inline-flex items-center gap-2 py-2.5 transition-colors hover:text-footer-foreground"
                 >
                   <Phone aria-hidden className="text-accent-soft-foreground size-4 shrink-0" />
                   {contato.telefonePy} · Paraguai
@@ -96,7 +96,7 @@ export function Footer() {
               <li>
                 <a
                   href={contato.emailHref}
-                  className="text-footer-muted inline-flex items-center gap-2 py-2 break-all transition-colors hover:text-footer-foreground"
+                  className="text-footer-muted inline-flex items-center gap-2 py-2.5 break-all transition-colors hover:text-footer-foreground"
                 >
                   <Mail aria-hidden className="text-accent-soft-foreground size-4 shrink-0" />
                   {contato.email}
@@ -107,7 +107,7 @@ export function Footer() {
                   href={empresa.mapaHref}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="text-footer-muted inline-flex items-start gap-2 py-2 transition-colors hover:text-footer-foreground"
+                  className="text-footer-muted inline-flex items-start gap-2 py-2.5 transition-colors hover:text-footer-foreground"
                 >
                   <MapPin aria-hidden className="mt-0.5 text-accent-soft-foreground size-4 shrink-0" />
                   <span>

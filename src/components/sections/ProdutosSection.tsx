@@ -40,11 +40,11 @@ export function ProdutosSection() {
             </Tabs.List>
           </Tabs.ListContainer>
 
-          <Tabs.Panel id={produtos.abas.novaGeracao.id} className="pt-8">
+          <Tabs.Panel id={produtos.abas.novaGeracao.id} className="pt-6 md:pt-8">
             <NovaGeracao />
           </Tabs.Panel>
 
-          <Tabs.Panel id={produtos.abas.consolidada.id} className="pt-8">
+          <Tabs.Panel id={produtos.abas.consolidada.id} className="pt-6 md:pt-8">
             <LinhaConsolidada />
           </Tabs.Panel>
         </Tabs>
@@ -57,7 +57,7 @@ function NovaGeracao() {
   const { esyntax, novaGeracao } = produtos;
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4 md:gap-6">
       {/* Destaque: E-Syntax com painel ilustrativo escuro */}
       <div className="grid items-center gap-6 sm:gap-8 rounded-2xl border-border bg-surface border p-4 sm:p-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
         <div>
@@ -96,7 +96,7 @@ function NovaGeracao() {
       </div>
 
       {/* Dex e PDV */}
-      <ul className="grid gap-5 md:grid-cols-2">
+      <ul className="grid gap-4 md:grid-cols-2 md:gap-5">
         {novaGeracao.map((produto) => (
           <li key={produto.nome}>
             <a
