@@ -38,21 +38,24 @@ export function HeroSection() {
             </CtaLink>
           </div>
 
+          {/* Um <dl> só aceita dt/dd/div como filho DIRETO: o par vai dentro de
+              um único div, sem nível extra, e a divisória é border, não span.
+              flex-col-reverse porque o valor vem grande em cima e o rótulo
+              embaixo, mas <dt> tem que preceder <dd> no DOM. */}
           <dl className="border-border mt-12 flex flex-wrap items-center gap-x-6 gap-y-4 border-t pt-6">
             {hero.indicadores.map((item, i) => (
-              <div key={item.rotulo} className="flex items-center gap-6">
-                {i > 0 ? (
-                  <span aria-hidden className="bg-border hidden h-9 w-px sm:block" />
-                ) : null}
-                <div>
-                  <dt className="sr-only">{item.rotulo}</dt>
-                  <dd className="font-display text-foreground text-2xl font-semibold tracking-tight">
-                    {item.valor}
-                  </dd>
-                  <p className="text-muted mt-0.5 text-[13px] whitespace-nowrap">
-                    {item.rotulo}
-                  </p>
-                </div>
+              <div
+                key={item.rotulo}
+                className={`flex flex-col-reverse ${
+                  i > 0 ? "border-border pl-6 sm:border-l" : ""
+                }`}
+              >
+                <dt className="text-muted mt-0.5 text-[13px] whitespace-nowrap">
+                  {item.rotulo}
+                </dt>
+                <dd className="font-display text-foreground text-2xl font-semibold tracking-tight">
+                  {item.valor}
+                </dd>
               </div>
             ))}
           </dl>
