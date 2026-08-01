@@ -19,18 +19,18 @@ export function SectionHeading({
   return (
     <div className={centralizado ? "mx-auto max-w-3xl text-center" : undefined}>
       {overline ? (
-        <p className="text-sm font-medium tracking-wide text-accent uppercase">
+        <p className="text-accent-soft-foreground font-mono text-xs font-medium tracking-[0.1em] uppercase">
           {overline}
         </p>
       ) : null}
 
-      <h2 className="mt-3 text-3xl font-semibold tracking-tight text-balance text-foreground md:text-4xl">
+      <h2 className="text-foreground font-display mt-4 text-3xl font-semibold tracking-[-0.028em] text-balance md:text-[42px] md:leading-[1.1]">
         {titulo}
       </h2>
 
       {subtitulo ? (
         <p
-          className={`mt-4 max-w-2xl text-lg leading-relaxed text-pretty text-foreground/70 ${
+          className={`text-foreground-base/70 mt-4 max-w-2xl text-lg leading-relaxed text-pretty ${
             centralizado ? "mx-auto" : ""
           }`}
         >

@@ -1,49 +1,40 @@
 import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 
+import { CtaLink } from "@/components/ui/CtaLink";
+import { MarcaSyntax } from "@/components/ui/MarcaSyntax";
 import { contato, empresa, navAcoes, navPrincipal } from "@/content/pt-BR/site";
 
 /**
- * Rodapé claro. Dados reais do site atual: endereço da matriz, telefones do
- * Brasil e do Paraguai, e-mail e fundação em 2006.
+ * Rodapé. Dados reais do site atual: endereço da matriz, telefones do Brasil e
+ * do Paraguai, e-mail e fundação em 2006.
+ *
+ * Fundo próprio (--color-footer), mais escuro que a folha: é ele que cobre os
+ * stops claros do gradiente da página, onde nenhum texto poderia encostar.
  */
 export function Footer() {
   const ano = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-border bg-surface">
+    <footer className="bg-footer text-footer-foreground">
       <div className="mx-auto max-w-7xl px-6 py-16">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[minmax(0,1.6fr)_1fr_1.2fr]">
           <div>
-            <div className="flex items-center gap-2.5">
-              <span
-                aria-hidden
-                className="flex size-[30px] items-center justify-center rounded-lg bg-accent font-mono text-[15px] font-medium text-accent-foreground"
-              >
-                &lt;/&gt;
-              </span>
-              <span className="text-[17px] font-semibold tracking-tight text-foreground">
-                {empresa.nome}{" "}
-                <span className="font-normal text-foreground/60">
-                  {empresa.sobrenome}
-                </span>
-              </span>
-            </div>
+            <MarcaSyntax tamanho="lg" />
 
-            <p className="mt-4 max-w-sm text-sm leading-relaxed text-foreground/70">
+            <p className="mt-5 max-w-sm text-sm leading-relaxed">
               Sistemas web, aplicativos e automação para empresas do Brasil e do
               Paraguai. No mercado desde {empresa.fundacao}.
             </p>
 
-            <a
-              href={navAcoes.contato.href}
-              className="mt-6 inline-flex h-10 items-center rounded-lg bg-accent px-4 text-sm font-medium text-accent-foreground transition-colors hover:bg-accent/90"
-            >
-              {navAcoes.contato.rotulo}
-            </a>
+            <div className="mt-6">
+              <CtaLink href={navAcoes.contato.href} tamanho="md">
+                {navAcoes.contato.rotulo}
+              </CtaLink>
+            </div>
           </div>
 
           <nav aria-label="Navegação do rodapé">
-            <h2 className="text-xs font-medium tracking-[0.1em] text-foreground/50 uppercase">
+            <h2 className="text-footer-muted font-mono text-xs font-medium tracking-[0.1em] uppercase">
               Navegação
             </h2>
             <ul className="mt-4 flex flex-col gap-2.5 text-sm">
@@ -51,7 +42,7 @@ export function Footer() {
                 <li key={item.rotulo}>
                   <a
                     href={item.href}
-                    className="text-foreground/70 transition-colors hover:text-foreground"
+                    className="text-footer-muted transition-colors hover:text-footer-foreground"
                   >
                     {item.rotulo}
                   </a>
@@ -60,7 +51,7 @@ export function Footer() {
               <li>
                 <a
                   href="#contato"
-                  className="text-foreground/70 transition-colors hover:text-foreground"
+                  className="text-footer-muted transition-colors hover:text-footer-foreground"
                 >
                   Contato
                 </a>
@@ -69,16 +60,16 @@ export function Footer() {
           </nav>
 
           <div>
-            <h2 className="text-xs font-medium tracking-[0.1em] text-foreground/50 uppercase">
+            <h2 className="text-footer-muted font-mono text-xs font-medium tracking-[0.1em] uppercase">
               Contato
             </h2>
             <ul className="mt-4 flex flex-col gap-3 text-sm">
               <li>
                 <a
                   href={contato.telefoneHref}
-                  className="inline-flex items-center gap-2 text-foreground/70 transition-colors hover:text-foreground"
+                  className="inline-flex items-center gap-2 text-footer-muted transition-colors hover:text-footer-foreground"
                 >
-                  <Phone aria-hidden className="size-4 shrink-0 text-accent" />
+                  <Phone aria-hidden className="text-accent-soft-foreground size-4 shrink-0" />
                   {contato.telefone}
                 </a>
               </li>
@@ -87,27 +78,27 @@ export function Footer() {
                   href={contato.whatsappHref}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="inline-flex items-center gap-2 text-foreground/70 transition-colors hover:text-foreground"
+                  className="inline-flex items-center gap-2 text-footer-muted transition-colors hover:text-footer-foreground"
                 >
-                  <MessageCircle aria-hidden className="size-4 shrink-0 text-accent" />
+                  <MessageCircle aria-hidden className="text-accent-soft-foreground size-4 shrink-0" />
                   {contato.celular} · WhatsApp
                 </a>
               </li>
               <li>
                 <a
                   href={contato.telefonePyHref}
-                  className="inline-flex items-center gap-2 text-foreground/70 transition-colors hover:text-foreground"
+                  className="inline-flex items-center gap-2 text-footer-muted transition-colors hover:text-footer-foreground"
                 >
-                  <Phone aria-hidden className="size-4 shrink-0 text-accent" />
+                  <Phone aria-hidden className="text-accent-soft-foreground size-4 shrink-0" />
                   {contato.telefonePy} · Paraguai
                 </a>
               </li>
               <li>
                 <a
                   href={contato.emailHref}
-                  className="inline-flex items-center gap-2 break-all text-foreground/70 transition-colors hover:text-foreground"
+                  className="inline-flex items-center gap-2 break-all text-footer-muted transition-colors hover:text-footer-foreground"
                 >
-                  <Mail aria-hidden className="size-4 shrink-0 text-accent" />
+                  <Mail aria-hidden className="text-accent-soft-foreground size-4 shrink-0" />
                   {contato.email}
                 </a>
               </li>
@@ -116,9 +107,9 @@ export function Footer() {
                   href={empresa.mapaHref}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="inline-flex items-start gap-2 text-foreground/70 transition-colors hover:text-foreground"
+                  className="inline-flex items-start gap-2 text-footer-muted transition-colors hover:text-footer-foreground"
                 >
-                  <MapPin aria-hidden className="mt-0.5 size-4 shrink-0 text-accent" />
+                  <MapPin aria-hidden className="mt-0.5 text-accent-soft-foreground size-4 shrink-0" />
                   <span>
                     {empresa.endereco}
                     <br />
@@ -130,7 +121,7 @@ export function Footer() {
           </div>
         </div>
 
-        <p className="mt-12 border-t border-border pt-6 text-xs text-foreground/50">
+        <p className="text-footer-muted mt-12 border-t border-white/10 pt-6 text-xs">
           © {ano} {empresa.razaoSocial}. Todos os direitos reservados.
         </p>
       </div>

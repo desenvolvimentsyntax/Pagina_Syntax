@@ -1,13 +1,15 @@
+import { buttonVariants } from "@heroui/react";
 import { ArrowRight } from "lucide-react";
 import type { ReactNode } from "react";
 
 /**
  * CTA em forma de âncora para navegação entre seções.
  *
- * Desvio consciente da regra 2 do §3 (usar Button do HeroUI): os CTAs das
- * seções são navegação (`<a href>`), e o Button da v3 só vira âncora via
- * `render`, que é uma função — o que obrigaria a seção inteira a virar client
- * component e violaria a regra 9 do §3. O visual usa os tokens do tema.
+ * Não é desvio do §3: `buttonVariants` vem de @heroui/styles sem "use client"
+ * e devolve as mesmas classes que o Button monta ("button button--primary"),
+ * então a âncora fica idêntica ao componente sem arrastar a seção para o
+ * cliente. O Button só vira <a> via `render`, que é função e não atravessa a
+ * fronteira RSC (§3.9).
  */
 
 interface CtaLinkProps {
@@ -16,21 +18,12 @@ interface CtaLinkProps {
   variante?: "primario" | "secundario";
   comSeta?: boolean;
   tamanho?: "md" | "lg";
+  externo?: boolean;
 }
 
-const BASE =
-  "inline-flex items-center justify-center gap-2 rounded-lg text-[15px] font-medium tracking-tight transition-colors";
-
-const TAMANHOS = {
-  md: "h-11 px-5",
-  lg: "h-12 px-6",
-} as const;
-
 const VARIANTES = {
-  primario:
-    "bg-accent text-accent-foreground shadow-[0_10px_24px_-10px_rgb(37_99_235_/_0.55)] hover:bg-accent/90",
-  secundario:
-    "border border-border bg-background text-foreground hover:border-slate-300 hover:bg-surface",
+  primario: "primary",
+  secundario: "secondary",
 } as const;
 
 export function CtaLink({
@@ -39,11 +32,13 @@ export function CtaLink({
   variante = "primario",
   comSeta = false,
   tamanho = "lg",
+  externo = false,
 }: CtaLinkProps) {
   return (
     <a
       href={href}
-      className={`${BASE} ${TAMANHOS[tamanho]} ${VARIANTES[variante]}`}
+      className={buttonVariants({ variant: VARIANTES[variante], size: tamanho })}
+      {...(externo ? { target: "_blank", rel: "noreferrer noopener" } : {})}
     >
       {children}
       {comSeta ? <ArrowRight aria-hidden className="size-4" /> : null}
