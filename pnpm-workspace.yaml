@@ -1,0 +1,12 @@
+# pnpm 11 lê configurações daqui, não do .npmrc.
+# Windows/drive R:: hardlink dá EPERM ao extrair pacotes com binário nativo (sharp).
+packageImportMethod: copy
+nodeLinker: hoisted
+# Extração serializada: com paralelismo alto o rename da pasta temporária
+# colide com o scanner do Windows e estoura EPERM.
+workerConcurrency: 1
+onlyBuiltDependencies:
+  - sharp
+allowBuilds:
+  sharp: true
+  unrs-resolver: true

@@ -1,0 +1,87 @@
+import { produtos } from "@/content/pt-BR/home";
+
+/**
+ * Painel ilustrativo do E-Syntax — a única área escura do site, de propósito:
+ * cria contraste premium dentro do tema claro. Decorativo (role="img", §9);
+ * conteúdo de demonstração (§11).
+ */
+export function PainelFiscal() {
+  const { painel } = produtos.esyntax;
+
+  return (
+    <div
+      role="img"
+      aria-label="Painel de documentos fiscais do E-Syntax, com NF-e, NFC-e e CT-e emitidos e status de autorização em tempo real."
+      className="overflow-hidden rounded-2xl bg-ink-deep shadow-[0_40px_70px_-45px_rgb(15_23_42_/_0.8),inset_0_0_0_1px_rgb(148_163_184_/_0.15)]"
+    >
+      <div aria-hidden>
+        <div className="flex h-10 items-center gap-2.5 border-b border-hairline bg-ink-panel px-3.5">
+          <div className="flex gap-[7px]">
+            <span className="size-[9px] rounded-full bg-slate-600" />
+            <span className="size-[9px] rounded-full bg-slate-600" />
+            <span className="size-[9px] rounded-full bg-slate-600" />
+          </div>
+          <span className="hidden h-6 items-center truncate rounded-md bg-slate-400/10 px-3 font-mono text-[10.5px] text-slate-400 sm:flex">
+            {painel.url}
+          </span>
+          <span className="ml-auto flex shrink-0 items-center gap-1.5 text-[10.5px] whitespace-nowrap text-slate-400">
+            <span className="size-1.5 rounded-full bg-green-400" />
+            {painel.status}
+          </span>
+        </div>
+
+        <div className="p-4 sm:p-5">
+          <div className="flex items-center justify-between gap-4">
+            <div className="text-[15px] font-semibold tracking-tight whitespace-nowrap text-slate-100">
+              {painel.titulo}
+            </div>
+            <span className="rounded-md bg-accent px-2.5 py-1.5 text-[11px] whitespace-nowrap text-accent-foreground">
+              Emitir NF-e
+            </span>
+          </div>
+
+          <div className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+            {painel.cartoes.map((cartao) => (
+              <div
+                key={cartao.rotulo}
+                className="rounded-[10px] bg-ink-panel p-3 shadow-[inset_0_0_0_1px_rgb(148_163_184_/_0.11)]"
+              >
+                <div className="font-mono text-[10px] tracking-[0.06em] text-slate-500">
+                  {cartao.rotulo}
+                </div>
+                <div className="mt-1.5 text-lg font-semibold tracking-tight text-slate-50">
+                  {cartao.valor}
+                </div>
+                <div className="mt-1 text-[10.5px] text-positive">{cartao.nota}</div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-3 overflow-hidden rounded-[10px] bg-ink-panel shadow-[inset_0_0_0_1px_rgb(148_163_184_/_0.11)]">
+            {painel.linhas.map((linha) => (
+              <div
+                key={linha.doc}
+                className="grid grid-cols-[88px_1fr_78px] items-center gap-3 border-b border-slate-400/7 px-3.5 py-2.5 text-[11.5px] text-slate-300 last:border-b-0 sm:grid-cols-[88px_1fr_92px_78px]"
+              >
+                <span className="truncate font-mono text-ondark-link">{linha.doc}</span>
+                <span className="truncate">{linha.cliente}</span>
+                <span className="hidden font-mono text-slate-200 sm:inline">
+                  {linha.valor}
+                </span>
+                <span
+                  className={
+                    linha.tom === "ok"
+                      ? "justify-self-start rounded-full bg-green-400/14 px-2 py-0.5 text-[10px] whitespace-nowrap text-positive"
+                      : "justify-self-start rounded-full bg-blue-400/16 px-2 py-0.5 text-[10px] whitespace-nowrap text-ondark-link"
+                  }
+                >
+                  {linha.status}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
