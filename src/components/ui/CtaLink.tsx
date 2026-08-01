@@ -15,15 +15,17 @@ import type { ReactNode } from "react";
 interface CtaLinkProps {
   href: string;
   children: ReactNode;
-  variante?: "primario" | "secundario";
+  /** `inverso` é para CTA sobre painel colorido, onde as outras somem. */
+  variante?: "primario" | "secundario" | "inverso";
   comSeta?: boolean;
   tamanho?: "md" | "lg";
   externo?: boolean;
 }
 
 const VARIANTES = {
-  primario: "primary",
-  secundario: "secondary",
+  primario: { variant: "primary", class: undefined },
+  secundario: { variant: "secondary", class: undefined },
+  inverso: { variant: "secondary", class: "button--inverso" },
 } as const;
 
 export function CtaLink({
@@ -34,10 +36,12 @@ export function CtaLink({
   tamanho = "lg",
   externo = false,
 }: CtaLinkProps) {
+  const { variant, class: modificador } = VARIANTES[variante];
+
   return (
     <a
       href={href}
-      className={buttonVariants({ variant: VARIANTES[variante], size: tamanho })}
+      className={buttonVariants({ variant, size: tamanho, class: modificador })}
       {...(externo ? { target: "_blank", rel: "noreferrer noopener" } : {})}
     >
       {children}

@@ -307,6 +307,7 @@ export const contatoSecao = {
   subtitulo:
     "Conte o que precisa e retornamos com uma demonstração aplicada ao seu segmento.",
   canaisTitulo: "Canais diretos",
+  cta: { rotulo: "Falar com especialista", href: "#formulario" },
   form: {
     titulo: "Solicite uma demonstração",
     campos: {

@@ -29,7 +29,7 @@ const ICONES: Record<string, LucideIcon> = {
 /** Grade das oito frentes de desenvolvimento. Cards HeroUI (§3, mapa de uso). */
 export function SolucoesSection() {
   return (
-    <section id="solucoes" className="bg-surface py-16 md:py-24">
+    <section id="solucoes" className="py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-6">
         <Reveal>
           <SectionHeading
@@ -46,11 +46,11 @@ export function SolucoesSection() {
             return (
               <li key={item.titulo} className="h-full">
                 <Reveal atraso={(i % 4) * 60} className="h-full">
-                  <Card className="h-full border border-border bg-background transition-[border-color,box-shadow] hover:border-accent/35 hover:shadow-[0_16px_32px_-20px_rgb(15_23_42_/_0.25)]">
+                  <Card className="h-full border border-border bg-surface transition-[border-color,box-shadow] hover:border-accent-soft-foreground/40 hover:shadow-[0_20px_40px_-24px_rgb(0_0_0/0.75)]">
                     <Card.Header>
                       <span
                         aria-hidden
-                        className="mb-3 flex size-11 items-center justify-center rounded-lg bg-accent/10 text-accent"
+                        className="mb-3 flex size-11 items-center justify-center rounded-lg bg-accent/15 text-accent-soft-foreground"
                       >
                         {Icone ? <Icone className="size-5" /> : null}
                       </span>

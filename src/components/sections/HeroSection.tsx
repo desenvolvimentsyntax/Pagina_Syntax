@@ -1,25 +1,31 @@
 import { CtaLink } from "@/components/ui/CtaLink";
 import { DashboardMockup } from "@/components/ui/DashboardMockup";
+import { ParticleCanvas } from "@/components/ui/ParticleCanvas";
 import { hero } from "@/content/pt-BR/home";
 
-/** Hero da home. Server Component — não há estado nem evento aqui (§3.9). */
+/** Hero da home. Server Component — o único cliente aqui é o ParticleCanvas. */
 export function HeroSection() {
   return (
-    <section id="topo" className="bg-background">
-      <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 pt-14 pb-16 md:pt-20 md:pb-24 lg:grid-cols-[minmax(0,540px)_1fr] lg:gap-14">
+    <section id="topo" className="relative">
+      <ParticleCanvas />
+
+      <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 pt-16 pb-16 md:pt-24 md:pb-24 lg:grid-cols-[minmax(0,540px)_1fr] lg:gap-14">
         <div className="animate-rise">
-          <p className="inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/5 py-1.5 pr-3.5 pl-2.5 text-[13px] font-medium text-accent">
-            <span aria-hidden className="size-1.5 rounded-full bg-accent" />
+          <p className="border-accent-soft-foreground/25 bg-accent/10 text-accent-soft-foreground inline-flex items-center gap-2 rounded-full border py-1.5 pr-3.5 pl-2.5 text-[13px] font-medium">
+            <span
+              aria-hidden
+              className="bg-accent-soft-foreground size-1.5 rounded-full"
+            />
             {hero.badge}
           </p>
 
-          <h1 className="mt-6 text-[clamp(2.375rem,6vw,3.625rem)] leading-[1.06] font-semibold tracking-tight text-balance text-foreground">
+          <h1 className="font-display text-foreground mt-6 text-[clamp(2.375rem,6vw,3.5rem)] leading-[1.06] font-semibold tracking-[-0.03em] text-balance">
             {hero.tituloInicio}
-            <span className="text-accent">{hero.tituloDestaque}</span>
+            <span className="texto-gradiente">{hero.tituloDestaque}</span>
             {hero.tituloFim}
           </h1>
 
-          <p className="mt-6 max-w-lg text-lg leading-relaxed text-pretty text-foreground/70">
+          <p className="text-foreground-base/70 mt-6 max-w-lg text-lg leading-relaxed text-pretty">
             {hero.subtitulo}
           </p>
 
@@ -32,18 +38,18 @@ export function HeroSection() {
             </CtaLink>
           </div>
 
-          <dl className="mt-12 flex flex-wrap items-center gap-x-6 gap-y-4 border-t border-border pt-6">
+          <dl className="border-border mt-12 flex flex-wrap items-center gap-x-6 gap-y-4 border-t pt-6">
             {hero.indicadores.map((item, i) => (
               <div key={item.rotulo} className="flex items-center gap-6">
                 {i > 0 ? (
-                  <span aria-hidden className="hidden h-9 w-px bg-border sm:block" />
+                  <span aria-hidden className="bg-border hidden h-9 w-px sm:block" />
                 ) : null}
                 <div>
                   <dt className="sr-only">{item.rotulo}</dt>
-                  <dd className="text-2xl font-semibold tracking-tight text-foreground">
+                  <dd className="font-display text-foreground text-2xl font-semibold tracking-tight">
                     {item.valor}
                   </dd>
-                  <p className="mt-0.5 text-[13px] whitespace-nowrap text-foreground/55">
+                  <p className="text-muted mt-0.5 text-[13px] whitespace-nowrap">
                     {item.rotulo}
                   </p>
                 </div>
@@ -52,10 +58,10 @@ export function HeroSection() {
           </dl>
         </div>
 
-        <div className="relative animate-rise-slow">
+        <div className="animate-rise-slow relative">
           <div
             aria-hidden
-            className="absolute inset-8 bg-[radial-gradient(ellipse_at_center,rgb(37_99_235_/_0.09),transparent_70%)]"
+            className="absolute inset-4 bg-[radial-gradient(ellipse_at_center,color-mix(in_oklab,var(--accent)_38%,transparent),transparent_70%)] blur-2xl"
           />
           <div className="relative flex justify-center lg:justify-end">
             <DashboardMockup />
