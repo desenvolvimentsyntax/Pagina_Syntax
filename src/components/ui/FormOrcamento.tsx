@@ -16,6 +16,7 @@ import {
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
+import { CtaLink } from "@/components/ui/CtaLink";
 import { contatoSecao } from "@/content/pt-BR/home";
 import { contato } from "@/content/pt-BR/site";
 import { contatoSchema, type ContatoForm } from "@/lib/schemas/contato";
@@ -89,14 +90,11 @@ export function FormOrcamento() {
           </Alert.Content>
         </Alert>
 
-        <a
-          href={linkWhatsApp}
-          target="_blank"
-          rel="noreferrer noopener"
-          className="inline-flex h-12 items-center justify-center rounded-lg bg-accent px-6 text-[15px] font-medium text-accent-foreground transition-colors hover:bg-accent/90"
-        >
-          {form.sucesso.linkRotulo}
-        </a>
+        <div>
+          <CtaLink href={linkWhatsApp} externo>
+            {form.sucesso.linkRotulo}
+          </CtaLink>
+        </div>
 
         <Button
           variant="ghost"
