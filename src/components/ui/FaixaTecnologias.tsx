@@ -20,7 +20,7 @@ export function FaixaTecnologias({ rotulo, chips, className }: FaixaTecnologiasP
       orientation="horizontal"
       tabIndex={0}
       aria-label={rotulo}
-      className={`[scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${className ?? ""}`}
+      className={`py-2.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${className ?? ""}`}
     >
       <ul className="flex w-max items-center gap-2.5">
         {chips.map((chip) => (

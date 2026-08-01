@@ -24,7 +24,9 @@ export function HeroSection() {
     <section id="topo" className="relative overflow-x-clip">
       <ParticleCanvas />
 
-      <div className="relative mx-auto grid w-full max-w-7xl items-center gap-8 px-5 pt-12 pb-16 md:gap-12 md:px-6 md:pt-16 md:pb-20 lg:min-h-[calc(100svh-82px)] lg:max-h-[960px] lg:grid-cols-[minmax(0,540px)_1fr] lg:content-center lg:gap-14 lg:pt-8 lg:pb-16">
+      {/* 2 colunas só em xl: em 1024–1279 o min-content do mockup (textos
+          nowrap) esmagaria a coluna de texto para ~300px. */}
+      <div className="relative mx-auto grid w-full max-w-7xl items-center gap-8 px-5 pt-12 pb-16 md:gap-12 md:px-6 md:pt-16 md:pb-20 xl:min-h-[calc(100svh-82px)] xl:max-h-[960px] xl:grid-cols-[minmax(0,540px)_1fr] xl:content-center xl:gap-14 xl:pt-8 xl:pb-16">
         <div className="animate-rise">
           <p className="border-accent-soft-foreground/25 bg-accent/10 text-accent-soft-foreground inline-flex max-w-full items-center gap-2 rounded-full border py-1.5 pr-3.5 pl-2.5 text-[13px] font-medium">
             <span
@@ -35,7 +37,7 @@ export function HeroSection() {
             <span className="hidden sm:inline">{hero.badge}</span>
           </p>
 
-          <h1 className="font-display text-foreground mt-6 text-[2rem] leading-[1.06] font-semibold tracking-[-0.03em] text-balance min-[480px]:text-[2.5rem] sm:text-[2.75rem] lg:text-[3.5rem]">
+          <h1 className="font-display text-foreground mt-6 text-[2rem] leading-[1.06] font-semibold tracking-[-0.03em] text-balance min-[480px]:text-[2.5rem] sm:text-[2.75rem] xl:text-[3.5rem]">
             {hero.tituloInicio}
             <span className="texto-gradiente">{hero.tituloDestaque}</span>
             {hero.tituloFim}
@@ -54,29 +56,29 @@ export function HeroSection() {
             </CtaLink>
           </div>
 
-          <LinhaFatos className="mt-10 hidden lg:flex" />
+          <LinhaFatos className="mt-10 hidden xl:flex" />
         </div>
 
         <div className="animate-rise-slow relative">
-          <ArcoSyntax className="parallax-suave--lento pointer-events-none absolute top-1/2 -right-14 hidden w-[540px] -translate-y-1/2 lg:block" />
+          <ArcoSyntax className="parallax-suave--lento pointer-events-none absolute top-1/2 -right-14 hidden w-[540px] -translate-y-1/2 xl:block" />
 
           <div
             aria-hidden
             className="absolute inset-4 bg-[radial-gradient(ellipse_at_center,color-mix(in_oklab,var(--accent)_38%,transparent),transparent_70%)] blur-2xl"
           />
 
-          <div className="relative flex justify-center lg:justify-end">
-            <DashboardMockup variante="compacto" className="lg:hidden" />
-            <DashboardMockup className="hidden lg:block" />
+          <div className="relative flex justify-center xl:justify-end">
+            <DashboardMockup variante="compacto" className="xl:hidden" />
+            <DashboardMockup className="hidden xl:block" />
           </div>
         </div>
 
-        <LinhaFatos className="flex lg:hidden" />
+        <LinhaFatos className="flex xl:hidden" />
       </div>
 
       <div
         aria-hidden
-        className="absolute inset-x-0 bottom-4 hidden justify-center lg:flex"
+        className="absolute inset-x-0 bottom-4 hidden justify-center xl:flex"
       >
         <div className="flex flex-col items-center gap-2">
           <span className="animate-pulso text-micro font-mono text-[10px] tracking-[0.18em] uppercase">

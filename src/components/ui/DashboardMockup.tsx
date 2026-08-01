@@ -235,7 +235,7 @@ function Satelites() {
   const [primeiro, segundo] = mockup.satelites;
 
   return (
-    <div className="hidden lg:block">
+    <div className="hidden xl:block">
       <div className="parallax-suave bg-panel-raised border-hairline-strong absolute top-14 -left-12 flex items-center gap-2 rounded-xl border px-3.5 py-2.5 shadow-[0_18px_40px_-18px_rgb(0_0_0/0.8)]">
         <span className="bg-positive size-1.5 rounded-full" />
         <span className="text-ondark text-[11px] font-medium whitespace-nowrap">
