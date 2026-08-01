@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
+import { PageShell } from "@/components/layout/PageShell";
 import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 import { ContatoSection } from "@/components/sections/ContatoSection";
 import { DiferenciaisSection } from "@/components/sections/DiferenciaisSection";
@@ -67,17 +68,19 @@ export default async function HomePage({
     <>
       <Header />
 
-      <main>
-        <HeroSection />
-        <SegmentosSection />
-        <QuemSomosSection />
-        <SolucoesSection />
-        <ProdutosSection />
-        <TecnologiasSection />
-        <DiferenciaisSection />
-        <ProjetosSection />
-        <ContatoSection />
-      </main>
+      <PageShell>
+        <main>
+          <HeroSection />
+          <SegmentosSection />
+          <QuemSomosSection />
+          <SolucoesSection />
+          <ProdutosSection />
+          <TecnologiasSection />
+          <DiferenciaisSection />
+          <ProjetosSection />
+          <ContatoSection />
+        </main>
+      </PageShell>
 
       <Footer />
       <WhatsAppButton />

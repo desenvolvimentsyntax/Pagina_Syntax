@@ -3,52 +3,143 @@
 @import "@heroui/styles";
 
 /* ---------------------------------------------------------------------------
-   Tema claro — paleta institucional da Syntax (CLAUDE.md §4).
-   O site inteiro é claro; a única área escura são os painéis de mockup de
-   produto, que usam os tokens ink/ondark do bloco @theme abaixo.
+   Tema escuro — identidade do site inteiro (CLAUDE.md §4).
+   O <html> carrega data-theme="dark", então o bloco escuro do HeroUI
+   (@layer theme) entra primeiro e nos dá color-scheme, --surface-shadow zerado
+   e os status clareados. Este bloco vem SEM @layer de propósito: CSS sem
+   camada vence qualquer camada, então sobrescreve os tokens do HeroUI sem
+   precisar de !important nem de especificidade inflada.
 --------------------------------------------------------------------------- */
 :root,
-[data-theme="light"] {
-  --background: oklch(1 0 0); /* #FFFFFF */
-  --foreground: oklch(0.2077 0.0398 265.75); /* #0F172A */
-  --surface: oklch(0.9842 0.0034 247.86); /* #F8FAFC */
-  --surface-foreground: var(--foreground);
-  --accent: oklch(0.5461 0.2152 262.88); /* #2563EB */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --background: oklch(0.1947 0.0225 276.15); /* #12141F */
+  --foreground: oklch(1 0 0); /* branco — só títulos */
+  --foreground-base: oklch(0.9449 0.0133 262.38); /* #E8EDF6 — corpo */
+  --muted: oklch(0.7025 0.0342 260.01); /* #93A0B5 */
+
+  --sheet: oklch(0.1719 0.0186 259.66); /* #0B1018 — folha central */
+  --slate: oklch(0.7107 0.0351 256.79); /* #94A3B8 — base das translucidezes */
+
+  /* Superfícies TRANSLÚCIDAS: é o que mantém Card visível sobre a folha.
+     Opacas na cor da folha, os cards sumiriam. */
+  --surface: color-mix(in oklab, var(--slate) 5%, transparent);
+  --surface-foreground: var(--foreground-base);
+  --surface-secondary: color-mix(in oklab, var(--slate) 9%, transparent);
+  --surface-tertiary: color-mix(in oklab, var(--slate) 12%, transparent);
+
+  /* Overlay é OPACO — Modal, Drawer, Tooltip e Popover flutuam sobre conteúdo
+     arbitrário; translúcido aqui deixaria o texto ilegível. */
+  --overlay: oklch(0.2153 0.0311 267.09); /* #131928 */
+  --overlay-foreground: var(--foreground-base);
+
+  --accent: oklch(0.5461 0.2152 262.88); /* #2563EB — só preenchimento */
   --accent-foreground: oklch(1 0 0);
-  --border: oklch(0.9288 0.0126 255.51); /* #E2E8F0 */
-  --radius: 0.5rem;
+  /* #60A5FA: o accent para TEXTO. #2563EB sobre a folha dá 3,69:1 e reprova. */
+  --accent-soft-foreground: oklch(0.7137 0.1434 254.62);
+  --focus: var(--accent-soft-foreground);
+  --link: var(--accent-soft-foreground);
+
+  --border: color-mix(in oklab, var(--slate) 14%, transparent);
+  /* Sobrescrito de propósito: no escuro do HeroUI ele deriva de --surface, que
+     aqui é translúcido — o color-mix resultante seria invisível. */
+  --border-secondary: color-mix(in oklab, var(--slate) 18%, transparent);
+  --separator: var(--border);
+
+  --radius: 0.75rem;
+}
+
+/* Tokens semânticos próprios expostos ao Tailwind. Os do HeroUI (accent,
+   surface, muted, border…) já vêm mapeados pelo @theme inline do pacote. */
+@theme inline {
+  --color-sheet: var(--sheet);
+  --color-foreground-base: var(--foreground-base);
 }
 
 /* ---------------------------------------------------------------------------
    Tokens de marca fora da escala do Tailwind (CLAUDE.md §3.6 — nada de hex
-   solto no JSX). Os tokens escuros valem SÓ para os painéis de mockup.
+   solto no JSX).
 --------------------------------------------------------------------------- */
 @theme {
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: ui-monospace, "Cascadia Mono", "SFMono-Regular", Menlo, monospace;
+  --font-display: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-ibm-plex-mono), ui-monospace, Menlo, monospace;
 
-  /* Painel escuro dos mockups de produto */
-  --color-ink: #0f172a;
-  --color-ink-deep: #0b1120;
-  --color-ink-panel: #101a2b;
+  /* Azuis de marca usados nos gradientes (o --accent é o meio da escala) */
+  --color-accent-2: #3b82f6;
+  --color-accent-strong: #1d4ed8;
+  --color-accent-violet: #a78bfa;
+  --color-accent-indigo: #818cf8;
 
-  /* Texto sobre o painel escuro */
-  --color-ondark: #e7edf7;
-  --color-ondark-soft: #8494aa;
-  --color-ondark-dim: #4c5a70;
+  /* Texto de apoio muito discreto (rótulos, monospace pequeno) */
+  --color-micro: #7d8aa0;
+
+  /* Cinza dos quadrados do mosaico da marca (MarcaSyntax) */
+  --color-slate-mark: #8fa0b5;
+
+  /* Rodapé: cobre os stops claros do gradiente da página */
+  --color-footer: #1f1f1f;
+  --color-footer-foreground: #c9c9c9;
+  --color-footer-muted: #a5a5a5;
+
+  /* WhatsApp: green-500 dá 2,28:1 com o glifo branco e reprova o SC 1.4.11 */
+  --color-whatsapp: #16a34a;
+  --color-whatsapp-hover: #15803d;
+
+  /* Painéis de mockup — agora escuros DENTRO de um site escuro: precisam
+     ficar acima da folha, não abaixo. */
+  --color-panel: #131928;
+  --color-panel-raised: #1a2233;
+
+  /* Texto sobre os painéis de mockup */
+  --color-ondark: #e8edf6;
+  --color-ondark-soft: #a3b0c4;
+  --color-ondark-dim: #7d8aa0;
   --color-ondark-link: #93b4fd;
 
   /* Estado positivo sobre escuro */
   --color-positive: #6ee7a0;
 
-  /* Contornos sobre o painel escuro */
-  --color-hairline: rgb(148 163 184 / 0.12);
+  /* Contornos sobre painel escuro */
+  --color-hairline: rgb(148 163 184 / 0.14);
   --color-hairline-strong: rgb(148 163 184 / 0.24);
 
   /* Animações de entrada — §10: nada acima de 400ms */
   --animate-rise: synRise 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
   --animate-rise-slow: synRise 400ms 80ms cubic-bezier(0.16, 1, 0.3, 1) both;
   --animate-grow: synGrow 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ---------------------------------------------------------------------------
+   Botão primário em gradiente.
+
+   Fica em @layer components (não sem camada) para que uma classe utilitária
+   do Tailwind — camada `utilities`, precedência maior — ainda consiga
+   sobrepor pontualmente.
+
+   Pegadinha: .button--primary não declara background-color; ela só define
+   --button-bg / --button-bg-hover, e é a .button base que aplica
+   `background-color: var(--button-bg)`. Um gradiente é background-IMAGE, então
+   o hover também tem que trocar a imagem. Efeito colateral bem-vindo: a cor
+   sólida continua embaixo e serve de fallback (5,17:1 com o branco).
+--------------------------------------------------------------------------- */
+@layer components {
+  .button {
+    border-radius: 9999px;
+  }
+
+  .button--primary {
+    background-image: linear-gradient(180deg, var(--color-accent-2), var(--accent));
+    box-shadow:
+      0 0 44px color-mix(in oklab, var(--accent) 55%, transparent),
+      inset 0 1px 0 rgb(255 255 255 / 0.28);
+  }
+
+  .button--primary:hover,
+  .button--primary[data-hovered="true"] {
+    background-image: linear-gradient(180deg, var(--accent), var(--color-accent-strong));
+  }
 }
 
 @keyframes synRise {
@@ -69,6 +160,39 @@
   to {
     transform: scaleY(1);
   }
+}
+
+/* ---------------------------------------------------------------------------
+   Fundo da página: a folha do PageShell flutua sobre este gradiente. O stop
+   final é claro de propósito — quem o cobre é o rodapé (--color-footer), por
+   isso nenhum texto pode encostar nele.
+--------------------------------------------------------------------------- */
+.fundo-pagina {
+  background-image: linear-gradient(
+    180deg,
+    var(--background) 0%,
+    var(--color-panel) 42%,
+    #8b93ae 100%
+  );
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+/* ---------------------------------------------------------------------------
+   Texto com gradiente (H1 do hero, §7). A cor sólida vem antes do clip: se o
+   background-clip falhar, o texto continua legível em vez de sumir.
+--------------------------------------------------------------------------- */
+.texto-gradiente {
+  color: var(--foreground-base);
+  background-image: linear-gradient(
+    94deg,
+    var(--accent-soft-foreground),
+    var(--color-accent-indigo) 55%,
+    var(--color-accent-violet)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /* ---------------------------------------------------------------------------
@@ -116,14 +240,15 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Âncoras param abaixo do header sticky. */
+/* Âncoras param abaixo do header flutuante. */
 section[id] {
-  scroll-margin-top: 5rem;
+  scroll-margin-top: 6.5rem;
 }
 
-/* Foco visível em tudo que é interativo (CLAUDE.md §9). */
+/* Foco visível em tudo que é interativo (CLAUDE.md §9).
+   var(--focus), não var(--accent): #2563EB sobre a folha dá 3,69:1. */
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--focus);
   outline-offset: 2px;
   border-radius: 4px;
 }
