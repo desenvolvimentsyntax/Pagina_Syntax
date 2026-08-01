@@ -9,6 +9,7 @@ import {
   navRodape,
   navSolucoes,
 } from "@/content/pt-BR/site";
+import { ui } from "@/content/pt-BR/ui";
 
 /**
  * Rodapé em quatro colunas: marca, navegação dos 9 atos, soluções (âncoras
@@ -35,8 +36,7 @@ export function Footer() {
             <MarcaSyntax tamanho="lg" />
 
             <p className="mt-5 max-w-sm text-sm leading-relaxed">
-              Sistemas web, aplicativos e automação para empresas do Brasil e do
-              Paraguai. No mercado desde {empresa.fundacao}.
+              {ui.rodape.descricao}
             </p>
 
             <div className="mt-6">
@@ -46,9 +46,9 @@ export function Footer() {
             </div>
           </div>
 
-          <nav aria-label="Navegação do rodapé">
+          <nav aria-label={ui.rodape.navegacaoAria}>
             <h2 className="text-footer-muted font-mono text-xs font-medium tracking-[0.1em] uppercase">
-              Navegação
+              {ui.rodape.colunaNavegacao}
             </h2>
             <ul className="mt-2 grid grid-cols-2 gap-x-6 text-sm lg:flex lg:flex-col lg:gap-1">
               {navRodape.map((item) => (
@@ -64,9 +64,9 @@ export function Footer() {
             </ul>
           </nav>
 
-          <nav aria-label="Soluções">
+          <nav aria-label={ui.rodape.solucoesAria}>
             <h2 className="text-footer-muted font-mono text-xs font-medium tracking-[0.1em] uppercase">
-              Soluções
+              {ui.rodape.colunaSolucoes}
             </h2>
             <ul className="mt-2 flex flex-col gap-1 text-sm">
               {navSolucoes.map((item) => (
@@ -84,7 +84,7 @@ export function Footer() {
 
           <div>
             <h2 className="text-footer-muted font-mono text-xs font-medium tracking-[0.1em] uppercase">
-              Contato
+              {ui.rodape.colunaContato}
             </h2>
             <ul className="mt-2 flex flex-col gap-1 text-sm">
               <li>
@@ -104,7 +104,7 @@ export function Footer() {
                   className="text-footer-muted inline-flex items-center gap-2 py-2.5 transition-colors hover:text-footer-foreground"
                 >
                   <MessageCircle aria-hidden className="text-accent-soft-foreground size-4 shrink-0" />
-                  {contato.celular} · WhatsApp
+                  {contato.celular} · {ui.rodape.sufixoWhatsApp}
                 </a>
               </li>
               <li>
@@ -113,7 +113,7 @@ export function Footer() {
                   className="text-footer-muted inline-flex items-center gap-2 py-2.5 transition-colors hover:text-footer-foreground"
                 >
                   <Phone aria-hidden className="text-accent-soft-foreground size-4 shrink-0" />
-                  {contato.telefonePy} · Paraguai
+                  {contato.telefonePy} · {ui.rodape.sufixoParaguai}
                 </a>
               </li>
               <li>
@@ -136,7 +136,7 @@ export function Footer() {
                   <span>
                     {empresa.endereco}
                     <br />
-                    Filial: {empresa.filial}
+                    {ui.rodape.filialPrefixo} {empresa.filial}
                   </span>
                 </a>
               </li>
@@ -148,9 +148,13 @@ export function Footer() {
             a página existir) e seletor de idioma (§18, fatia 5). */}
         <div className="text-footer-muted mt-12 flex flex-col gap-1.5 border-t border-white/10 pt-6 text-xs sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © {ano} {empresa.razaoSocial}. Todos os direitos reservados.
+            © {ano} {empresa.razaoSocial}. {ui.rodape.direitos}
           </p>
-          {empresa.cnpj ? <p>CNPJ {empresa.cnpj}</p> : null}
+          {empresa.cnpj ? (
+            <p>
+              {ui.rodape.cnpjRotulo} {empresa.cnpj}
+            </p>
+          ) : null}
         </div>
       </div>
     </footer>

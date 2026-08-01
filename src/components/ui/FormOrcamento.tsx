@@ -54,7 +54,7 @@ export function FormOrcamento() {
     },
   });
 
-  function aoEnviar(dados: ContatoForm) {
+  async function aoEnviar(dados: ContatoForm) {
     const texto = [
       "Olá! Vim pelo site da Syntax e gostaria de uma demonstração.",
       "",
@@ -70,8 +70,14 @@ export function FormOrcamento() {
     const url = `${contato.whatsappHref}?text=${encodeURIComponent(texto)}`;
     setLinkWhatsApp(url);
 
+    // Invariante: o window.open fica ANTES de qualquer await — o popup
+    // blocker só libera a abertura na pilha do gesto do usuário.
     const janela = window.open(url, "_blank", "noopener,noreferrer");
     setFalhouAbrir(janela === null);
+
+    // Pausa perceptiva, não IO: mantém o isPending com "Abrindo o WhatsApp…"
+    // visível antes da troca de etapa (teto de 400ms do §10).
+    await new Promise((resolve) => setTimeout(resolve, 400));
     setEtapa("sucesso");
   }
 
@@ -82,17 +88,23 @@ export function FormOrcamento() {
           <Alert.Indicator />
           <Alert.Content>
             <Alert.Title>
-              {falhouAbrir ? "Quase lá" : form.sucesso.titulo}
+              {falhouAbrir ? form.aviso.titulo : form.sucesso.titulo}
             </Alert.Title>
             <Alert.Description>
-              {falhouAbrir ? form.erro : form.sucesso.texto}
+              {falhouAbrir ? form.aviso.texto : form.sucesso.texto}
             </Alert.Description>
           </Alert.Content>
         </Alert>
 
+        {/* Com popup bloqueado o link é o único caminho — vira CTA primário. */}
         <div>
-          <CtaLink href={linkWhatsApp} externo>
-            {form.sucesso.linkRotulo}
+          <CtaLink
+            href={linkWhatsApp}
+            externo
+            variante={falhouAbrir ? "primario" : "secundario"}
+            larguraTotal={falhouAbrir}
+          >
+            {falhouAbrir ? form.aviso.linkRotulo : form.sucesso.linkRotulo}
           </CtaLink>
         </div>
 
@@ -104,7 +116,7 @@ export function FormOrcamento() {
             setEtapa("formulario");
           }}
         >
-          Preencher novamente
+          {form.preencherNovamente}
         </Button>
       </div>
     );
@@ -261,8 +273,7 @@ export function FormOrcamento() {
       </Button>
 
       <p className="text-xs leading-relaxed text-foreground/50">
-        Seus dados vão direto para o WhatsApp comercial da Syntax — nada fica
-        armazenado neste site.
+        {form.disclaimer}
       </p>
     </Form>
   );

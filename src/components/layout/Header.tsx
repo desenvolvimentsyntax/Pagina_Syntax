@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { CtaLink } from "@/components/ui/CtaLink";
 import { MarcaSyntax } from "@/components/ui/MarcaSyntax";
 import { navAcoes, navPrincipal, empresa, contato } from "@/content/pt-BR/site";
+import { ui } from "@/content/pt-BR/ui";
 
 /**
  * Menu de topo. A v3 não tem Navbar (CLAUDE.md §3.1), então o header é layout
@@ -58,12 +59,16 @@ export function Header() {
         }`}
       >
         <div className="flex items-center gap-8 xl:gap-10">
-          <a href="#topo" aria-label="Página inicial" className="flex min-h-11 items-center">
+          <a
+            href="#topo"
+            aria-label={ui.header.paginaInicialAria}
+            className="flex min-h-11 items-center"
+          >
             <MarcaSyntax />
           </a>
 
           <nav
-            aria-label="Navegação principal"
+            aria-label={ui.header.navPrincipalAria}
             className="hidden items-center gap-6 text-[14.5px] lg:flex"
           >
             {navPrincipal.map((item) => (
@@ -115,7 +120,7 @@ function MenuMobile({
       <Button
         isIconOnly
         variant="ghost"
-        aria-label="Abrir menu"
+        aria-label={ui.header.abrirMenu}
         className="text-foreground size-11 lg:hidden"
       >
         <Menu aria-hidden className="size-5" />
@@ -125,11 +130,11 @@ function MenuMobile({
         <Drawer.Content placement="right">
           <Drawer.Dialog>
             <Drawer.Header>
-              <Drawer.Heading>Menu</Drawer.Heading>
+              <Drawer.Heading>{ui.header.menuTitulo}</Drawer.Heading>
             </Drawer.Header>
 
             <Drawer.Body>
-              <nav aria-label="Navegação principal" className="flex flex-col gap-1">
+              <nav aria-label={ui.header.navPrincipalAria} className="flex flex-col gap-1">
                 {navPrincipal.map((item) => (
                   <a
                     key={item.rotulo}
@@ -151,7 +156,7 @@ function MenuMobile({
 
             <Drawer.Footer>
               <Button slot="close" variant="secondary">
-                Fechar
+                {ui.header.fechar}
               </Button>
               {/* Âncora, não Button: `render` tipa as props como <button> e o
                   ref não é compatível com <a>. Mesmas classes, via

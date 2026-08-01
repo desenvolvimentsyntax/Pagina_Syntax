@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { IBM_Plex_Mono, Instrument_Sans, Sora } from "next/font/google";
 
 import "@/app/globals.css";
@@ -38,6 +38,13 @@ const ibmPlexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://syntaxsistemas.com.br"),
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#12141F",
+  colorScheme: "dark",
 };
 
 export function generateStaticParams() {

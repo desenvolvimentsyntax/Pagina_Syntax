@@ -1,4 +1,5 @@
 import { mockup } from "@/content/pt-BR/home";
+import { ui } from "@/content/pt-BR/ui";
 
 /**
  * Painel ilustrativo do hero — card de navegador flat.
@@ -27,7 +28,7 @@ export function DashboardMockup({
   return (
     <div
       role="img"
-      aria-label="Painel do Syntax ERP mostrando pedidos do dia, faturamento e o volume de pedidos registrados no sistema ao longo do ano."
+      aria-label={ui.mockups.dashboardAria}
       className={`w-full ${compacto ? "max-w-[440px]" : "max-w-[680px]"} ${className ?? ""}`}
     >
       <div aria-hidden className="relative">
@@ -61,9 +62,15 @@ function BarraNavegador({ compacto }: { compacto: boolean }) {
           {mockup.url}
         </span>
       )}
-      <span className="text-ondark-dim ml-auto flex shrink-0 items-center gap-1.5 font-mono text-[9px] tracking-[0.08em] uppercase">
-        <span className="bg-positive size-1.5 rounded-full" />
-        {mockup.led}
+      <span className="ml-auto flex shrink-0 items-center gap-2.5">
+        {/* Rótulo visível: os indicadores do painel são fictícios (§11). */}
+        <span className="text-ondark-dim rounded bg-hairline px-2 py-0.5 font-mono text-[9px] tracking-[0.08em] whitespace-nowrap uppercase">
+          {ui.mockups.dadosIlustrativos}
+        </span>
+        <span className="text-ondark-dim flex shrink-0 items-center gap-1.5 font-mono text-[9px] tracking-[0.08em] uppercase">
+          <span className="bg-positive size-1.5 rounded-full" />
+          {mockup.led}
+        </span>
       </span>
     </div>
   );

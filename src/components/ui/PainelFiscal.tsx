@@ -1,4 +1,5 @@
 import { prova } from "@/content/pt-BR/home";
+import { ui } from "@/content/pt-BR/ui";
 
 /**
  * Painel ilustrativo do E-Syntax.
@@ -14,7 +15,7 @@ export function PainelFiscal() {
   return (
     <div
       role="img"
-      aria-label="Painel de documentos fiscais do E-Syntax, com NF-e, NFC-e e CT-e emitidos e status de autorização em tempo real."
+      aria-label={ui.mockups.painelFiscalAria}
       className="bg-panel overflow-hidden rounded-2xl shadow-[0_40px_70px_-45px_rgb(0_0_0/0.9),0_0_44px_color-mix(in_oklab,var(--glow-color)_26%,transparent),inset_0_0_0_1px_rgb(148_163_184_/_0.18)]"
     >
       <div aria-hidden>
@@ -27,9 +28,15 @@ export function PainelFiscal() {
           <span className="hidden h-6 items-center truncate rounded-md bg-hairline px-3 font-mono text-[10.5px] text-ondark-soft sm:flex">
             {painel.url}
           </span>
-          <span className="ml-auto flex min-w-0 items-center gap-1.5 text-[10.5px] text-ondark-soft">
-            <span className="size-1.5 shrink-0 rounded-full bg-positive" />
-            <span className="truncate">{painel.status}</span>
+          <span className="ml-auto flex min-w-0 items-center gap-2.5">
+            {/* Rótulo visível: os nomes de empresa do painel são fictícios (§11). */}
+            <span className="text-ondark-dim rounded bg-hairline px-2 py-0.5 font-mono text-[9px] tracking-[0.08em] whitespace-nowrap uppercase">
+              {ui.mockups.dadosIlustrativos}
+            </span>
+            <span className="flex min-w-0 items-center gap-1.5 text-[10.5px] text-ondark-soft">
+              <span className="size-1.5 shrink-0 rounded-full bg-positive" />
+              <span className="truncate">{painel.status}</span>
+            </span>
           </span>
         </div>
 

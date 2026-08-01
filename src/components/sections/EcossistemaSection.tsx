@@ -2,8 +2,8 @@ import { FaixaTecnologias } from "@/components/ui/FaixaTecnologias";
 import { ecossistema } from "@/content/pt-BR/home";
 
 /**
- * Ato 06 — Ecossistema como FAIXA (peso 1): o respiro entre Método e
- * Diferenciais. Herdou o nicho da antiga faixa de Segmentos — uma frase de
+ * Faixa entre os atos 05 e 06 — Ecossistema (peso 1): o respiro entre Método
+ * e Diferenciais. Herdou o nicho da antiga faixa de Segmentos — uma frase de
  * credibilidade + os chips de stack numa linha deslizante. Curta de
  * propósito: o público não é técnico (§1). Sem SectionHeading (§7, faixa).
  */
