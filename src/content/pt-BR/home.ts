@@ -175,46 +175,55 @@ export const solucoes = {
   titulo: "Uma solução para cada parte da sua operação",
   subtitulo:
     "Do balcão ao faturamento: escolha o ponto que mais dói hoje e comece por ele.",
+  /** `destaque` marca as duas capas do bento (§7) — as frentes-mãe. */
   itens: [
     {
       icone: "sistemas-web",
       titulo: "Sistemas web",
       texto: "Gestão no navegador, sem instalação — acesse da loja, do escritório ou do celular.",
-    },
-    {
-      icone: "administrativo",
-      titulo: "Sistemas administrativos",
-      texto: "Pedidos, estoque, financeiro e cadastros organizados em um painel só.",
-    },
-    {
-      icone: "restaurantes",
-      titulo: "Sistemas para restaurantes",
-      texto: "Frente de caixa com mesas, comandas, cardápio e fechamento sem fila.",
-    },
-    {
-      icone: "landing-pages",
-      titulo: "Landing pages",
-      texto: "Páginas de campanha rápidas, feitas para transformar visita em contato.",
-    },
-    {
-      icone: "sites",
-      titulo: "Sites institucionais",
-      texto: "Presença profissional que aparece no Google e passa credibilidade.",
+      destaque: true,
     },
     {
       icone: "sob-medida",
       titulo: "Desenvolvimento sob medida",
       texto: "Seu processo não cabe em sistema de prateleira? Construímos do seu jeito.",
+      destaque: true,
+    },
+    {
+      icone: "administrativo",
+      titulo: "Sistemas administrativos",
+      texto: "Pedidos, estoque, financeiro e cadastros organizados em um painel só.",
+      destaque: false,
+    },
+    {
+      icone: "restaurantes",
+      titulo: "Sistemas para restaurantes",
+      texto: "Frente de caixa com mesas, comandas, cardápio e fechamento sem fila.",
+      destaque: false,
+    },
+    {
+      icone: "landing-pages",
+      titulo: "Landing pages",
+      texto: "Páginas de campanha rápidas, feitas para transformar visita em contato.",
+      destaque: false,
+    },
+    {
+      icone: "sites",
+      titulo: "Sites institucionais",
+      texto: "Presença profissional que aparece no Google e passa credibilidade.",
+      destaque: false,
     },
     {
       icone: "integracoes",
       titulo: "Integrações",
       texto: "ERP, fiscal, pagamento e e-commerce conversando entre si, sem redigitação.",
+      destaque: false,
     },
     {
       icone: "apis",
       titulo: "APIs",
       texto: "Seus dados disponíveis com segurança para parceiros e outros sistemas.",
+      destaque: false,
     },
   ],
 } as const;
@@ -346,36 +355,27 @@ export const metodo = {
   ],
 } as const;
 
+/**
+ * Ecossistema virou faixa (§7): uma frase de credibilidade + os chips das
+ * antigas três abas achatados numa lista única.
+ * ⚠️ PENDENTE: confirmar com a Syntax o stack real antes de publicar.
+ */
 export const ecossistema = {
-  overline: "Ecossistema",
-  titulo: "Base moderna, sem modismo",
-  subtitulo:
-    "Construímos com ferramentas maduras e mantidas pelo mercado — o que garante segurança, velocidade e facilidade de evolução.",
-  abas: [
-    {
-      id: "nuvem",
-      rotulo: "Nuvem",
-      rotuloCurto: "Nuvem",
-      texto:
-        "Seus sistemas rodam no navegador, sem instalação. Acesse da loja, do escritório ou do celular, com os dados sempre atualizados.",
-      chips: ["Nuvem", "React", "Next.js", "Acesso por navegador"],
-    },
-    {
-      id: "apis",
-      rotulo: "APIs e integrações",
-      rotuloCurto: "APIs",
-      texto:
-        "Seus sistemas conversam entre si. Nada de redigitar no financeiro o que já foi digitado no pedido.",
-      chips: ["APIs REST", "Node.js", "TypeScript", "Integrações"],
-    },
-    {
-      id: "erp",
-      rotulo: "Gestão e ERP",
-      rotuloCurto: "ERP",
-      texto:
-        "Pedido, estoque, faturamento e documento fiscal no mesmo lugar, com histórico de tudo que passou pela operação.",
-      chips: ["PostgreSQL", "Documentos fiscais", "Multi-loja", "Força de vendas"],
-    },
+  rotulo: "Ecossistema",
+  texto:
+    "Base moderna, sem modismo: construímos com ferramentas maduras e mantidas pelo mercado.",
+  chips: [
+    "Nuvem",
+    "React",
+    "Next.js",
+    "Node.js",
+    "TypeScript",
+    "PostgreSQL",
+    "APIs REST",
+    "Documentos fiscais",
+    "Multi-loja",
+    "Força de vendas",
+    "Integrações",
   ],
 } as const;
 
@@ -391,9 +391,9 @@ export const diferenciais = {
     },
     {
       icone: "experiencia",
-      titulo: "Vinte anos de operação",
+      titulo: "No mercado desde 2006",
       texto:
-        "Desde 2006 dentro de distribuidoras, comércios e indústrias. Conhecemos o chão de loja, não só o código.",
+        "Distribuidoras, comércios e indústrias por dentro. Conhecemos o chão de loja, não só o código.",
     },
     {
       icone: "mercosul",
@@ -407,6 +407,23 @@ export const diferenciais = {
       texto:
         "Quando o processo é seu, o sistema também é: projetos personalizados do levantamento à entrega.",
     },
+  ],
+} as const;
+
+/**
+ * Mapa e números de atuação (ato Diferenciais).
+ * ⚠️ conferir antes de publicar: TODOS os números abaixo são derivados da
+ * contagem dos pins do mapa oficial de atuação da Syntax (26 marcadores:
+ * 24 cidades em SP, GO, RS, MS e MG + Pedro Juan Caballero e Assunção no
+ * Paraguai). O mapa pode estar desatualizado — validar com a empresa.
+ */
+export const atuacao = {
+  rotulo: "Atuação",
+  titulo: "Onde a Syntax já está rodando",
+  numeros: [
+    { valor: "26", rotulo: "localidades atendidas" },
+    { valor: "5", rotulo: "estados + Paraguai" },
+    { valor: "2", rotulo: "sedes próprias — Sorocaba SP e Pedro Juan Caballero PY" },
   ],
 } as const;
 
