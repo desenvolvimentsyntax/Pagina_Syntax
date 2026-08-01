@@ -21,25 +21,36 @@ export const hero = {
   badge: "Software house · Sorocaba SP · Pedro Juan Caballero PY",
   /** Versão do badge para telas < 640px — a completa quebra em 2 linhas. */
   badgeCurto: "Software house · BR & PY",
-  tituloInicio: "Transformamos processos em ",
-  tituloDestaque: "sistemas inteligentes",
-  tituloFim: ".",
+  tituloInicio: "A ",
+  tituloDestaque: "engenharia",
+  tituloFim: " por trás de quem vende, fatura e entrega.",
   subtitulo:
     "Sistemas web, aplicativos e automação para sua empresa vender, faturar e controlar a operação sem planilha e sem retrabalho.",
   ctaPrimario: { rotulo: "Solicitar demonstração", href: "#contato" },
   ctaSecundario: { rotulo: "Conhecer soluções", href: "#solucoes" },
-  indicadores: [
-    { valor: "2006", rotulo: "no mercado desde" },
-    { valor: "2 países", rotulo: "Brasil e Paraguai" },
-    { valor: "6 sistemas", rotulo: "no portfólio" },
+  /**
+   * ⚠️ conferir antes de publicar: "26 localidades" é contagem dos pins do
+   * mapa oficial de atuação (24 cidades BR + 2 PY) — derivado, não declarado.
+   */
+  linhaFatos: [
+    "Desde 2006",
+    "Sorocaba SP · Pedro Juan Caballero PY",
+    "26 localidades no Mercosul",
   ],
+  indicadorRolagem: "role",
 } as const;
 
 /** Painel ilustrativo do hero. Conteúdo de demonstração, decorativo. */
 export const mockup = {
   url: "app.syntaxsistemas.com.br",
+  led: "produção",
   produto: "Syntax ERP",
   menu: ["Visão geral", "Pedidos", "Estoque", "Financeiro", "Relatórios"],
+  /** Mini-cartões que orbitam o painel no desktop (decorativos). */
+  satelites: [
+    { rotulo: "NF-e autorizada", nota: "agora", tom: "ok" },
+    { rotulo: "API", nota: "62 ms", tom: "info" },
+  ],
   cabecalho: {
     titulo: "Operação em tempo real",
     subtitulo: "Atualizado há 2 minutos",

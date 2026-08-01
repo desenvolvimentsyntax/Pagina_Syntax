@@ -7,37 +7,63 @@ import { mockup } from "@/content/pt-BR/home";
  * na cor da folha ele desapareceria dentro dela. É decorativo — o leitor de
  * tela recebe uma descrição única e o conteúdo interno fica oculto (§9).
  * Conteúdo de demonstração (§11).
+ *
+ * `variante="compacto"` é a versão da dobra mobile: sem sidebar, sem URL,
+ * 2 KPIs e 8 barras — orçada para entrar na primeira tela de 390×844.
+ * Os satélites (mini-cartões com parallax) só existem na completa, em lg+.
  */
-export function DashboardMockup() {
+
+interface DashboardMockupProps {
+  variante?: "completo" | "compacto";
+  className?: string;
+}
+
+export function DashboardMockup({
+  variante = "completo",
+  className,
+}: DashboardMockupProps) {
+  const compacto = variante === "compacto";
+
   return (
     <div
       role="img"
       aria-label="Painel do Syntax ERP mostrando pedidos do dia, faturamento e o volume de pedidos registrados no sistema ao longo do ano."
-      className="w-full max-w-[680px]"
+      className={`w-full ${compacto ? "max-w-[440px]" : "max-w-[680px]"} ${className ?? ""}`}
     >
-      <div
-        aria-hidden
-        className="border-hairline-strong bg-panel overflow-hidden rounded-2xl border shadow-[0_40px_80px_-40px_rgb(0_0_0/0.9)]"
-      >
-        <BarraNavegador url={mockup.url} />
+      <div aria-hidden className="relative">
+        <div className="border-hairline-strong bg-panel overflow-hidden rounded-2xl border shadow-[0_40px_80px_-40px_rgb(0_0_0/0.9),0_0_44px_color-mix(in_oklab,var(--glow-color)_28%,transparent)]">
+          <BarraNavegador compacto={compacto} />
 
-        <div className="grid grid-cols-1 sm:grid-cols-[168px_1fr]">
-          <Sidebar />
-          <Conteudo />
+          {compacto ? (
+            <Conteudo compacto />
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-[168px_1fr]">
+              <Sidebar />
+              <Conteudo />
+            </div>
+          )}
         </div>
+
+        {compacto ? null : <Satelites />}
       </div>
     </div>
   );
 }
 
-function BarraNavegador({ url }: { url: string }) {
+function BarraNavegador({ compacto }: { compacto: boolean }) {
   return (
     <div className="border-hairline bg-panel-raised flex h-9 items-center gap-2 border-b px-3.5">
       <span className="bg-ondark-dim size-2 rounded-full" />
       <span className="bg-ondark-dim size-2 rounded-full" />
       <span className="bg-ondark-dim size-2 rounded-full" />
-      <span className="border-hairline bg-panel text-ondark-soft ml-2 hidden h-5 items-center truncate rounded-md border px-2.5 font-mono text-[10.5px] sm:flex">
-        {url}
+      {compacto ? null : (
+        <span className="border-hairline bg-panel text-ondark-soft ml-2 hidden h-5 items-center truncate rounded-md border px-2.5 font-mono text-[10.5px] sm:flex">
+          {mockup.url}
+        </span>
+      )}
+      <span className="text-ondark-dim ml-auto flex shrink-0 items-center gap-1.5 font-mono text-[9px] tracking-[0.08em] uppercase">
+        <span className="bg-positive size-1.5 rounded-full" />
+        {mockup.led}
       </span>
     </div>
   );
@@ -78,9 +104,13 @@ function Sidebar() {
   );
 }
 
-function Conteudo() {
+function Conteudo({ compacto = false }: { compacto?: boolean }) {
+  const indicadores = compacto
+    ? mockup.indicadores.slice(0, 2)
+    : mockup.indicadores;
+
   return (
-    <div className="p-4 sm:p-5">
+    <div className={compacto ? "p-3.5" : "p-4 sm:p-5"}>
       <div className="flex items-end justify-between gap-3">
         <div className="shrink-0">
           <div className="text-[14.5px] font-semibold tracking-tight text-ondark whitespace-nowrap">
@@ -90,21 +120,31 @@ function Conteudo() {
             {mockup.cabecalho.subtitulo}
           </div>
         </div>
-        <div className="hidden shrink-0 gap-1.5 sm:flex">
-          <span className="border-hairline bg-panel-raised text-ondark-soft rounded-md border px-2.5 py-1 text-[10px]">
-            30 dias
-          </span>
-          <span className="rounded-md bg-accent px-2.5 py-1 text-[10px] text-accent-foreground">
-            Exportar
-          </span>
-        </div>
+        {compacto ? null : (
+          <div className="hidden shrink-0 gap-1.5 sm:flex">
+            <span className="border-hairline bg-panel-raised text-ondark-soft rounded-md border px-2.5 py-1 text-[10px]">
+              30 dias
+            </span>
+            <span className="rounded-md bg-accent px-2.5 py-1 text-[10px] text-accent-foreground">
+              Exportar
+            </span>
+          </div>
+        )}
       </div>
 
-      <div className="mt-3.5 grid grid-cols-2 gap-2.5 min-[400px]:grid-cols-3">
-        {mockup.indicadores.map((kpi) => (
+      <div
+        className={
+          compacto
+            ? "mt-3 grid grid-cols-2 gap-2.5"
+            : "mt-3.5 grid grid-cols-2 gap-2.5 min-[400px]:grid-cols-3"
+        }
+      >
+        {indicadores.map((kpi) => (
           <div
             key={kpi.rotulo}
-            className="border-hairline bg-panel-raised min-w-0 rounded-xl border p-3 last:hidden min-[400px]:last:block"
+            className={`border-hairline bg-panel-raised min-w-0 rounded-xl border p-3 ${
+              compacto ? "" : "last:hidden min-[400px]:last:block"
+            }`}
           >
             <div className="text-ondark-soft text-[10px] leading-tight">
               {kpi.rotulo}
@@ -125,16 +165,16 @@ function Conteudo() {
         ))}
       </div>
 
-      <Grafico />
+      <Grafico compacto={compacto} />
     </div>
   );
 }
 
-function Grafico() {
+function Grafico({ compacto }: { compacto: boolean }) {
   const { grafico } = mockup;
 
   return (
-    <div className="border-hairline rounded-xl border px-4 pt-4 pb-3 mt-3">
+    <div className="border-hairline mt-3 rounded-xl border px-4 pt-4 pb-3">
       <div className="flex items-center justify-between gap-3">
         <div className="text-ondark text-[11.5px] font-medium whitespace-nowrap">
           {grafico.titulo}
@@ -151,11 +191,15 @@ function Grafico() {
         </div>
       </div>
 
-      <div className="mt-3.5 flex h-[110px] items-end gap-1.5 sm:gap-2">
+      <div
+        className={`mt-3.5 flex items-end gap-1.5 sm:gap-2 ${compacto ? "h-[88px]" : "h-[110px]"}`}
+      >
         {grafico.automatico.map((auto, i) => (
           <div
             key={grafico.meses[i]}
-            className={`h-full flex-1 flex-col justify-end gap-[3px] ${i < 4 ? "hidden sm:flex" : "flex"}`}
+            className={`h-full flex-1 flex-col justify-end gap-[3px] ${
+              i < 4 ? (compacto ? "hidden" : "hidden sm:flex") : "flex"
+            }`}
           >
             <div
               className="origin-bottom animate-grow rounded-t-[3px] bg-accent"
@@ -171,10 +215,44 @@ function Grafico() {
 
       <div className="text-ondark-dim mt-2 flex justify-between font-mono text-[9px]">
         {grafico.meses.map((mes, i) => (
-          <span key={mes} className={i < 4 ? "hidden sm:inline" : undefined}>
+          <span
+            key={mes}
+            className={i < 4 ? (compacto ? "hidden" : "hidden sm:inline") : undefined}
+          >
             {mes}
           </span>
         ))}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Mini-cartões que orbitam o painel (L1.5). Parallax em velocidades
+ * diferentes — decorativo, dentro do role="img" do pai, só lg+.
+ */
+function Satelites() {
+  const [primeiro, segundo] = mockup.satelites;
+
+  return (
+    <div className="hidden lg:block">
+      <div className="parallax-suave bg-panel-raised border-hairline-strong absolute top-14 -left-12 flex items-center gap-2 rounded-xl border px-3.5 py-2.5 shadow-[0_18px_40px_-18px_rgb(0_0_0/0.8)]">
+        <span className="bg-positive size-1.5 rounded-full" />
+        <span className="text-ondark text-[11px] font-medium whitespace-nowrap">
+          {primeiro.rotulo}
+        </span>
+        <span className="text-ondark-dim text-[10px] whitespace-nowrap">
+          {primeiro.nota}
+        </span>
+      </div>
+
+      <div className="parallax-suave--lento bg-panel-raised border-hairline-strong absolute -right-7 bottom-16 flex items-center gap-2 rounded-xl border px-3.5 py-2.5 font-mono shadow-[0_18px_40px_-18px_rgb(0_0_0/0.8)]">
+        <span className="text-ondark-soft text-[10px] tracking-[0.06em] uppercase whitespace-nowrap">
+          {segundo.rotulo}
+        </span>
+        <span className="text-accent-soft-foreground text-[11px] font-medium whitespace-nowrap">
+          {segundo.nota}
+        </span>
       </div>
     </div>
   );
