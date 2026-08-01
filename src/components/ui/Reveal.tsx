@@ -10,12 +10,19 @@ import { useEffect, useRef, type ReactNode } from "react";
 
 interface RevealProps {
   children: ReactNode;
-  /** Atraso em ms para escalonar itens de uma mesma grade (máx. sutil). */
+  /** Atraso em ms — escape pontual; para grades, prefira `.reveal-stagger` no pai. */
   atraso?: number;
+  /** Estado inicial da entrada (§10). O destino é sempre o mesmo. */
+  efeito?: "subir" | "lado" | "lado-inverso" | "escala";
   className?: string;
 }
 
-export function Reveal({ children, atraso = 0, className }: RevealProps) {
+export function Reveal({
+  children,
+  atraso = 0,
+  efeito = "subir",
+  className,
+}: RevealProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -47,6 +54,7 @@ export function Reveal({ children, atraso = 0, className }: RevealProps) {
     <div
       ref={ref}
       className={className ? `reveal ${className}` : "reveal"}
+      data-efeito={efeito === "subir" ? undefined : efeito}
       style={atraso ? { transitionDelay: `${atraso}ms` } : undefined}
     >
       {children}
