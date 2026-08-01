@@ -69,21 +69,9 @@ export const mockup = {
   },
 } as const;
 
-export const segmentos = {
-  rotulo: "Segmentos atendidos",
-  itens: [
-    "Distribuição",
-    "Indústria",
-    "Varejo",
-    "Food service",
-    "Controle de frotas",
-    "Gestão de eventos",
-  ],
-} as const;
-
 export const quemSomos = {
   overline: "Quem somos",
-  titulo: "Vinte anos resolvendo a operação de quem vende e distribui",
+  titulo: "Desde 2006 resolvendo a operação de quem vende e distribui",
   subtitulo:
     "A Syntax nasceu em 2006 desenvolvendo sistemas para indústrias e distribuidoras de bebidas — e cresceu junto com os clientes.",
   paragrafos: [
@@ -91,10 +79,94 @@ export const quemSomos = {
     "Com matriz em Sorocaba-SP e filial em Pedro Juan Caballero-PY, acompanhamos operações em todo o Mercosul — no seu idioma e no seu fuso.",
     "Quem desenvolve é quem atende: nossa equipe reúne profissionais com mais de 15 anos de estrada em software de gestão.",
   ],
-  fatos: [
-    { valor: "2006", rotulo: "ano de fundação" },
-    { valor: "15+ anos", rotulo: "de experiência da equipe" },
-    { valor: "BR · PY", rotulo: "matriz e filial próprias" },
+  /**
+   * Marcos da linha do tempo. Os dois do meio não têm ano de propósito —
+   * ⚠️ conferir com a Syntax os anos reais da expansão e da filial antes de
+   * datar qualquer um deles.
+   */
+  marcos: [
+    {
+      ano: "2006",
+      titulo: "Fundação em Sorocaba",
+      texto:
+        "Primeiros sistemas para industrialização e distribuição no setor de bebidas.",
+    },
+    {
+      ano: "Expansão",
+      titulo: "A linha Syntax cresce",
+      texto:
+        "ERP, Store, Mobile e Eventos chegam a varejo, indústria, frotas e eventos.",
+    },
+    {
+      ano: "Fronteira",
+      titulo: "Filial no Paraguai",
+      texto:
+        "Operação própria em Pedro Juan Caballero, dos dois lados do Mercosul.",
+    },
+    {
+      ano: "Hoje",
+      titulo: "Nova geração web",
+      texto: "E-Syntax, Dex e PDV levam a gestão da Syntax para o navegador.",
+    },
+  ],
+} as const;
+
+export const problemas = {
+  overline: "Segmentos",
+  titulo: "O problema que trava a sua operação a gente já viu — e resolveu",
+  subtitulo:
+    "Seis segmentos, as mesmas dores de sempre. Escolha o seu e veja por onde a Syntax começa.",
+  rotuloLista: "Segmentos atendidos",
+  verSolucao: { rotulo: "Ver a solução", href: "#produtos" },
+  segmentos: [
+    {
+      id: "distribuicao",
+      rotulo: "Distribuição",
+      icone: "distribuicao",
+      dor: "Pedido tirado no papel, romaneio errado, carga voltando para o depósito.",
+      resposta:
+        "Força de vendas no celular e pedido caindo direto no faturamento — sem redigitação e sem extravio.",
+    },
+    {
+      id: "industria",
+      rotulo: "Indústria",
+      icone: "industria",
+      dor: "A produção não enxerga o estoque; a venda não enxerga a produção.",
+      resposta:
+        "Ordem de produção, estoque e faturamento no mesmo sistema, com o mesmo número.",
+    },
+    {
+      id: "varejo",
+      rotulo: "Varejo",
+      icone: "varejo",
+      dor: "Fila no caixa, estoque que não bate e fechamento que vira hora extra.",
+      resposta:
+        "Automação comercial do caixa ao fiscal: SAT, NFC-e e estoque em tempo real.",
+    },
+    {
+      id: "food-service",
+      rotulo: "Food service",
+      icone: "food-service",
+      dor: "Comanda perdida, cozinha às cegas e fechamento demorado.",
+      resposta:
+        "Mesas, comandas e delivery num painel só, com emissão fiscal no fim da noite.",
+    },
+    {
+      id: "frotas",
+      rotulo: "Controle de frotas",
+      icone: "frotas",
+      dor: "Veículo na rua sem controle de custo e manutenção vencendo no susto.",
+      resposta:
+        "Viagens, abastecimento e manutenção registrados por veículo e por motorista.",
+    },
+    {
+      id: "eventos",
+      rotulo: "Gestão de eventos",
+      icone: "eventos",
+      dor: "Agenda em choque, orçamento por telefone e custo descoberto no fim.",
+      resposta:
+        "Espaços, contratos e agenda num painel só — sem reserva duplicada.",
+    },
   ],
 } as const;
 

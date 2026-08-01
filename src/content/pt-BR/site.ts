@@ -39,16 +39,17 @@ export interface ItemNav {
 }
 
 /*
- * Seis itens é o teto: com sete o menu estoura em 1024px. "Diferenciais" saiu
- * daqui quando Método e Ecossistema entraram — a seção continua na página.
+ * Seis itens é o teto: com sete o menu estoura em 1024px. A ordem segue os
+ * 9 atos da narrativa (§7); Ecossistema (virou faixa) e Projetos (fundido em
+ * Produtos) saíram — as âncoras continuam navegáveis pelo footer.
  */
 export const navPrincipal: readonly ItemNav[] = [
   { rotulo: "Quem somos", href: "#quem-somos", secao: "quem-somos" },
+  { rotulo: "Segmentos", href: "#segmentos", secao: "segmentos" },
   { rotulo: "Soluções", href: "#solucoes", secao: "solucoes" },
-  { rotulo: "Método", href: "#metodo", secao: "metodo" },
   { rotulo: "Produtos", href: "#produtos", secao: "produtos" },
-  { rotulo: "Ecossistema", href: "#ecossistema", secao: "ecossistema" },
-  { rotulo: "Projetos", href: "#projetos", secao: "projetos" },
+  { rotulo: "Método", href: "#metodo", secao: "metodo" },
+  { rotulo: "Diferenciais", href: "#diferenciais", secao: "diferenciais" },
 ] as const;
 
 export const navAcoes = {

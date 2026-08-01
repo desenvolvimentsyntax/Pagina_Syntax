@@ -359,6 +359,15 @@
       animation-timeline: view();
       animation-range: entry 0% exit 100%;
     }
+
+    /* Trilho da LinhaDoTempo: se desenha conforme a seção entra na tela.
+       Fora do @supports, o fallback é o trilho completo. */
+    .traco-scroll-y {
+      transform-origin: top;
+      animation: synTracoY linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 45%;
+    }
   }
 }
 
