@@ -1,5 +1,6 @@
 import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 
+import { ArcoSyntax } from "@/components/ui/ArcoSyntax";
 import { CtaLink } from "@/components/ui/CtaLink";
 import { FormOrcamento } from "@/components/ui/FormOrcamento";
 import { Reveal } from "@/components/ui/Reveal";
@@ -44,7 +45,12 @@ const CANAIS = [
   },
 ] as const;
 
-/** Contato: canais diretos reais + formulário de orçamento (§12). */
+/**
+ * Ato 07 — Contato (peso 5): a banda em gradiente fecha o fio violeta→azul
+ * (stop indigo na entrada do .cta-gradiente) com o ArcoSyntax como ornamento
+ * de canto — as vars de cor do arco são sobrescritas localmente para ler em
+ * branco sobre o azul. Canais diretos reais + formulário (§12).
+ */
 export function ContatoSection() {
   return (
     <section id="contato" className="py-16 md:py-24">
@@ -53,19 +59,24 @@ export function ContatoSection() {
           {/* O CTA de fechamento é o cabeçalho desta seção, não uma seção
               própria: dois CTAs seguidos no fim da página se anulam. */}
           <div className="cta-gradiente relative -mx-5 overflow-hidden px-5 py-10 text-center sm:px-12 md:mx-0 md:rounded-[20px] md:py-20">
-            <p className="font-mono text-xs font-medium tracking-[0.1em] text-white/70 uppercase">
+            <ArcoSyntax className="pointer-events-none absolute -right-20 -bottom-28 w-[340px] opacity-70 [--color-hairline-strong:rgb(255_255_255/0.16)] [--glow-color:rgb(255_255_255/0.5)] md:-right-14 md:-bottom-24 md:w-[400px]" />
+
+            <p className="relative font-mono text-xs font-medium tracking-[0.1em] text-white/70 uppercase">
+              <span className="text-white/45">
+                07 <span aria-hidden>/</span>{" "}
+              </span>
               {contatoSecao.overline}
             </p>
 
-            <h2 className="font-display mx-auto mt-4 max-w-3xl text-[28px] leading-[1.12] font-semibold tracking-[-0.03em] text-pretty text-white md:text-[52px] md:leading-[1.08]">
+            <h2 className="font-display relative mx-auto mt-4 max-w-3xl text-[28px] leading-[1.12] font-semibold tracking-[-0.03em] text-pretty text-white md:text-[52px] md:leading-[1.08]">
               {contatoSecao.titulo}
             </h2>
 
-            <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-pretty text-white/80 md:mt-5 md:text-lg">
+            <p className="relative mx-auto mt-4 max-w-xl text-base leading-relaxed text-pretty text-white/80 md:mt-5 md:text-lg">
               {contatoSecao.subtitulo}
             </p>
 
-            <div className="mt-9 flex justify-center">
+            <div className="relative mt-9 flex justify-center">
               <CtaLink href={contatoSecao.cta.href} variante="inverso" comSeta>
                 {contatoSecao.cta.rotulo}
               </CtaLink>
@@ -92,9 +103,9 @@ export function ContatoSection() {
                 >
                   <span
                     aria-hidden
-                    className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-lg bg-accent/15 text-accent-soft-foreground"
+                    className="borda-gradiente text-accent-soft-foreground mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-lg"
                   >
-                    <canal.icone className="size-4" />
+                    <canal.icone className="size-4" strokeWidth={1.75} />
                   </span>
                   <span>
                     <span className="block text-sm font-medium text-foreground">

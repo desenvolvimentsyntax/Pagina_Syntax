@@ -8,6 +8,11 @@ export const empresa = {
   nome: "Syntax",
   sobrenome: "Sistemas",
   razaoSocial: "Syntax Sistemas Empresariais",
+  /**
+   * ⚠️ conferir — o CNPJ não existe em nenhuma fonte pública consultada.
+   * Vazio = o rodapé não renderiza a linha. Não publicar sem confirmação.
+   */
+  cnpj: "",
   fundacao: "2006",
   matriz: "Sorocaba · SP · Brasil",
   filial: "Pedro Juan Caballero · Paraguai",
@@ -55,3 +60,26 @@ export const navPrincipal: readonly ItemNav[] = [
 export const navAcoes = {
   contato: { rotulo: "Solicitar demonstração", href: "#contato" },
 } as const;
+
+/** O rodapé navega os 9 atos completos — inclusive os que saíram do menu. */
+export const navRodape = [
+  { rotulo: "Quem somos", href: "#quem-somos" },
+  { rotulo: "Segmentos", href: "#segmentos" },
+  { rotulo: "Soluções", href: "#solucoes" },
+  { rotulo: "Produtos", href: "#produtos" },
+  { rotulo: "Método", href: "#metodo" },
+  { rotulo: "Ecossistema", href: "#ecossistema" },
+  { rotulo: "Diferenciais", href: "#diferenciais" },
+  { rotulo: "Contato", href: "#contato" },
+] as const;
+
+/**
+ * Coluna de soluções do rodapé. Hoje são âncoras da home; na fatia 4 (§15)
+ * cada uma vira a rota própria de /solucoes/<slug> (§18).
+ */
+export const navSolucoes = [
+  { rotulo: "Sistema para restaurantes", href: "#produtos" },
+  { rotulo: "Sistema administrativo", href: "#produtos" },
+  { rotulo: "Desenvolvimento sob medida", href: "#solucoes" },
+  { rotulo: "Sites e landing pages", href: "#solucoes" },
+] as const;
