@@ -263,12 +263,12 @@ Toda seção da home segue esta estrutura. Não improvise variações.
 
 ```tsx
 <section id="produtos" className="py-16 md:py-24">
-  <div className="mx-auto max-w-7xl px-6">
+  <div className="mx-auto max-w-7xl px-5 md:px-6">
     {/* Cabeçalho: use o SectionHeading, não recrie a hierarquia */}
     <SectionHeading overline="Produtos" titulo="..." subtitulo="..." />
 
     {/* Conteúdo */}
-    <div className="mt-16">...</div>
+    <div className="mt-10 md:mt-16">...</div>
   </div>
 </section>
 ```
@@ -280,7 +280,24 @@ Toda seção da home segue esta estrutura. Não improvise variações.
 **A seção não tem fundo próprio** (§4): quem dá o fundo é o `PageShell`, que
 envolve o `<main>` em `app/[locale]/page.tsx`.
 
-Container: `max-w-7xl` sempre. Padding lateral: `px-6`.
+### Sistema de espaçamento (escala 8px) — vale para o site inteiro
+
+- Container: `max-w-7xl` sempre. Padding lateral: **`px-5` mobile, `md:px-6`**
+  — o MESMO em toda seção, header e footer. Nenhuma seção pode parecer mais
+  apertada que outra.
+- Ritmo vertical: `py-16 md:py-24` em toda seção (faixas como Segmentos:
+  `py-8`). Gaps internos em múltiplos de 8 (com 4 como meio passo).
+- Card: `p-4 sm:p-6` — nunca `p-6` fixo (em 320px o padding triplo
+  folha+seção+card desperdiça ~20% da largura).
+- **A folha (`PageShell`) e o header são full-bleed abaixo de `md`** (sem
+  radius, sem borda lateral): moldura de 12px não lê em 320px.
+- **Alvo de toque mínimo: 44px.** Link de texto pequeno ganha `py` estendido;
+  CTAs de dobra usam `larguraTotal` do `CtaLink` no mobile.
+- Mobile não é desktop encolhido: cada dobra tem um formato próprio
+  (mostruário → faixa deslizante → editorial → índice → timeline vertical →
+  tabs → banda numerada → cards → gradiente). **Nenhuma dobra repete o formato
+  da vizinha**; antes de criar seção nova, escolha um formato que ainda não
+  esteja em uso ao lado.
 
 ---
 

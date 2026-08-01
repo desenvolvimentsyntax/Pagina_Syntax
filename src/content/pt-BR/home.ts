@@ -268,6 +268,7 @@ export const ecossistema = {
     {
       id: "nuvem",
       rotulo: "Nuvem",
+      rotuloCurto: "Nuvem",
       texto:
         "Seus sistemas rodam no navegador, sem instalação. Acesse da loja, do escritório ou do celular, com os dados sempre atualizados.",
       chips: ["Nuvem", "React", "Next.js", "Acesso por navegador"],
@@ -275,6 +276,7 @@ export const ecossistema = {
     {
       id: "apis",
       rotulo: "APIs e integrações",
+      rotuloCurto: "APIs",
       texto:
         "Seus sistemas conversam entre si. Nada de redigitar no financeiro o que já foi digitado no pedido.",
       chips: ["APIs REST", "Node.js", "TypeScript", "Integrações"],
@@ -282,6 +284,7 @@ export const ecossistema = {
     {
       id: "erp",
       rotulo: "Gestão e ERP",
+      rotuloCurto: "ERP",
       texto:
         "Pedido, estoque, faturamento e documento fiscal no mesmo lugar, com histórico de tudo que passou pela operação.",
       chips: ["PostgreSQL", "Documentos fiscais", "Multi-loja", "Força de vendas"],
