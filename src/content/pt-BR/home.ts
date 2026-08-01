@@ -19,6 +19,8 @@
 
 export const hero = {
   badge: "Software house · Sorocaba SP · Pedro Juan Caballero PY",
+  /** Versão do badge para telas < 640px — a completa quebra em 2 linhas. */
+  badgeCurto: "Software house · BR & PY",
   tituloInicio: "Transformamos processos em ",
   tituloDestaque: "sistemas inteligentes",
   tituloFim: ".",

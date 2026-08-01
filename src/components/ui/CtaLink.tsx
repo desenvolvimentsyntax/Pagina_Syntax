@@ -20,6 +20,8 @@ interface CtaLinkProps {
   comSeta?: boolean;
   tamanho?: "md" | "lg";
   externo?: boolean;
+  /** Full-width no mobile, largura própria em sm+ (alvo de toque de 48px). */
+  larguraTotal?: boolean;
 }
 
 const VARIANTES = {
@@ -35,13 +37,21 @@ export function CtaLink({
   comSeta = false,
   tamanho = "lg",
   externo = false,
+  larguraTotal = false,
 }: CtaLinkProps) {
   const { variant, class: modificador } = VARIANTES[variante];
+  const classes = [modificador, larguraTotal ? "w-full sm:w-auto" : undefined]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <a
       href={href}
-      className={buttonVariants({ variant, size: tamanho, class: modificador })}
+      className={buttonVariants({
+        variant,
+        size: tamanho,
+        class: classes || undefined,
+      })}
       {...(externo ? { target: "_blank", rel: "noreferrer noopener" } : {})}
     >
       {children}
