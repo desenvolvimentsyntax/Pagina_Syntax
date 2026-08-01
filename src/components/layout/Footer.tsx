@@ -2,11 +2,18 @@ import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 
 import { CtaLink } from "@/components/ui/CtaLink";
 import { MarcaSyntax } from "@/components/ui/MarcaSyntax";
-import { contato, empresa, navAcoes, navPrincipal } from "@/content/pt-BR/site";
+import {
+  contato,
+  empresa,
+  navAcoes,
+  navRodape,
+  navSolucoes,
+} from "@/content/pt-BR/site";
 
 /**
- * Rodapé. Dados reais do site atual: endereço da matriz, telefones do Brasil e
- * do Paraguai, e-mail e fundação em 2006.
+ * Rodapé em quatro colunas: marca, navegação dos 9 atos, soluções (âncoras
+ * hoje; viram as rotas da fatia 4 do §15) e contato completo. Dados reais do
+ * site atual. CNPJ só renderiza quando `empresa.cnpj` for confirmado (§11).
  *
  * Fundo próprio (--color-footer), mais escuro que a folha: é ele que cobre os
  * stops claros do gradiente da página, onde nenhum texto poderia encostar.
@@ -17,7 +24,13 @@ export function Footer() {
   return (
     <footer className="bg-footer text-footer-foreground">
       <div className="mx-auto max-w-7xl px-5 py-12 md:px-6 md:py-16">
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[minmax(0,1.6fr)_1fr_1.2fr]">
+        {/* Hairline com o nó técnico — a marcação dos atos fecha a página. */}
+        <div aria-hidden className="mb-10 flex items-center md:mb-12">
+          <span className="bg-accent-soft-foreground/60 size-1 shrink-0 rounded-full" />
+          <span className="h-px flex-1 bg-white/10" />
+        </div>
+
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.5fr)_1fr_1.1fr_1.3fr]">
           <div>
             <MarcaSyntax tamanho="lg" />
 
@@ -37,8 +50,8 @@ export function Footer() {
             <h2 className="text-footer-muted font-mono text-xs font-medium tracking-[0.1em] uppercase">
               Navegação
             </h2>
-            <ul className="mt-2 grid grid-cols-2 gap-x-6 text-sm md:flex md:flex-col md:gap-1">
-              {navPrincipal.map((item) => (
+            <ul className="mt-2 grid grid-cols-2 gap-x-6 text-sm lg:flex lg:flex-col lg:gap-1">
+              {navRodape.map((item) => (
                 <li key={item.rotulo}>
                   <a
                     href={item.href}
@@ -48,14 +61,24 @@ export function Footer() {
                   </a>
                 </li>
               ))}
-              <li>
-                <a
-                  href="#contato"
-                  className="text-footer-muted inline-block py-2.5 transition-colors hover:text-footer-foreground"
-                >
-                  Contato
-                </a>
-              </li>
+            </ul>
+          </nav>
+
+          <nav aria-label="Soluções">
+            <h2 className="text-footer-muted font-mono text-xs font-medium tracking-[0.1em] uppercase">
+              Soluções
+            </h2>
+            <ul className="mt-2 flex flex-col gap-1 text-sm">
+              {navSolucoes.map((item) => (
+                <li key={item.rotulo}>
+                  <a
+                    href={item.href}
+                    className="text-footer-muted inline-block py-2.5 transition-colors hover:text-footer-foreground"
+                  >
+                    {item.rotulo}
+                  </a>
+                </li>
+              ))}
             </ul>
           </nav>
 
@@ -109,7 +132,7 @@ export function Footer() {
                   rel="noreferrer noopener"
                   className="text-footer-muted inline-flex items-start gap-2 py-2.5 transition-colors hover:text-footer-foreground"
                 >
-                  <MapPin aria-hidden className="mt-0.5 text-accent-soft-foreground size-4 shrink-0" />
+                  <MapPin aria-hidden className="text-accent-soft-foreground mt-0.5 size-4 shrink-0" />
                   <span>
                     {empresa.endereco}
                     <br />
@@ -121,9 +144,14 @@ export function Footer() {
           </div>
         </div>
 
-        <p className="text-footer-muted mt-12 border-t border-white/10 pt-6 text-xs">
-          © {ano} {empresa.razaoSocial}. Todos os direitos reservados.
-        </p>
+        {/* Slots aguardando confirmação: política de privacidade (linkar quando
+            a página existir) e seletor de idioma (§18, fatia 5). */}
+        <div className="text-footer-muted mt-12 flex flex-col gap-1.5 border-t border-white/10 pt-6 text-xs sm:flex-row sm:items-center sm:justify-between">
+          <p>
+            © {ano} {empresa.razaoSocial}. Todos os direitos reservados.
+          </p>
+          {empresa.cnpj ? <p>CNPJ {empresa.cnpj}</p> : null}
+        </div>
       </div>
     </footer>
   );

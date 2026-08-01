@@ -11,6 +11,8 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
+import { cartaoSyntax } from "@/components/ui/CartaoSyntax";
+import { PointerGlow } from "@/components/ui/PointerGlow";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { solucoes } from "@/content/pt-BR/home";
@@ -27,84 +29,153 @@ const ICONES: Record<string, LucideIcon> = {
 };
 
 /**
- * As oito frentes de desenvolvimento.
- *
- * No mobile é um ÍNDICE: lista com divide-y, ícone-tile à esquerda e número
- * `01–08` em mono à direita — oito cards empilhados eram 1.960px de coluna
- * monótona em 320. Em sm+ volta a grade de Card (§3, mapa de uso). É o único
- * índice da página; não replicar o padrão em outra seção.
+ * Ato 03 — Soluções em bento (peso 4): duas capas (as frentes-mãe) + seis
+ * regulares, todos CartaoSyntax dentro de PointerGlow — o spotlight que segue
+ * o mouse vive SÓ aqui (§10). No mobile as capas viram cards cheios e o resto
+ * continua índice numerado — formato exclusivo desta dobra (§7).
  */
 export function SolucoesSection() {
+  const capas = solucoes.itens.filter((item) => item.destaque);
+  const regulares = solucoes.itens.filter((item) => !item.destaque);
+
   return (
     <section id="solucoes" className="py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-5 md:px-6">
         <Reveal>
           <SectionHeading
+            indice="03"
             overline={solucoes.overline}
             titulo={solucoes.titulo}
             subtitulo={solucoes.subtitulo}
           />
         </Reveal>
 
-        {/* Índice — só < sm */}
-        <Reveal className="sm:hidden">
-          <ol className="divide-border border-border mt-10 divide-y border-y">
-            {solucoes.itens.map((item, i) => {
+        {/* Mobile: capas cheias + índice numerado — só < sm */}
+        <div className="sm:hidden">
+          <div className="reveal-stagger mt-10 flex flex-col gap-4">
+            {capas.map((item) => {
               const Icone = ICONES[item.icone];
 
               return (
-                <li key={item.titulo} className="flex items-start gap-4 py-4">
-                  <span
-                    aria-hidden
-                    className="bg-accent/15 text-accent-soft-foreground mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-lg"
-                  >
-                    {Icone ? <Icone className="size-4.5" /> : null}
-                  </span>
-
-                  <div className="min-w-0 flex-1">
-                    <h3 className="text-foreground text-[15px] font-semibold tracking-tight">
+                <Reveal key={item.titulo}>
+                  <div className={cartaoSyntax({ peso: "capa" }).base()}>
+                    <TileIcone Icone={Icone} tamanho="md" />
+                    <h3 className="text-foreground mt-4 text-lg font-semibold tracking-tight">
                       {item.titulo}
                     </h3>
-                    <p className="text-foreground-base/70 mt-1 text-[13px] leading-relaxed">
+                    <p className="text-foreground-base/70 mt-1.5 text-[13.5px] leading-relaxed">
                       {item.texto}
                     </p>
                   </div>
+                </Reveal>
+              );
+            })}
+          </div>
 
-                  <span aria-hidden className="text-micro mt-1 font-mono text-xs">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
+          <Reveal>
+            <ol className="divide-border border-border mt-6 divide-y border-y">
+              {regulares.map((item, i) => {
+                const Icone = ICONES[item.icone];
+
+                return (
+                  <li key={item.titulo} className="flex items-start gap-4 py-4">
+                    <TileIcone Icone={Icone} tamanho="sm" />
+
+                    <div className="min-w-0 flex-1">
+                      <h3 className="text-foreground text-[15px] font-semibold tracking-tight">
+                        {item.titulo}
+                      </h3>
+                      <p className="text-foreground-base/70 mt-1 text-[13px] leading-relaxed">
+                        {item.texto}
+                      </p>
+                    </div>
+
+                    <span aria-hidden className="text-micro mt-1 font-mono text-xs">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                  </li>
+                );
+              })}
+            </ol>
+          </Reveal>
+        </div>
+
+        {/* Bento — sm+ */}
+        <PointerGlow className="hidden sm:block">
+          <ul className="reveal-stagger mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-6">
+            {capas.map((item) => {
+              const Icone = ICONES[item.icone];
+
+              return (
+                <li key={item.titulo} className="h-full lg:col-span-3">
+                  <Reveal efeito="escala" className="h-full">
+                    <Card
+                      data-spotlight
+                      className={cartaoSyntax({ peso: "capa", interativo: true }).base({
+                        className: "h-full lg:min-h-52",
+                      })}
+                    >
+                      <Card.Header>
+                        <TileIcone Icone={Icone} tamanho="md" />
+                        <Card.Title className="mt-4 text-xl">{item.titulo}</Card.Title>
+                        <Card.Description className="mt-1.5 max-w-md text-[15px]">
+                          {item.texto}
+                        </Card.Description>
+                      </Card.Header>
+                    </Card>
+                  </Reveal>
                 </li>
               );
             })}
-          </ol>
-        </Reveal>
 
-        {/* Grade de cards — sm+ */}
-        <ul className="mt-14 hidden gap-5 sm:grid sm:grid-cols-2 lg:grid-cols-4">
-          {solucoes.itens.map((item, i) => {
-            const Icone = ICONES[item.icone];
+            {regulares.map((item) => {
+              const Icone = ICONES[item.icone];
 
-            return (
-              <li key={item.titulo} className="h-full">
-                <Reveal atraso={(i % 4) * 60} className="h-full">
-                  <Card className="h-full border border-border bg-surface transition-[border-color,box-shadow] hover:border-accent-soft-foreground/40 hover:shadow-[0_20px_40px_-24px_rgb(0_0_0/0.75)]">
-                    <Card.Header>
-                      <span
-                        aria-hidden
-                        className="mb-3 flex size-11 items-center justify-center rounded-lg bg-accent/15 text-accent-soft-foreground"
-                      >
-                        {Icone ? <Icone className="size-5" /> : null}
-                      </span>
-                      <Card.Title>{item.titulo}</Card.Title>
-                      <Card.Description>{item.texto}</Card.Description>
-                    </Card.Header>
-                  </Card>
-                </Reveal>
-              </li>
-            );
-          })}
-        </ul>
+              return (
+                <li key={item.titulo} className="h-full lg:col-span-2">
+                  <Reveal className="h-full">
+                    <Card
+                      data-spotlight
+                      className={cartaoSyntax({ peso: "padrao", interativo: true }).base({
+                        className: "h-full",
+                      })}
+                    >
+                      <Card.Header>
+                        <TileIcone Icone={Icone} tamanho="sm" />
+                        <Card.Title className="mt-3">{item.titulo}</Card.Title>
+                        <Card.Description className="mt-1">
+                          {item.texto}
+                        </Card.Description>
+                      </Card.Header>
+                    </Card>
+                  </Reveal>
+                </li>
+              );
+            })}
+          </ul>
+        </PointerGlow>
       </div>
     </section>
+  );
+}
+
+function TileIcone({
+  Icone,
+  tamanho,
+}: {
+  Icone: LucideIcon | undefined;
+  tamanho: "sm" | "md";
+}) {
+  return (
+    <span
+      aria-hidden
+      className={`borda-gradiente text-accent-soft-foreground flex shrink-0 items-center justify-center rounded-lg ${
+        tamanho === "md" ? "size-12" : "mt-0.5 size-10"
+      }`}
+    >
+      {Icone ? (
+        <Icone className={tamanho === "md" ? "size-5.5" : "size-4.5"} strokeWidth={1.75} />
+      ) : null}
+    </span>
   );
 }

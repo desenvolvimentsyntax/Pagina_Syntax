@@ -21,25 +21,36 @@ export const hero = {
   badge: "Software house · Sorocaba SP · Pedro Juan Caballero PY",
   /** Versão do badge para telas < 640px — a completa quebra em 2 linhas. */
   badgeCurto: "Software house · BR & PY",
-  tituloInicio: "Transformamos processos em ",
-  tituloDestaque: "sistemas inteligentes",
-  tituloFim: ".",
+  tituloInicio: "A ",
+  tituloDestaque: "engenharia",
+  tituloFim: " por trás de quem vende, fatura e entrega.",
   subtitulo:
     "Sistemas web, aplicativos e automação para sua empresa vender, faturar e controlar a operação sem planilha e sem retrabalho.",
   ctaPrimario: { rotulo: "Solicitar demonstração", href: "#contato" },
   ctaSecundario: { rotulo: "Conhecer soluções", href: "#solucoes" },
-  indicadores: [
-    { valor: "2006", rotulo: "no mercado desde" },
-    { valor: "2 países", rotulo: "Brasil e Paraguai" },
-    { valor: "6 sistemas", rotulo: "no portfólio" },
+  /**
+   * ⚠️ conferir antes de publicar: "26 localidades" é contagem dos pins do
+   * mapa oficial de atuação (24 cidades BR + 2 PY) — derivado, não declarado.
+   */
+  linhaFatos: [
+    "Desde 2006",
+    "Sorocaba SP · Pedro Juan Caballero PY",
+    "26 localidades no Mercosul",
   ],
+  indicadorRolagem: "role",
 } as const;
 
 /** Painel ilustrativo do hero. Conteúdo de demonstração, decorativo. */
 export const mockup = {
   url: "app.syntaxsistemas.com.br",
+  led: "produção",
   produto: "Syntax ERP",
   menu: ["Visão geral", "Pedidos", "Estoque", "Financeiro", "Relatórios"],
+  /** Mini-cartões que orbitam o painel no desktop (decorativos). */
+  satelites: [
+    { rotulo: "NF-e autorizada", nota: "agora", tom: "ok" },
+    { rotulo: "API", nota: "62 ms", tom: "info" },
+  ],
   cabecalho: {
     titulo: "Operação em tempo real",
     subtitulo: "Atualizado há 2 minutos",
@@ -58,21 +69,9 @@ export const mockup = {
   },
 } as const;
 
-export const segmentos = {
-  rotulo: "Segmentos atendidos",
-  itens: [
-    "Distribuição",
-    "Indústria",
-    "Varejo",
-    "Food service",
-    "Controle de frotas",
-    "Gestão de eventos",
-  ],
-} as const;
-
 export const quemSomos = {
   overline: "Quem somos",
-  titulo: "Vinte anos resolvendo a operação de quem vende e distribui",
+  titulo: "Desde 2006 resolvendo a operação de quem vende e distribui",
   subtitulo:
     "A Syntax nasceu em 2006 desenvolvendo sistemas para indústrias e distribuidoras de bebidas — e cresceu junto com os clientes.",
   paragrafos: [
@@ -80,10 +79,94 @@ export const quemSomos = {
     "Com matriz em Sorocaba-SP e filial em Pedro Juan Caballero-PY, acompanhamos operações em todo o Mercosul — no seu idioma e no seu fuso.",
     "Quem desenvolve é quem atende: nossa equipe reúne profissionais com mais de 15 anos de estrada em software de gestão.",
   ],
-  fatos: [
-    { valor: "2006", rotulo: "ano de fundação" },
-    { valor: "15+ anos", rotulo: "de experiência da equipe" },
-    { valor: "BR · PY", rotulo: "matriz e filial próprias" },
+  /**
+   * Marcos da linha do tempo. Os dois do meio não têm ano de propósito —
+   * ⚠️ conferir com a Syntax os anos reais da expansão e da filial antes de
+   * datar qualquer um deles.
+   */
+  marcos: [
+    {
+      ano: "2006",
+      titulo: "Fundação em Sorocaba",
+      texto:
+        "Primeiros sistemas para industrialização e distribuição no setor de bebidas.",
+    },
+    {
+      ano: "Expansão",
+      titulo: "A linha Syntax cresce",
+      texto:
+        "ERP, Store, Mobile e Eventos chegam a varejo, indústria, frotas e eventos.",
+    },
+    {
+      ano: "Fronteira",
+      titulo: "Filial no Paraguai",
+      texto:
+        "Operação própria em Pedro Juan Caballero, dos dois lados do Mercosul.",
+    },
+    {
+      ano: "Hoje",
+      titulo: "Nova geração web",
+      texto: "E-Syntax, Dex e PDV levam a gestão da Syntax para o navegador.",
+    },
+  ],
+} as const;
+
+export const problemas = {
+  overline: "Segmentos",
+  titulo: "O problema que trava a sua operação a gente já viu — e resolveu",
+  subtitulo:
+    "Seis segmentos, as mesmas dores de sempre. Escolha o seu e veja por onde a Syntax começa.",
+  rotuloLista: "Segmentos atendidos",
+  verSolucao: { rotulo: "Ver a solução", href: "#produtos" },
+  segmentos: [
+    {
+      id: "distribuicao",
+      rotulo: "Distribuição",
+      icone: "distribuicao",
+      dor: "Pedido tirado no papel, romaneio errado, carga voltando para o depósito.",
+      resposta:
+        "Força de vendas no celular e pedido caindo direto no faturamento — sem redigitação e sem extravio.",
+    },
+    {
+      id: "industria",
+      rotulo: "Indústria",
+      icone: "industria",
+      dor: "A produção não enxerga o estoque; a venda não enxerga a produção.",
+      resposta:
+        "Ordem de produção, estoque e faturamento no mesmo sistema, com o mesmo número.",
+    },
+    {
+      id: "varejo",
+      rotulo: "Varejo",
+      icone: "varejo",
+      dor: "Fila no caixa, estoque que não bate e fechamento que vira hora extra.",
+      resposta:
+        "Automação comercial do caixa ao fiscal: SAT, NFC-e e estoque em tempo real.",
+    },
+    {
+      id: "food-service",
+      rotulo: "Food service",
+      icone: "food-service",
+      dor: "Comanda perdida, cozinha às cegas e fechamento demorado.",
+      resposta:
+        "Mesas, comandas e delivery num painel só, com emissão fiscal no fim da noite.",
+    },
+    {
+      id: "frotas",
+      rotulo: "Controle de frotas",
+      icone: "frotas",
+      dor: "Veículo na rua sem controle de custo e manutenção vencendo no susto.",
+      resposta:
+        "Viagens, abastecimento e manutenção registrados por veículo e por motorista.",
+    },
+    {
+      id: "eventos",
+      rotulo: "Gestão de eventos",
+      icone: "eventos",
+      dor: "Agenda em choque, orçamento por telefone e custo descoberto no fim.",
+      resposta:
+        "Espaços, contratos e agenda num painel só — sem reserva duplicada.",
+    },
   ],
 } as const;
 
@@ -92,59 +175,64 @@ export const solucoes = {
   titulo: "Uma solução para cada parte da sua operação",
   subtitulo:
     "Do balcão ao faturamento: escolha o ponto que mais dói hoje e comece por ele.",
+  /** `destaque` marca as duas capas do bento (§7) — as frentes-mãe. */
   itens: [
     {
       icone: "sistemas-web",
       titulo: "Sistemas web",
       texto: "Gestão no navegador, sem instalação — acesse da loja, do escritório ou do celular.",
-    },
-    {
-      icone: "administrativo",
-      titulo: "Sistemas administrativos",
-      texto: "Pedidos, estoque, financeiro e cadastros organizados em um painel só.",
-    },
-    {
-      icone: "restaurantes",
-      titulo: "Sistemas para restaurantes",
-      texto: "Frente de caixa com mesas, comandas, cardápio e fechamento sem fila.",
-    },
-    {
-      icone: "landing-pages",
-      titulo: "Landing pages",
-      texto: "Páginas de campanha rápidas, feitas para transformar visita em contato.",
-    },
-    {
-      icone: "sites",
-      titulo: "Sites institucionais",
-      texto: "Presença profissional que aparece no Google e passa credibilidade.",
+      destaque: true,
     },
     {
       icone: "sob-medida",
       titulo: "Desenvolvimento sob medida",
       texto: "Seu processo não cabe em sistema de prateleira? Construímos do seu jeito.",
+      destaque: true,
+    },
+    {
+      icone: "administrativo",
+      titulo: "Sistemas administrativos",
+      texto: "Pedidos, estoque, financeiro e cadastros organizados em um painel só.",
+      destaque: false,
+    },
+    {
+      icone: "restaurantes",
+      titulo: "Sistemas para restaurantes",
+      texto: "Frente de caixa com mesas, comandas, cardápio e fechamento sem fila.",
+      destaque: false,
+    },
+    {
+      icone: "landing-pages",
+      titulo: "Landing pages",
+      texto: "Páginas de campanha rápidas, feitas para transformar visita em contato.",
+      destaque: false,
+    },
+    {
+      icone: "sites",
+      titulo: "Sites institucionais",
+      texto: "Presença profissional que aparece no Google e passa credibilidade.",
+      destaque: false,
     },
     {
       icone: "integracoes",
       titulo: "Integrações",
       texto: "ERP, fiscal, pagamento e e-commerce conversando entre si, sem redigitação.",
+      destaque: false,
     },
     {
       icone: "apis",
       titulo: "APIs",
       texto: "Seus dados disponíveis com segurança para parceiros e outros sistemas.",
+      destaque: false,
     },
   ],
 } as const;
 
-export const produtos = {
+export const prova = {
   overline: "Produtos",
-  titulo: "Sistemas prontos, testados na operação real",
+  titulo: "Sistemas reais, rodando agora",
   subtitulo:
-    "Duas gerações de produto: a plataforma web que estamos expandindo e a linha consolidada que roda em clientes desde 2006.",
-  abas: {
-    novaGeracao: { id: "nova-geracao", rotulo: "Nova geração web" },
-    consolidada: { id: "linha-consolidada", rotulo: "Linha consolidada" },
-  },
+    "Nada de mockup: a demonstração do Dex é aberta — entre e navegue como um cliente.",
   esyntax: {
     nome: "E-Syntax",
     selo: "Plataforma web",
@@ -174,7 +262,7 @@ export const produtos = {
       ],
     },
   },
-  novaGeracao: [
+  demos: [
     {
       sigla: "Dx",
       nome: "Syntax Dex",
@@ -185,6 +273,7 @@ export const produtos = {
       descricao:
         "Administrativo web de pedidos: clientes, produtos, tabelas de preço e aprovação da força de vendas em qualquer dispositivo.",
       tags: ["Pedidos", "Força de vendas", "Distribuição"],
+      cta: "Acessar demonstração",
     },
     {
       sigla: "PDV",
@@ -196,34 +285,41 @@ export const produtos = {
       descricao:
         "Frente de caixa web para bares, padarias e restaurantes: mesas, comandas, delivery e fechamento com emissão fiscal.",
       tags: ["Mesas e comandas", "Delivery", "Food service"],
+      cta: "Ver o ambiente de testes",
     },
   ],
-  consolidada: [
-    {
-      sigla: "ERP",
-      nome: "Syntax ERP",
-      descricao: "Gestão completa para indústrias e distribuidoras: do pedido à entrega.",
-      tags: ["Indústria", "Distribuição"],
-    },
-    {
-      sigla: "ST",
-      nome: "Syntax Store",
-      descricao: "Automação comercial completa para o varejo, do caixa ao estoque.",
-      tags: ["Varejo", "Automação comercial"],
-    },
-    {
-      sigla: "MB",
-      nome: "Syntax Mobile",
-      descricao: "Força de vendas e ações de mercado na palma da mão da sua equipe.",
-      tags: ["Vendas externas", "Mobilidade"],
-    },
-    {
-      sigla: "EV",
-      nome: "Syntax Eventos",
-      descricao: "Gestão para produção de eventos e locação de espaços, sem choque de agenda.",
-      tags: ["Eventos", "Locação"],
-    },
-  ],
+  /** A linha consolidada como catálogo técnico — sem cards (§7). */
+  catalogo: {
+    rotulo: "Linha consolidada",
+    nota: "Em produção em empresas do Brasil e do Paraguai desde 2006.",
+    cta: { rotulo: "Pedir apresentação", href: "#contato" },
+    itens: [
+      {
+        sigla: "ERP",
+        nome: "Syntax ERP",
+        descricao: "Gestão completa para indústrias e distribuidoras: do pedido à entrega.",
+        tags: ["Indústria", "Distribuição"],
+      },
+      {
+        sigla: "ST",
+        nome: "Syntax Store",
+        descricao: "Automação comercial completa para o varejo, do caixa ao estoque.",
+        tags: ["Varejo", "Automação comercial"],
+      },
+      {
+        sigla: "MB",
+        nome: "Syntax Mobile",
+        descricao: "Força de vendas e ações de mercado na palma da mão da sua equipe.",
+        tags: ["Vendas externas", "Mobilidade"],
+      },
+      {
+        sigla: "EV",
+        nome: "Syntax Eventos",
+        descricao: "Gestão para produção de eventos e locação de espaços, sem choque de agenda.",
+        tags: ["Eventos", "Locação"],
+      },
+    ],
+  },
 } as const;
 
 export const metodo = {
@@ -259,36 +355,27 @@ export const metodo = {
   ],
 } as const;
 
+/**
+ * Ecossistema virou faixa (§7): uma frase de credibilidade + os chips das
+ * antigas três abas achatados numa lista única.
+ * ⚠️ PENDENTE: confirmar com a Syntax o stack real antes de publicar.
+ */
 export const ecossistema = {
-  overline: "Ecossistema",
-  titulo: "Base moderna, sem modismo",
-  subtitulo:
-    "Construímos com ferramentas maduras e mantidas pelo mercado — o que garante segurança, velocidade e facilidade de evolução.",
-  abas: [
-    {
-      id: "nuvem",
-      rotulo: "Nuvem",
-      rotuloCurto: "Nuvem",
-      texto:
-        "Seus sistemas rodam no navegador, sem instalação. Acesse da loja, do escritório ou do celular, com os dados sempre atualizados.",
-      chips: ["Nuvem", "React", "Next.js", "Acesso por navegador"],
-    },
-    {
-      id: "apis",
-      rotulo: "APIs e integrações",
-      rotuloCurto: "APIs",
-      texto:
-        "Seus sistemas conversam entre si. Nada de redigitar no financeiro o que já foi digitado no pedido.",
-      chips: ["APIs REST", "Node.js", "TypeScript", "Integrações"],
-    },
-    {
-      id: "erp",
-      rotulo: "Gestão e ERP",
-      rotuloCurto: "ERP",
-      texto:
-        "Pedido, estoque, faturamento e documento fiscal no mesmo lugar, com histórico de tudo que passou pela operação.",
-      chips: ["PostgreSQL", "Documentos fiscais", "Multi-loja", "Força de vendas"],
-    },
+  rotulo: "Ecossistema",
+  texto:
+    "Base moderna, sem modismo: construímos com ferramentas maduras e mantidas pelo mercado.",
+  chips: [
+    "Nuvem",
+    "React",
+    "Next.js",
+    "Node.js",
+    "TypeScript",
+    "PostgreSQL",
+    "APIs REST",
+    "Documentos fiscais",
+    "Multi-loja",
+    "Força de vendas",
+    "Integrações",
   ],
 } as const;
 
@@ -304,9 +391,9 @@ export const diferenciais = {
     },
     {
       icone: "experiencia",
-      titulo: "Vinte anos de operação",
+      titulo: "No mercado desde 2006",
       texto:
-        "Desde 2006 dentro de distribuidoras, comércios e indústrias. Conhecemos o chão de loja, não só o código.",
+        "Distribuidoras, comércios e indústrias por dentro. Conhecemos o chão de loja, não só o código.",
     },
     {
       icone: "mercosul",
@@ -323,36 +410,20 @@ export const diferenciais = {
   ],
 } as const;
 
-export const projetos = {
-  overline: "Projetos",
-  titulo: "Veja o que já está rodando",
-  subtitulo:
-    "Nada de mockup: acesse a demonstração aberta e navegue pelo sistema como um cliente.",
-  itens: [
-    {
-      titulo: "Syntax Dex",
-      selo: "Demo aberta",
-      tomSelo: "ok",
-      texto:
-        "O administrativo web de pedidos com demonstração pública — entre e teste sem cadastro.",
-      cta: { rotulo: "Acessar demonstração", href: "https://demo.syntaxsistemasdex.com.br/", externo: true },
-    },
-    {
-      titulo: "PDV Restaurante",
-      selo: "Em desenvolvimento",
-      tomSelo: "info",
-      texto:
-        "A frente de caixa web para food service, em construção com operação piloto.",
-      cta: { rotulo: "Solicitar acesso antecipado", href: "#contato", externo: false },
-    },
-    {
-      titulo: "Linha consolidada",
-      selo: "Desde 2006",
-      tomSelo: "neutro",
-      texto:
-        "ERP, Store, Mobile e Eventos em produção em empresas do Brasil e do Paraguai.",
-      cta: { rotulo: "Pedir apresentação", href: "#contato", externo: false },
-    },
+/**
+ * Mapa e números de atuação (ato Diferenciais).
+ * ⚠️ conferir antes de publicar: TODOS os números abaixo são derivados da
+ * contagem dos pins do mapa oficial de atuação da Syntax (26 marcadores:
+ * 24 cidades em SP, GO, RS, MS e MG + Pedro Juan Caballero e Assunção no
+ * Paraguai). O mapa pode estar desatualizado — validar com a empresa.
+ */
+export const atuacao = {
+  rotulo: "Atuação",
+  titulo: "Onde a Syntax já está rodando",
+  numeros: [
+    { valor: "26", rotulo: "localidades atendidas" },
+    { valor: "5", rotulo: "estados + Paraguai" },
+    { valor: "2", rotulo: "sedes próprias — Sorocaba SP e Pedro Juan Caballero PY" },
   ],
 } as const;
 

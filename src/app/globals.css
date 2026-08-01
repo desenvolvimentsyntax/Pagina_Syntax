@@ -48,6 +48,11 @@
   --separator: var(--border);
 
   --radius: 0.75rem;
+
+  /* Cor de glow por cena (§4): componentes brilham com var(--glow-color) e a
+     seção decide o tom — o fio violeta seta [--glow-color:var(--color-accent-indigo)]
+     no <section> e tudo dentro muda junto. */
+  --glow-color: var(--accent);
 }
 
 /* Tokens semânticos próprios expostos ao Tailwind. Os do HeroUI (accent,
@@ -105,10 +110,21 @@
   --color-hairline: rgb(148 163 184 / 0.14);
   --color-hairline-strong: rgb(148 163 184 / 0.24);
 
+  /* Glow em três níveis (§4). A cor resolve em uso, por elemento — é o que
+     permite à seção trocar o tom via --glow-color sem tocar em componente. */
+  --shadow-glow-sm:
+    0 0 0 1px color-mix(in oklab, var(--glow-color) 22%, transparent),
+    0 8px 28px -12px color-mix(in oklab, var(--glow-color) 30%, transparent);
+  --shadow-glow-md: 0 0 44px color-mix(in oklab, var(--glow-color) 40%, transparent);
+  --shadow-glow-lg: 0 0 110px -20px color-mix(in oklab, var(--glow-color) 50%, transparent);
+
   /* Animações de entrada — §10: nada acima de 400ms */
   --animate-rise: synRise 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
   --animate-rise-slow: synRise 400ms 80ms cubic-bezier(0.16, 1, 0.3, 1) both;
   --animate-grow: synGrow 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
+
+  /* Pulso do indicador de rolagem do hero — 2 iterações, nunca infinito (§10) */
+  --animate-pulso: synPulso 1400ms ease-in-out 2 both;
 }
 
 /* ---------------------------------------------------------------------------
@@ -139,17 +155,6 @@
   .button--primary:hover,
   .button--primary[data-hovered="true"] {
     background-image: linear-gradient(180deg, var(--accent), var(--color-accent-strong));
-  }
-
-  /* Abas compactas no mobile: com px-4 e text-sm as listas de Produtos e
-     Ecossistema estouram a viewport em 320px e o HeroUI liga um botão de
-     scroll de 16px — pior que encolher o rótulo. min-w-20 idem. */
-  @media (max-width: 767px) {
-    .tabs__tab {
-      min-width: 0;
-      padding-inline: 0.625rem;
-      font-size: 13px;
-    }
   }
 
   /* CTA sobre painel colorido (a faixa .cta-gradiente): ali as variantes do
@@ -185,6 +190,35 @@
   }
 }
 
+/* Linha que se desenha (§10) — horizontal e vertical. */
+@keyframes synTraco {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes synTracoY {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes synPulso {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
 /* ---------------------------------------------------------------------------
    Fundo da página: a folha do PageShell flutua sobre este gradiente. O stop
    final é claro de propósito — quem o cobre é o rodapé (--color-footer), por
@@ -208,9 +242,10 @@
 .cta-gradiente {
   background-image: linear-gradient(
     100deg,
-    #0a0a5c,
-    #101099 38%,
-    #1b2adb 72%,
+    #1e1b4b 0%,
+    #0a0a5c 18%,
+    #101099 45%,
+    #1b2adb 75%,
     #1d3bf5
   );
 }
@@ -233,6 +268,117 @@
 }
 
 /* ---------------------------------------------------------------------------
+   Borda em gradiente (tiles de ícone e cartão-capa). O padding do ::before é
+   a espessura; a máscara recorta o miolo e sobra só o anel. A cor acompanha
+   --glow-color da cena.
+--------------------------------------------------------------------------- */
+@utility borda-gradiente {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      135deg,
+      color-mix(in oklab, var(--glow-color) 45%, transparent),
+      var(--color-hairline) 60%
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Spotlight que segue o ponteiro (§10) — o PointerGlow escreve --mx/--my nos
+   cartões [data-spotlight]. Todo o custo fica atrás de (pointer: fine) +
+   sem reduced-motion: em touch o pseudo-elemento nem existe, então o :hover
+   emulado do toque não gruda glow em posição nenhuma.
+--------------------------------------------------------------------------- */
+@media (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  [data-spotlight] {
+    position: relative;
+  }
+
+  [data-spotlight]::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      260px circle at var(--mx, 50%) var(--my, 50%),
+      color-mix(in oklab, var(--glow-color) 12%, transparent),
+      transparent 65%
+    );
+    opacity: 0;
+    transition: opacity 200ms ease;
+    pointer-events: none;
+  }
+
+  [data-pointer-glow]:hover [data-spotlight]::after {
+    opacity: 1;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Parallax decorativo leve (§10): CSS scroll-driven, roda no compositor, sem
+   JS e sem listener. Amplitude ≤24px, transform-only, só em camada decorativa
+   (nunca em texto). Sem suporte (Firefox estável), o elemento fica estático —
+   o fallback é o estado final.
+--------------------------------------------------------------------------- */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .parallax-suave {
+      animation: synParallax linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 100%;
+    }
+
+    .parallax-suave--lento {
+      animation: synParallaxLento linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 100%;
+    }
+
+    /* Trilho da LinhaDoTempo: se desenha conforme a seção entra na tela.
+       Fora do @supports, o fallback é o trilho completo. */
+    .traco-scroll-y {
+      transform-origin: top;
+      animation: synTracoY linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 45%;
+    }
+  }
+}
+
+@keyframes synParallax {
+  from {
+    transform: translateY(24px);
+  }
+  to {
+    transform: translateY(-24px);
+  }
+}
+
+@keyframes synParallaxLento {
+  from {
+    transform: translateY(12px);
+  }
+  to {
+    transform: translateY(-12px);
+  }
+}
+
+/* ---------------------------------------------------------------------------
    Scroll reveal (§10) — o componente Reveal adiciona .reveal-visible via
    IntersectionObserver. Sem JavaScript, o conteúdo fica visível.
 --------------------------------------------------------------------------- */
@@ -244,13 +390,50 @@
     transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* Variantes de entrada (§10): só muda o estado inicial; o destino é o mesmo. */
+.reveal[data-efeito="lado"] {
+  transform: translateX(-16px);
+}
+
+.reveal[data-efeito="lado-inverso"] {
+  transform: translateX(16px);
+}
+
+.reveal[data-efeito="escala"] {
+  transform: scale(0.96);
+}
+
 .reveal-visible {
   opacity: 1;
   transform: none;
 }
 
+/* Stagger orquestrado (§10): passos de 60ms, teto de 300ms. O atraso vem do
+   contêiner, não de prop manual por item. Inline style (prop `atraso`) ainda
+   vence, como escape pontual. */
+.reveal-stagger > .reveal:nth-child(2) {
+  transition-delay: 60ms;
+}
+
+.reveal-stagger > .reveal:nth-child(3) {
+  transition-delay: 120ms;
+}
+
+.reveal-stagger > .reveal:nth-child(4) {
+  transition-delay: 180ms;
+}
+
+.reveal-stagger > .reveal:nth-child(5) {
+  transition-delay: 240ms;
+}
+
+.reveal-stagger > .reveal:nth-child(n + 6) {
+  transition-delay: 300ms;
+}
+
 @media (scripting: none) {
-  .reveal {
+  .reveal,
+  .reveal[data-efeito] {
     opacity: 1;
     transform: none;
   }
@@ -267,7 +450,8 @@
     scroll-behavior: auto !important;
   }
 
-  .reveal {
+  .reveal,
+  .reveal[data-efeito] {
     opacity: 1;
     transform: none;
   }
@@ -289,17 +473,42 @@ section[id] {
 }
 
 /* ---------------------------------------------------------------------------
-   Faixa horizontal deslizante (Segmentos no mobile): uma linha com scroll
-   manual — sem animação (§10) — e fade nas bordas avisando que há mais.
+   Numerais vazados do Método: contorno hairline que se preenche com a cor da
+   cena no hover. Sem suporte a text-stroke, o fallback é o numeral sólido em
+   hairline-strong — nunca invisível.
 --------------------------------------------------------------------------- */
-.faixa-scroll {
-  overflow-x: auto;
-  scrollbar-width: none;
-  mask-image: linear-gradient(90deg, transparent, #000 24px, #000 calc(100% - 24px), transparent);
+.numeral-vazado {
+  color: var(--color-hairline-strong);
+  transition: color 300ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.faixa-scroll::-webkit-scrollbar {
-  display: none;
+@supports (-webkit-text-stroke: 1px black) {
+  .numeral-vazado {
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--color-hairline-strong);
+    transition:
+      color 300ms cubic-bezier(0.16, 1, 0.3, 1),
+      -webkit-text-stroke-color 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+.etapa-metodo:hover .numeral-vazado {
+  color: var(--glow-color);
+  -webkit-text-stroke-color: color-mix(in oklab, var(--glow-color) 55%, transparent);
+}
+
+.etapa-metodo .etapa-corpo {
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.etapa-metodo:hover .etapa-corpo {
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .etapa-metodo:hover .etapa-corpo {
+    transform: none;
+  }
 }
 
 /* Foco visível em tudo que é interativo (CLAUDE.md §9).

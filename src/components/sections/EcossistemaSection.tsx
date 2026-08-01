@@ -1,60 +1,30 @@
-import { Chip, Tabs } from "@heroui/react";
-
-import { Reveal } from "@/components/ui/Reveal";
-import { SectionHeading } from "@/components/ui/SectionHeading";
+import { FaixaTecnologias } from "@/components/ui/FaixaTecnologias";
 import { ecossistema } from "@/content/pt-BR/home";
 
 /**
- * Ecossistema de tecnologia em três abas. Substitui a antiga TecnologiasSection
- * — as duas eram chips de stack, e manter as duas repetia a informação.
- *
- * Curta de propósito: o público não é técnico (§1). Serve de credibilidade,
- * não de vitrine de jargão. Tabs do HeroUI não exige "use client" (§3.9).
+ * Ato 06 — Ecossistema como FAIXA (peso 1): o respiro entre Método e
+ * Diferenciais. Herdou o nicho da antiga faixa de Segmentos — uma frase de
+ * credibilidade + os chips de stack numa linha deslizante. Curta de
+ * propósito: o público não é técnico (§1). Sem SectionHeading (§7, faixa).
  */
 export function EcossistemaSection() {
   return (
-    <section id="ecossistema" className="py-16 md:py-24">
-      <div className="mx-auto max-w-7xl px-5 md:px-6">
-        <Reveal>
-          <SectionHeading
-            overline={ecossistema.overline}
-            titulo={ecossistema.titulo}
-            subtitulo={ecossistema.subtitulo}
-          />
-        </Reveal>
+    <section id="ecossistema" className="border-border border-y py-10 md:py-14">
+      <div className="mx-auto flex max-w-7xl flex-col gap-5 px-5 md:px-6 lg:flex-row lg:items-center lg:gap-12">
+        <div className="shrink-0 lg:max-w-sm">
+          <h2 className="text-accent-soft-foreground font-mono text-xs font-medium tracking-[0.1em] uppercase">
+            {ecossistema.rotulo}
+          </h2>
+          <p className="text-foreground-base/70 mt-2 text-sm leading-relaxed text-pretty">
+            {ecossistema.texto}
+          </p>
+        </div>
 
-        <Tabs className="mt-10" defaultSelectedKey={ecossistema.abas[0].id}>
-          <Tabs.ListContainer>
-            <Tabs.List aria-label="Ecossistema de tecnologia">
-              {ecossistema.abas.map((aba) => (
-                <Tabs.Tab key={aba.id} id={aba.id}>
-                  {/* Rótulo completo não cabe na lista em 320px */}
-                  <span className="sm:hidden">{aba.rotuloCurto}</span>
-                  <span className="hidden sm:inline">{aba.rotulo}</span>
-                  <Tabs.Indicator />
-                </Tabs.Tab>
-              ))}
-            </Tabs.List>
-          </Tabs.ListContainer>
-
-          {ecossistema.abas.map((aba) => (
-            <Tabs.Panel key={aba.id} id={aba.id} className="pt-6 md:pt-8">
-              <div className="border-border bg-surface grid items-center gap-8 rounded-2xl border p-4 sm:p-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-                <p className="text-foreground-base/70 max-w-md text-base leading-relaxed">
-                  {aba.texto}
-                </p>
-
-                <ul className="flex flex-wrap gap-2.5 lg:justify-end">
-                  {aba.chips.map((chip) => (
-                    <li key={chip}>
-                      <Chip variant="secondary">{chip}</Chip>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </Tabs.Panel>
-          ))}
-        </Tabs>
+        <FaixaTecnologias
+          rotulo={ecossistema.rotulo}
+          chips={ecossistema.chips}
+          className="-mx-5 px-5 md:mx-0 md:px-0 lg:min-w-0 lg:flex-1"
+        />
       </div>
     </section>
   );

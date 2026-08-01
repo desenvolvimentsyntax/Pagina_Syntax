@@ -10,10 +10,9 @@ import { DiferenciaisSection } from "@/components/sections/DiferenciaisSection";
 import { EcossistemaSection } from "@/components/sections/EcossistemaSection";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { MetodoSection } from "@/components/sections/MetodoSection";
-import { ProdutosSection } from "@/components/sections/ProdutosSection";
-import { ProjetosSection } from "@/components/sections/ProjetosSection";
+import { ProblemasSection } from "@/components/sections/ProblemasSection";
+import { ProvaSection } from "@/components/sections/ProvaSection";
 import { QuemSomosSection } from "@/components/sections/QuemSomosSection";
-import { SegmentosSection } from "@/components/sections/SegmentosSection";
 import { SolucoesSection } from "@/components/sections/SolucoesSection";
 import {
   OG_LOCALE,
@@ -69,17 +68,17 @@ export default async function HomePage({
     <>
       <Header />
 
+      {/* Ordem = os 9 atos da narrativa (§7). */}
       <PageShell>
         <main>
           <HeroSection />
-          <SegmentosSection />
           <QuemSomosSection />
+          <ProblemasSection />
           <SolucoesSection />
+          <ProvaSection />
           <MetodoSection />
-          <ProdutosSection />
           <EcossistemaSection />
           <DiferenciaisSection />
-          <ProjetosSection />
           <ContatoSection />
         </main>
       </PageShell>

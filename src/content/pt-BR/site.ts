@@ -8,6 +8,11 @@ export const empresa = {
   nome: "Syntax",
   sobrenome: "Sistemas",
   razaoSocial: "Syntax Sistemas Empresariais",
+  /**
+   * ⚠️ conferir — o CNPJ não existe em nenhuma fonte pública consultada.
+   * Vazio = o rodapé não renderiza a linha. Não publicar sem confirmação.
+   */
+  cnpj: "",
   fundacao: "2006",
   matriz: "Sorocaba · SP · Brasil",
   filial: "Pedro Juan Caballero · Paraguai",
@@ -39,18 +44,42 @@ export interface ItemNav {
 }
 
 /*
- * Seis itens é o teto: com sete o menu estoura em 1024px. "Diferenciais" saiu
- * daqui quando Método e Ecossistema entraram — a seção continua na página.
+ * Seis itens é o teto: com sete o menu estoura em 1024px. A ordem segue os
+ * 9 atos da narrativa (§7); Ecossistema (virou faixa) e Projetos (fundido em
+ * Produtos) saíram — as âncoras continuam navegáveis pelo footer.
  */
 export const navPrincipal: readonly ItemNav[] = [
   { rotulo: "Quem somos", href: "#quem-somos", secao: "quem-somos" },
+  { rotulo: "Segmentos", href: "#segmentos", secao: "segmentos" },
   { rotulo: "Soluções", href: "#solucoes", secao: "solucoes" },
-  { rotulo: "Método", href: "#metodo", secao: "metodo" },
   { rotulo: "Produtos", href: "#produtos", secao: "produtos" },
-  { rotulo: "Ecossistema", href: "#ecossistema", secao: "ecossistema" },
-  { rotulo: "Projetos", href: "#projetos", secao: "projetos" },
+  { rotulo: "Método", href: "#metodo", secao: "metodo" },
+  { rotulo: "Diferenciais", href: "#diferenciais", secao: "diferenciais" },
 ] as const;
 
 export const navAcoes = {
   contato: { rotulo: "Solicitar demonstração", href: "#contato" },
 } as const;
+
+/** O rodapé navega os 9 atos completos — inclusive os que saíram do menu. */
+export const navRodape = [
+  { rotulo: "Quem somos", href: "#quem-somos" },
+  { rotulo: "Segmentos", href: "#segmentos" },
+  { rotulo: "Soluções", href: "#solucoes" },
+  { rotulo: "Produtos", href: "#produtos" },
+  { rotulo: "Método", href: "#metodo" },
+  { rotulo: "Ecossistema", href: "#ecossistema" },
+  { rotulo: "Diferenciais", href: "#diferenciais" },
+  { rotulo: "Contato", href: "#contato" },
+] as const;
+
+/**
+ * Coluna de soluções do rodapé. Hoje são âncoras da home; na fatia 4 (§15)
+ * cada uma vira a rota própria de /solucoes/<slug> (§18).
+ */
+export const navSolucoes = [
+  { rotulo: "Sistema para restaurantes", href: "#produtos" },
+  { rotulo: "Sistema administrativo", href: "#produtos" },
+  { rotulo: "Desenvolvimento sob medida", href: "#solucoes" },
+  { rotulo: "Sites e landing pages", href: "#solucoes" },
+] as const;

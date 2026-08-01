@@ -132,6 +132,8 @@ Verificado contra os 71 componentes da v3.0.5:
 - **`Divider` virou `Separator`**.
 - **`Textarea` virou `TextArea`** (T maiúsculo). Campo completo com label e
   erro: `TextField`.
+- **`Header` existe na v3.2.2 mas NÃO é navbar** — é o primitivo de cabeçalho
+  de lista do React Aria (para `ListBox`/`Menu`). Não o use no menu de topo.
 
 Antes de assumir que um componente não existe, confira:
 `node .agents/skills/heroui-react/scripts/list_components.mjs`
@@ -195,7 +197,20 @@ Regras que caem desse bloco — quebrar qualquer uma delas quebra o tema:
 Tokens de marca fora da escala semântica ficam no `@theme` do `globals.css`:
 `--color-accent-2`, `--color-accent-strong`, `--color-accent-violet`,
 `--color-sheet`, `--color-micro`, `--color-panel*` (mockups), `--color-footer*`,
-`--color-whatsapp`, `--color-ondark*`, `--color-hairline*`.
+`--color-whatsapp`, `--color-ondark*`, `--color-hairline*`,
+`--shadow-glow-sm/md/lg` (glow em níveis).
+
+**Sistema de glow por cena:** todo glow usa `var(--glow-color)` (default
+`var(--accent)`, definido no `:root`). A seção muda o tom com
+`[--glow-color:var(--color-accent-indigo)]` no `<section>` — nunca recolora
+componente por componente.
+
+**Violeta/indigo são a cor da "nova geração"** e aparecem exatamente em três
+pontos da narrativa: H1 do hero, ato Prova e CTA final. Não use fora deles —
+é o que mantém o fio legível.
+
+`--surface-tertiary` e `--border-secondary` têm uso: são o hover e a borda do
+`cartaoSyntax` peso "capa" (`components/ui/CartaoSyntax.tsx`).
 
 **Tipografia:**
 - Display / H1 / H2 de seção: **Sora** (`font-display`), 600, `tracking-[-0.03em]`
@@ -285,8 +300,13 @@ envolve o `<main>` em `app/[locale]/page.tsx`.
 - Container: `max-w-7xl` sempre. Padding lateral: **`px-5` mobile, `md:px-6`**
   — o MESMO em toda seção, header e footer. Nenhuma seção pode parecer mais
   apertada que outra.
-- Ritmo vertical: `py-16 md:py-24` em toda seção (faixas como Segmentos:
-  `py-8`). Gaps internos em múltiplos de 8 (com 4 como meio passo).
+- Ritmo vertical: `py-16 md:py-24` em toda seção, com duas exceções nomeadas:
+  o **hero preenche a dobra** (`lg:min-h-[calc(100svh-66px)]`) e **seções-faixa**
+  (hoje: Ecossistema) usam `py-10 md:py-14` com `border-y`. Gaps internos em
+  múltiplos de 8 (com 4 como meio passo).
+- A home segue a **curva de pesos dos 9 atos** (5·3·2·4·5·2·1·3·5 — forte,
+  médio, leve…). Seção nova declara seu peso e **não repete o formato da
+  vizinha** — nem no desktop nem no mobile.
 - Card: `p-4 sm:p-6` — nunca `p-6` fixo (em 320px o padding triplo
   folha+seção+card desperdiça ~20% da largura).
 - **A folha (`PageShell`) e o header são full-bleed abaixo de `md`** (sem
@@ -294,9 +314,10 @@ envolve o `<main>` em `app/[locale]/page.tsx`.
 - **Alvo de toque mínimo: 44px.** Link de texto pequeno ganha `py` estendido;
   CTAs de dobra usam `larguraTotal` do `CtaLink` no mobile.
 - Mobile não é desktop encolhido: cada dobra tem um formato próprio
-  (mostruário → faixa deslizante → editorial → índice → timeline vertical →
-  tabs → banda numerada → cards → gradiente). **Nenhuma dobra repete o formato
-  da vizinha**; antes de criar seção nova, escolha um formato que ainda não
+  (mostruário em camadas → editorial+timeline → acordeão de segmentos →
+  capas+índice → mostruário empilhado → banda de numerais → faixa deslizante →
+  banda numerada+mapa → gradiente). **Nenhuma dobra repete o formato da
+  vizinha**; antes de criar seção nova, escolha um formato que ainda não
   esteja em uso ao lado.
 
 ---
@@ -350,9 +371,22 @@ Meta: Lighthouse Accessibility 100.
 
 Meta: Lighthouse Performance > 95.
 
-- Animação permitida: fade in, slide up leve, hover em card, scroll reveal,
-  contador animado. **Nada mais.**
-- Nenhuma animação acima de 400ms.
+- Animação permitida: fade in; slide leve em **qualquer eixo** (≤24px); escala
+  de entrada (≥0.96); hover em card; scroll reveal com **stagger** (passos de
+  60ms via `.reveal-stagger`, atraso acumulado ≤300ms); contador animado;
+  linha que se desenha (`synTraco`/`synTracoY`, ≤400ms); pulso do indicador de
+  rolagem do hero (2 iterações, nunca infinito). **Nada mais.**
+- **Spotlight que segue o ponteiro: só via `PointerGlow`** (`components/ui/`).
+  Travas: só monta sob `pointer: fine` e sem `prefers-reduced-motion`;
+  rAF-throttled; escreve CSS vars direto no style, sem estado React. Não
+  reimplemente o efeito fora dele.
+- **Parallax decorativo leve: só via CSS scroll-driven animation**
+  (`.parallax-suave*`), dentro de `@supports (animation-timeline: view())` +
+  `@media (prefers-reduced-motion: no-preference)`. Amplitude ≤24px,
+  transform-only, **nunca em texto de leitura** — só camada decorativa
+  `aria-hidden`. Fallback obrigatório = elemento estático. Nada de biblioteca.
+- Animação regida por tempo: ≤400ms. Regida por scroll: a régua é a amplitude
+  (≤24px), não a duração.
 - Respeitar `prefers-reduced-motion` sempre.
 - **Animação é CSS por padrão** (transition/keyframes + `IntersectionObserver`
   para scroll reveal). A v3 não usa `framer-motion` e o projeto também não —
@@ -383,6 +417,10 @@ Não use esse desvio como precedente para outras animações.
 - Formato: `.webp` (fallback automático do Next).
 - Screenshots dos sistemas: usar prints reais, nunca mockup genérico
   inventado. Se não houver print, avise — não invente interface.
+- **Números derivados de material interno** (ex.: as 26 localidades contadas
+  do mapa oficial de atuação) entram no conteúdo com comentário
+  `⚠️ conferir antes de publicar` e **não vão a produção sem confirmação da
+  Syntax**. Números inventados não entram nunca (§13).
 - **Logo:** use `components/ui/MarcaSyntax.tsx` — mosaico de quadrados em SVG
   inline + lettering em tipografia do site. É desvio consciente do "não alterar
   o logo": o PNG oficial
@@ -424,6 +462,9 @@ Não use esse desvio como precedente para outras animações.
   especialista". Nunca "Saiba mais" sozinho.
 - Números concretos > adjetivos. "Mais de X restaurantes atendidos" vale
   mais que "referência no mercado".
+- Longevidade sempre como **"desde 2006"** — nunca "vinte anos" nem "há X
+  anos", que desatualizam sozinhos. "15+ anos" só para experiência da equipe,
+  nunca como idade da empresa.
 
 ---
 
@@ -452,6 +493,7 @@ codar nada.**
 | 1 | Home completa em tema claro (9 seções) | ✅ |
 | 2 | Redesign para o tema escuro: tokens, fontes, `PageShell`, marca | ✅ |
 | 3 | Redesign das 8 seções + Método + Ecossistema | ✅ |
+| 3.5 | Direção de arte da home: 9 atos, sistema de glow, componentes de marca | ⬜ |
 | 4 | Páginas de solução (SEO) | ⬜ |
 | 5 | Conteúdo `es-PY` (§18) — hoje `src/content/es-PY/` não existe | ⬜ |
 | 6 | Lighthouse: Performance > 95, Acessibilidade 100 | ⬜ |
