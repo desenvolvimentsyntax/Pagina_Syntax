@@ -8,12 +8,15 @@ import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 import { ContatoSection } from "@/components/sections/ContatoSection";
 import { DiferenciaisSection } from "@/components/sections/DiferenciaisSection";
 import { EcossistemaSection } from "@/components/sections/EcossistemaSection";
+import { FaqSection } from "@/components/sections/FaqSection";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { MetodoSection } from "@/components/sections/MetodoSection";
 import { ProblemasSection } from "@/components/sections/ProblemasSection";
 import { ProvaSection } from "@/components/sections/ProvaSection";
+import { ProvaSocialSection } from "@/components/sections/ProvaSocialSection";
 import { QuemSomosSection } from "@/components/sections/QuemSomosSection";
 import { SolucoesSection } from "@/components/sections/SolucoesSection";
+import { meta } from "@/content/pt-BR/home";
 import {
   OG_LOCALE,
   alternatesDe,
@@ -30,9 +33,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const atual = ehLocale(locale) ? locale : LOCALE_PADRAO;
 
-  const title = "Syntax Sistemas — sistemas web e automação para empresas";
-  const description =
-    "Sistemas web, aplicativos e automação empresarial para varejo, distribuição, indústria e food service. Sorocaba-SP e Pedro Juan Caballero-PY.";
+  const { title, description } = meta;
 
   return {
     title,
@@ -68,10 +69,12 @@ export default async function HomePage({
     <>
       <Header />
 
-      {/* Ordem = os 9 atos da narrativa (§7). */}
+      {/* Ordem = os 10 atos da narrativa (§7). A faixa de prova social é
+          gated: só monta quando houver material real no content (§11). */}
       <PageShell>
         <main>
           <HeroSection />
+          <ProvaSocialSection />
           <QuemSomosSection />
           <ProblemasSection />
           <SolucoesSection />
@@ -79,6 +82,7 @@ export default async function HomePage({
           <MetodoSection />
           <EcossistemaSection />
           <DiferenciaisSection />
+          <FaqSection />
           <ContatoSection />
         </main>
       </PageShell>

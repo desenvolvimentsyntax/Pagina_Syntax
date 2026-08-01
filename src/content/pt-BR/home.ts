@@ -15,6 +15,9 @@
  *   house; confirmar que corresponde ao da Syntax antes de publicar.
  * - Conteúdo dos painéis ilustrativos (`mockup`, `produtos.esyntax.painel`):
  *   são demonstração decorativa (role="img"), não afirmação comercial.
+ * - `faq.itens`: respostas derivadas só de fatos já publicados nesta página;
+ *   validar as formulações (e se o SAT entra na resposta fiscal).
+ * - `provaSocial`: arrays vazios de propósito — ver o comentário do bloco.
  */
 
 export const hero = {
@@ -34,7 +37,7 @@ export const hero = {
    */
   linhaFatos: [
     "Desde 2006",
-    "Sorocaba SP · Pedro Juan Caballero PY",
+    "ERP · PDV · Força de vendas",
     "26 localidades no Mercosul",
   ],
   indicadorRolagem: "role",
@@ -69,15 +72,47 @@ export const mockup = {
   },
 } as const;
 
+/**
+ * Prova social — TUDO aqui é gated: array vazio = o bloco não monta em lugar
+ * nenhum (ProvaSocialSection retorna null; os depoimentos não renderizam em
+ * Diferenciais). NUNCA preencher com logo/depoimento fictício, nem para
+ * preview — o vercel.app é público (§11/§13). Só entra material real
+ * autorizado pelo cliente. Logos: variante clara/monocromática em
+ * public/images/clientes/<slug>.webp — o site é escuro.
+ */
+export interface LogoCliente {
+  nome: string;
+  src: string;
+  /** Dimensões intrínsecas — next/image exige (§10). */
+  largura: number;
+  altura: number;
+}
+
+export interface Depoimento {
+  texto: string;
+  nome: string;
+  cargo: string;
+  empresa: string;
+  /** Opcional — sem foto, o Avatar cai para as iniciais. */
+  avatarSrc?: string;
+}
+
+export const provaSocial = {
+  rotulo: "Quem roda Syntax",
+  logos: [] as readonly LogoCliente[],
+  depoimentosTitulo: "Quem usa, conta",
+  depoimentos: [] as readonly Depoimento[],
+} as const;
+
 export const quemSomos = {
   overline: "Quem somos",
   titulo: "Desde 2006 resolvendo a operação de quem vende e distribui",
   subtitulo:
-    "A Syntax nasceu em 2006 desenvolvendo sistemas para indústrias e distribuidoras de bebidas — e cresceu junto com os clientes.",
+    "Nascemos no setor de bebidas, desenvolvendo para indústrias e distribuidoras — e crescemos junto com os clientes.",
   paragrafos: [
-    "Hoje atendemos varejo, indústria, distribuição, food service, frotas e eventos, com sistemas próprios e projetos sob medida.",
+    "Hoje atendemos varejo, indústria, distribuição, food service, frotas e eventos, com sistemas próprios e projetos desenhados para o processo de cada cliente.",
     "Com matriz em Sorocaba-SP e filial em Pedro Juan Caballero-PY, acompanhamos operações em todo o Mercosul — no seu idioma e no seu fuso.",
-    "Quem desenvolve é quem atende: nossa equipe reúne profissionais com mais de 15 anos de estrada em software de gestão.",
+    "Nossa equipe reúne profissionais com mais de 15 anos de estrada em software de gestão — gente que conhece balcão, estoque e fiscal por dentro.",
   ],
   /**
    * Marcos da linha do tempo. Os dois do meio não têm ano de propósito —
@@ -291,7 +326,7 @@ export const prova = {
   /** A linha consolidada como catálogo técnico — sem cards (§7). */
   catalogo: {
     rotulo: "Linha consolidada",
-    nota: "Em produção em empresas do Brasil e do Paraguai desde 2006.",
+    nota: "Em produção todos os dias em empresas do Brasil e do Paraguai.",
     cta: { rotulo: "Pedir apresentação", href: "#contato" },
     itens: [
       {
@@ -350,7 +385,7 @@ export const metodo = {
       icone: "suporte",
       titulo: "Acompanhamos depois",
       texto:
-        "Quem atende é quem desenvolveu. O sistema evolui junto com a sua operação.",
+        "O sistema entra no ar e continua evoluindo: ajustes, melhorias e suporte no ritmo da sua operação.",
     },
   ],
 } as const;
@@ -381,7 +416,7 @@ export const ecossistema = {
 
 export const diferenciais = {
   overline: "Por que a Syntax",
-  titulo: "O que mantém nossos clientes desde 2006",
+  titulo: "O que mantém nossos clientes ano após ano",
   itens: [
     {
       icone: "suporte",
@@ -391,7 +426,7 @@ export const diferenciais = {
     },
     {
       icone: "experiencia",
-      titulo: "No mercado desde 2006",
+      titulo: "Feito por quem conhece o setor",
       texto:
         "Distribuidoras, comércios e indústrias por dentro. Conhecemos o chão de loja, não só o código.",
     },
@@ -399,7 +434,7 @@ export const diferenciais = {
       icone: "mercosul",
       titulo: "Brasil e Paraguai",
       texto:
-        "Matriz em Sorocaba e filial em Pedro Juan Caballero: atendimento nos dois lados da fronteira.",
+        "Duas sedes próprias, uma em cada país: quem opera na fronteira tem atendimento dos dois lados.",
     },
     {
       icone: "sob-medida",
@@ -424,6 +459,66 @@ export const atuacao = {
     { valor: "26", rotulo: "localidades atendidas" },
     { valor: "5", rotulo: "estados + Paraguai" },
     { valor: "2", rotulo: "sedes próprias — Sorocaba SP e Pedro Juan Caballero PY" },
+  ],
+} as const;
+
+/**
+ * ⚠️ conferir antes de publicar: todas as respostas derivam APENAS de fatos
+ * já publicados nesta página (migração acompanhada do desktop, suporte pela
+ * equipe que desenvolve, NF-e/NFC-e/CT-e, demo aberta do Dex, escopo/prazo/
+ * valor por escrito, matriz SP + filial PY). Nenhum preço ou prazo concreto.
+ * O SAT aparece na copy de Varejo (problemas.segmentos), mas ficou fora da
+ * resposta fiscal até a Syntax confirmar. Validar as formulações.
+ */
+export const faq = {
+  overline: "Perguntas frequentes",
+  titulo: "Dúvidas comuns antes de contratar",
+  subtitulo:
+    "Respostas diretas para o que mais perguntam à nossa equipe. A sua dúvida não está aqui? Pergunte pelo WhatsApp.",
+  cta: { rotulo: "Falar com especialista", href: "#contato" },
+  itens: [
+    {
+      id: "preco",
+      pergunta: "Quanto custa um sistema da Syntax?",
+      resposta:
+        "Depende do tamanho e do desenho da sua operação. Antes de qualquer linha de código, você recebe escopo, prazo e valor por escrito — sem surpresa no meio do caminho.",
+    },
+    {
+      id: "demonstracao",
+      pergunta: "Posso ver o sistema funcionando antes de contratar?",
+      resposta:
+        "Pode. A demonstração do Syntax Dex é aberta: entre e navegue como um cliente. Para os demais produtos, agendamos uma demonstração aplicada ao seu segmento.",
+    },
+    {
+      id: "migracao",
+      pergunta: "Já uso outro sistema. Como funciona a troca?",
+      resposta:
+        "A migração é acompanhada pela nossa equipe — inclusive para quem sai do sistema desktop da Syntax rumo à plataforma web. Sua equipe testa desde cedo e é treinada na virada.",
+    },
+    {
+      id: "fiscal",
+      pergunta: "O sistema emite NF-e e outros documentos fiscais?",
+      resposta:
+        "Sim. NF-e, NFC-e e CT-e fazem parte da linha Syntax: a emissão sai de dentro do sistema, sem redigitação.",
+    },
+    {
+      id: "suporte",
+      pergunta: "Quem me atende depois da implantação?",
+      resposta:
+        "A mesma equipe que constrói o sistema. Você fala com quem conhece o código e a sua operação — não com um script de atendimento.",
+    },
+    {
+      id: "personalizado",
+      pergunta: "Meu processo não cabe em sistema pronto. E agora?",
+      resposta:
+        "É uma das nossas frentes desde o início: mapeamos a operação com quem usa o sistema todo dia e construímos do seu jeito, do levantamento à entrega.",
+    },
+    {
+      id: "regiao",
+      pergunta: "Vocês atendem a minha região?",
+      resposta:
+        "Atendemos empresas do Brasil e do Paraguai, com sedes próprias nos dois países. O acompanhamento acontece no seu idioma e no seu fuso.",
+    },
   ],
 } as const;
 
@@ -458,13 +553,28 @@ export const contatoSecao = {
     ],
     botao: "Enviar pelo WhatsApp",
     enviando: "Abrindo o WhatsApp…",
+    preencherNovamente: "Preencher novamente",
+    disclaimer:
+      "Ao enviar, o WhatsApp abre no seu aparelho com a mensagem pronta — revise e dispare. Nada fica salvo neste site.",
     sucesso: {
       titulo: "Mensagem pronta no seu WhatsApp",
       texto:
         "Abrimos uma conversa com a nossa equipe comercial com os seus dados preenchidos. É só enviar.",
       linkRotulo: "Não abriu? Toque aqui para abrir o WhatsApp",
     },
-    erro:
-      "Não conseguimos abrir o WhatsApp automaticamente. Use o link abaixo ou fale conosco pelos canais diretos.",
+    aviso: {
+      titulo: "Falta um toque",
+      texto:
+        "O navegador bloqueou a abertura automática. Toque no botão abaixo — a mensagem já está montada.",
+      linkRotulo: "Abrir o WhatsApp com a mensagem pronta",
+    },
   },
+} as const;
+
+/** Metadata da home (page.tsx e imagens OG). */
+export const meta = {
+  title: "Syntax Sistemas — sistemas web e automação para empresas",
+  description:
+    "Sistemas web, aplicativos e automação empresarial para varejo, distribuição, indústria e food service. Sorocaba-SP e Pedro Juan Caballero-PY.",
+  ogAlt: "Syntax Sistemas — software house desde 2006, Brasil e Paraguai",
 } as const;

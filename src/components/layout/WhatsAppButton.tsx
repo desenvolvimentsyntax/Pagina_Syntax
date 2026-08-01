@@ -1,6 +1,7 @@
 import { MessageCircle } from "lucide-react";
 
 import { contato } from "@/content/pt-BR/site";
+import { ui } from "@/content/pt-BR/ui";
 
 /**
  * Botão flutuante de WhatsApp (§12) — alternativa permanente ao formulário.
@@ -18,7 +19,7 @@ export function WhatsAppButton() {
       href={href}
       target="_blank"
       rel="noreferrer noopener"
-      aria-label="Conversar com a Syntax pelo WhatsApp"
+      aria-label={ui.whatsappFlutuante.aria}
       className="bg-whatsapp hover:bg-whatsapp-hover fixed right-5 bottom-5 z-50 flex size-14 items-center justify-center rounded-full text-white shadow-[0_12px_28px_-8px_rgb(0_0_0/0.65)] transition-transform hover:scale-105"
     >
       <MessageCircle aria-hidden className="size-6" />

@@ -61,7 +61,7 @@ export const navAcoes = {
   contato: { rotulo: "Solicitar demonstração", href: "#contato" },
 } as const;
 
-/** O rodapé navega os 9 atos completos — inclusive os que saíram do menu. */
+/** O rodapé navega os 10 atos completos — inclusive os que saíram do menu. */
 export const navRodape = [
   { rotulo: "Quem somos", href: "#quem-somos" },
   { rotulo: "Segmentos", href: "#segmentos" },
@@ -70,6 +70,7 @@ export const navRodape = [
   { rotulo: "Método", href: "#metodo" },
   { rotulo: "Ecossistema", href: "#ecossistema" },
   { rotulo: "Diferenciais", href: "#diferenciais" },
+  { rotulo: "Perguntas frequentes", href: "#faq" },
   { rotulo: "Contato", href: "#contato" },
 ] as const;
 

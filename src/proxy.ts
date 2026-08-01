@@ -52,6 +52,16 @@ function detectarLocale(request: NextRequest): Locale {
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // As imagens de metadata do Next (og:image/twitter:image) são servidas sob
+  // o segmento interno [locale] — ex.: /pt-BR/opengraph-image. Sem este guard
+  // o rewrite final prefixaria o locale de novo e a rota viraria 404.
+  const ehImagemMetadata = LOCALES.some(
+    (locale) =>
+      pathname === `/${locale}/opengraph-image` ||
+      pathname === `/${locale}/twitter-image`,
+  );
+  if (ehImagemMetadata) return NextResponse.next();
+
   // Prefixo de locale explícito na URL (hoje só /es).
   for (const locale of LOCALES) {
     const prefixo = PREFIXO_LOCALE[locale];

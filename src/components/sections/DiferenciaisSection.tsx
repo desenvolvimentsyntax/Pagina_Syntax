@@ -1,9 +1,11 @@
+import { Avatar, Card } from "@heroui/react";
 import { Award, Globe2, Headset, Puzzle, type LucideIcon } from "lucide-react";
 
+import { cartaoSyntax } from "@/components/ui/CartaoSyntax";
 import { MapaAtuacao } from "@/components/ui/MapaAtuacao";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { atuacao, diferenciais } from "@/content/pt-BR/home";
+import { atuacao, diferenciais, provaSocial } from "@/content/pt-BR/home";
 
 const ICONES: Record<string, LucideIcon> = {
   suporte: Headset,
@@ -13,10 +15,13 @@ const ICONES: Record<string, LucideIcon> = {
 };
 
 /**
- * Ato 07 — Diferenciais (peso 3): a banda numerada tipográfica ganha hover
+ * Ato 06 — Diferenciais (peso 3): a banda numerada tipográfica ganha hover
  * (numeral acende com --glow-color) e, abaixo, o MapaAtuacao com os números
  * reais de presença — a carga de credibilidade quantitativa da página.
  * Números derivados marcados com ⚠️ no conteúdo (§11).
+ *
+ * Os depoimentos no fim são GATED (§11/§13): array vazio = nada renderiza.
+ * Só entram depoimentos reais autorizados — nunca fictícios, nem em preview.
  */
 export function DiferenciaisSection() {
   return (
@@ -98,7 +103,57 @@ export function DiferenciaisSection() {
             </div>
           </div>
         </Reveal>
+
+        {/* Depoimentos — só montam com material real no content. */}
+        {provaSocial.depoimentos.length > 0 ? (
+          <div className="mt-14 md:mt-20">
+            <h3 className="text-accent-soft-foreground font-mono text-xs font-medium tracking-[0.1em] uppercase">
+              {provaSocial.depoimentosTitulo}
+            </h3>
+
+            <ul className="reveal-stagger mt-6 grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {provaSocial.depoimentos.map((depoimento) => (
+                <li key={`${depoimento.nome}-${depoimento.empresa}`} className="h-full">
+                  <Reveal className="h-full">
+                    <Card className={cartaoSyntax({ peso: "padrao" }).base({ className: "h-full" })}>
+                      <Card.Content className="p-0">
+                        <p className="text-foreground-base/80 leading-relaxed text-pretty">
+                          “{depoimento.texto}”
+                        </p>
+                      </Card.Content>
+                      <Card.Footer className="mt-5 flex items-center gap-3 p-0">
+                        <Avatar size="sm">
+                          {depoimento.avatarSrc ? (
+                            <Avatar.Image alt="" src={depoimento.avatarSrc} />
+                          ) : null}
+                          <Avatar.Fallback>{iniciais(depoimento.nome)}</Avatar.Fallback>
+                        </Avatar>
+                        <span>
+                          <span className="text-foreground block text-sm font-medium">
+                            {depoimento.nome}
+                          </span>
+                          <span className="text-muted block text-xs">
+                            {depoimento.cargo} · {depoimento.empresa}
+                          </span>
+                        </span>
+                      </Card.Footer>
+                    </Card>
+                  </Reveal>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
       </div>
     </section>
   );
+}
+
+function iniciais(nome: string) {
+  return nome
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((parte) => parte[0]?.toUpperCase() ?? "")
+    .join("");
 }

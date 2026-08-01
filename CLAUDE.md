@@ -302,11 +302,13 @@ envolve o `<main>` em `app/[locale]/page.tsx`.
   apertada que outra.
 - Ritmo vertical: `py-16 md:py-24` em toda seção, com duas exceções nomeadas:
   o **hero preenche a dobra** (`lg:min-h-[calc(100svh-66px)]`) e **seções-faixa**
-  (hoje: Ecossistema) usam `py-10 md:py-14` com `border-y`. Gaps internos em
+  usam `py-10 md:py-14` — Ecossistema com `border-y`; a faixa gated de prova
+  social (`ProvaSocialSection`, só monta com material real no content) sem
+  `border-y`, de propósito, para não clonar a vizinha. Gaps internos em
   múltiplos de 8 (com 4 como meio passo).
-- A home segue a **curva de pesos dos 9 atos** (5·3·2·4·5·2·1·3·5 — forte,
-  médio, leve…). Seção nova declara seu peso e **não repete o formato da
-  vizinha** — nem no desktop nem no mobile.
+- A home segue a **curva de pesos dos 10 atos** (5·3·2·4·5·2·1·3·2·5 — forte,
+  médio, leve…; as faixas não contam como ato). Seção nova declara seu peso e
+  **não repete o formato da vizinha** — nem no desktop nem no mobile.
 - Card: `p-4 sm:p-6` — nunca `p-6` fixo (em 320px o padding triplo
   folha+seção+card desperdiça ~20% da largura).
 - **A folha (`PageShell`) e o header são full-bleed abaixo de `md`** (sem
@@ -316,9 +318,9 @@ envolve o `<main>` em `app/[locale]/page.tsx`.
 - Mobile não é desktop encolhido: cada dobra tem um formato próprio
   (mostruário em camadas → editorial+timeline → acordeão de segmentos →
   capas+índice → mostruário empilhado → banda de numerais → faixa deslizante →
-  banda numerada+mapa → gradiente). **Nenhuma dobra repete o formato da
-  vizinha**; antes de criar seção nova, escolha um formato que ainda não
-  esteja em uso ao lado.
+  banda numerada+mapa → acordeão de perguntas → gradiente). **Nenhuma dobra
+  repete o formato da vizinha**; antes de criar seção nova, escolha um formato
+  que ainda não esteja em uso ao lado.
 
 ---
 
@@ -493,7 +495,8 @@ codar nada.**
 | 1 | Home completa em tema claro (9 seções) | ✅ |
 | 2 | Redesign para o tema escuro: tokens, fontes, `PageShell`, marca | ✅ |
 | 3 | Redesign das 8 seções + Método + Ecossistema | ✅ |
-| 3.5 | Direção de arte da home: 9 atos, sistema de glow, componentes de marca | ⬜ |
+| 3.5 | Direção de arte da home: 9 atos, sistema de glow, componentes de marca | ✅ |
+| 3.6 | FAQ (ato 07) + prova social gated + poda de copy + form + OG/viewport + copy centralizada em `content/` | ✅ |
 | 4 | Páginas de solução (SEO) | ⬜ |
 | 5 | Conteúdo `es-PY` (§18) — hoje `src/content/es-PY/` não existe | ⬜ |
 | 6 | Lighthouse: Performance > 95, Acessibilidade 100 | ⬜ |

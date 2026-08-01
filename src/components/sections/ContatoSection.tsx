@@ -6,39 +6,40 @@ import { FormOrcamento } from "@/components/ui/FormOrcamento";
 import { Reveal } from "@/components/ui/Reveal";
 import { contatoSecao } from "@/content/pt-BR/home";
 import { contato, empresa } from "@/content/pt-BR/site";
+import { ui } from "@/content/pt-BR/ui";
 
 const CANAIS = [
   {
     icone: MessageCircle,
-    rotulo: "WhatsApp",
+    rotulo: ui.canais.whatsapp,
     valor: contato.celular,
     href: contato.whatsappHref,
     externo: true,
   },
   {
     icone: Phone,
-    rotulo: "Telefone",
+    rotulo: ui.canais.telefone,
     valor: contato.telefone,
     href: contato.telefoneHref,
     externo: false,
   },
   {
     icone: Phone,
-    rotulo: "Paraguai",
+    rotulo: ui.canais.paraguai,
     valor: contato.telefonePy,
     href: contato.telefonePyHref,
     externo: false,
   },
   {
     icone: Mail,
-    rotulo: "E-mail",
+    rotulo: ui.canais.email,
     valor: contato.email,
     href: contato.emailHref,
     externo: false,
   },
   {
     icone: MapPin,
-    rotulo: "Matriz",
+    rotulo: ui.canais.matriz,
     valor: empresa.endereco,
     href: empresa.mapaHref,
     externo: true,
@@ -46,7 +47,7 @@ const CANAIS = [
 ] as const;
 
 /**
- * Ato 07 — Contato (peso 5): a banda em gradiente fecha o fio violeta→azul
+ * Ato 08 — Contato (peso 5): a banda em gradiente fecha o fio violeta→azul
  * (stop indigo na entrada do .cta-gradiente) com o ArcoSyntax como ornamento
  * de canto — as vars de cor do arco são sobrescritas localmente para ler em
  * branco sobre o azul. Canais diretos reais + formulário (§12).
@@ -63,7 +64,7 @@ export function ContatoSection() {
 
             <p className="relative font-mono text-xs font-medium tracking-[0.1em] text-white/70 uppercase">
               <span className="text-white/45">
-                07 <span aria-hidden>/</span>{" "}
+                08 <span aria-hidden>/</span>{" "}
               </span>
               {contatoSecao.overline}
             </p>
