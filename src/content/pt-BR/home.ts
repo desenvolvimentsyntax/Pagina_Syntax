@@ -219,15 +219,11 @@ export const solucoes = {
   ],
 } as const;
 
-export const produtos = {
+export const prova = {
   overline: "Produtos",
-  titulo: "Sistemas prontos, testados na operação real",
+  titulo: "Sistemas reais, rodando agora",
   subtitulo:
-    "Duas gerações de produto: a plataforma web que estamos expandindo e a linha consolidada que roda em clientes desde 2006.",
-  abas: {
-    novaGeracao: { id: "nova-geracao", rotulo: "Nova geração web" },
-    consolidada: { id: "linha-consolidada", rotulo: "Linha consolidada" },
-  },
+    "Nada de mockup: a demonstração do Dex é aberta — entre e navegue como um cliente.",
   esyntax: {
     nome: "E-Syntax",
     selo: "Plataforma web",
@@ -257,7 +253,7 @@ export const produtos = {
       ],
     },
   },
-  novaGeracao: [
+  demos: [
     {
       sigla: "Dx",
       nome: "Syntax Dex",
@@ -268,6 +264,7 @@ export const produtos = {
       descricao:
         "Administrativo web de pedidos: clientes, produtos, tabelas de preço e aprovação da força de vendas em qualquer dispositivo.",
       tags: ["Pedidos", "Força de vendas", "Distribuição"],
+      cta: "Acessar demonstração",
     },
     {
       sigla: "PDV",
@@ -279,34 +276,41 @@ export const produtos = {
       descricao:
         "Frente de caixa web para bares, padarias e restaurantes: mesas, comandas, delivery e fechamento com emissão fiscal.",
       tags: ["Mesas e comandas", "Delivery", "Food service"],
+      cta: "Ver o ambiente de testes",
     },
   ],
-  consolidada: [
-    {
-      sigla: "ERP",
-      nome: "Syntax ERP",
-      descricao: "Gestão completa para indústrias e distribuidoras: do pedido à entrega.",
-      tags: ["Indústria", "Distribuição"],
-    },
-    {
-      sigla: "ST",
-      nome: "Syntax Store",
-      descricao: "Automação comercial completa para o varejo, do caixa ao estoque.",
-      tags: ["Varejo", "Automação comercial"],
-    },
-    {
-      sigla: "MB",
-      nome: "Syntax Mobile",
-      descricao: "Força de vendas e ações de mercado na palma da mão da sua equipe.",
-      tags: ["Vendas externas", "Mobilidade"],
-    },
-    {
-      sigla: "EV",
-      nome: "Syntax Eventos",
-      descricao: "Gestão para produção de eventos e locação de espaços, sem choque de agenda.",
-      tags: ["Eventos", "Locação"],
-    },
-  ],
+  /** A linha consolidada como catálogo técnico — sem cards (§7). */
+  catalogo: {
+    rotulo: "Linha consolidada",
+    nota: "Em produção em empresas do Brasil e do Paraguai desde 2006.",
+    cta: { rotulo: "Pedir apresentação", href: "#contato" },
+    itens: [
+      {
+        sigla: "ERP",
+        nome: "Syntax ERP",
+        descricao: "Gestão completa para indústrias e distribuidoras: do pedido à entrega.",
+        tags: ["Indústria", "Distribuição"],
+      },
+      {
+        sigla: "ST",
+        nome: "Syntax Store",
+        descricao: "Automação comercial completa para o varejo, do caixa ao estoque.",
+        tags: ["Varejo", "Automação comercial"],
+      },
+      {
+        sigla: "MB",
+        nome: "Syntax Mobile",
+        descricao: "Força de vendas e ações de mercado na palma da mão da sua equipe.",
+        tags: ["Vendas externas", "Mobilidade"],
+      },
+      {
+        sigla: "EV",
+        nome: "Syntax Eventos",
+        descricao: "Gestão para produção de eventos e locação de espaços, sem choque de agenda.",
+        tags: ["Eventos", "Locação"],
+      },
+    ],
+  },
 } as const;
 
 export const metodo = {
@@ -402,39 +406,6 @@ export const diferenciais = {
       titulo: "Sob medida de verdade",
       texto:
         "Quando o processo é seu, o sistema também é: projetos personalizados do levantamento à entrega.",
-    },
-  ],
-} as const;
-
-export const projetos = {
-  overline: "Projetos",
-  titulo: "Veja o que já está rodando",
-  subtitulo:
-    "Nada de mockup: acesse a demonstração aberta e navegue pelo sistema como um cliente.",
-  itens: [
-    {
-      titulo: "Syntax Dex",
-      selo: "Demo aberta",
-      tomSelo: "ok",
-      texto:
-        "O administrativo web de pedidos com demonstração pública — entre e teste sem cadastro.",
-      cta: { rotulo: "Acessar demonstração", href: "https://demo.syntaxsistemasdex.com.br/", externo: true },
-    },
-    {
-      titulo: "PDV Restaurante",
-      selo: "Em desenvolvimento",
-      tomSelo: "info",
-      texto:
-        "A frente de caixa web para food service, em construção com operação piloto.",
-      cta: { rotulo: "Solicitar acesso antecipado", href: "#contato", externo: false },
-    },
-    {
-      titulo: "Linha consolidada",
-      selo: "Desde 2006",
-      tomSelo: "neutro",
-      texto:
-        "ERP, Store, Mobile e Eventos em produção em empresas do Brasil e do Paraguai.",
-      cta: { rotulo: "Pedir apresentação", href: "#contato", externo: false },
     },
   ],
 } as const;

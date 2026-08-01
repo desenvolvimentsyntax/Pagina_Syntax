@@ -1,4 +1,4 @@
-import { produtos } from "@/content/pt-BR/home";
+import { prova } from "@/content/pt-BR/home";
 
 /**
  * Painel ilustrativo do E-Syntax.
@@ -9,13 +9,13 @@ import { produtos } from "@/content/pt-BR/home";
  * Decorativo (role="img", §9); conteúdo de demonstração (§11).
  */
 export function PainelFiscal() {
-  const { painel } = produtos.esyntax;
+  const { painel } = prova.esyntax;
 
   return (
     <div
       role="img"
       aria-label="Painel de documentos fiscais do E-Syntax, com NF-e, NFC-e e CT-e emitidos e status de autorização em tempo real."
-      className="bg-panel overflow-hidden rounded-2xl shadow-[0_40px_70px_-45px_rgb(0_0_0/0.9),inset_0_0_0_1px_rgb(148_163_184_/_0.18)]"
+      className="bg-panel overflow-hidden rounded-2xl shadow-[0_40px_70px_-45px_rgb(0_0_0/0.9),0_0_44px_color-mix(in_oklab,var(--glow-color)_26%,transparent),inset_0_0_0_1px_rgb(148_163_184_/_0.18)]"
     >
       <div aria-hidden>
         <div className="flex h-10 items-center gap-2.5 border-hairline bg-panel-raised border-b px-3.5">
