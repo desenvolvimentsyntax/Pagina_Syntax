@@ -1,12 +1,11 @@
 import { ImageResponse } from "next/og";
 
-import { hero, meta } from "@/content/pt-BR/home";
-import { empresa } from "@/content/pt-BR/site";
-import { SITE_URL } from "@/lib/routes";
+import { conteudoDe } from "@/content";
+import { LOCALE_PADRAO, SITE_URL, ehLocale } from "@/lib/routes";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = meta.ogAlt;
+export const alt = conteudoDe(LOCALE_PADRAO).home.meta.ogAlt;
 
 /*
  * O Satori não resolve CSS vars, não lê arquivo local por caminho relativo e
@@ -18,15 +17,22 @@ const TINTA = "#1f2937";
 const APOIO = "#646c7a";
 
 /**
- * Montserrat 800 buscada no build. Sem User-Agent de navegador o Google Fonts
- * devolve TTF, que o Satori aceita. Build sem rede não quebra: sem a fonte,
- * a ImageResponse cai na fonte padrão embutida (Noto Sans).
+ * Fonte buscada no build. Sem User-Agent de navegador o Google Fonts devolve
+ * TTF, que o Satori aceita. Build sem rede não quebra: sem a fonte, a
+ * ImageResponse cai na fonte padrão embutida (Noto Sans).
+ *
+ * Uma família só: headline, marca e pílula em Montserrat 800 — a mesma
+ * hierarquia da página desde a fatia 3.9. O Satori não sintetiza peso, então
+ * ela entra no peso real.
  */
-async function fonteMontserrat(): Promise<ArrayBuffer | undefined> {
+async function buscaFonte(
+  familia: string,
+  peso: number,
+): Promise<ArrayBuffer | undefined> {
   try {
     const css = await (
       await fetch(
-        "https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=swap",
+        `https://fonts.googleapis.com/css2?family=${familia.replace(/ /g, "+")}:wght@${peso}&display=swap`,
       )
     ).text();
     const url = css.match(/src: url\((.+?)\) format\('(?:truetype|opentype)'\)/)?.[1];
@@ -37,11 +43,30 @@ async function fonteMontserrat(): Promise<ArrayBuffer | undefined> {
   }
 }
 
-export default async function OpengraphImage() {
-  const montserrat = await fonteMontserrat();
+export default async function OpengraphImage({
+  params,
+}: {
+  params: { locale: string };
+}) {
+  /* A arte acompanha o idioma da página: card social em espanhol na raiz, em
+     português no /pt. O segmento [locale] é quem informa qual é. */
+  const atual = ehLocale(params.locale) ? params.locale : LOCALE_PADRAO;
+  const conteudo = conteudoDe(atual);
+  const { hero } = conteudo.home;
+  const { empresa } = conteudo.site;
+  const { MOEDA, planoDeEntrada, planos } = conteudo.planos;
+
+  // Uma família só desde a fatia 3.9: a headline acompanha o H1 da página,
+  // que agora é Montserrat 800 (a Tenor Sans saiu do site).
+  const montserrat = await buscaFonte("Montserrat", 800);
   // Só o domínio: "desde 2006 · BR & PY" já está no eyebrow, e conector
   // escrito aqui seria texto visível fora do content (regra 1 do handoff).
   const rodape = SITE_URL.replace("https://", "");
+
+  /* O preço entra na arte porque este link circula em grupo de WhatsApp: no
+     feed a pessoa lê o card antes de decidir se abre a página. O menor valor
+     é o `planoDeEntrada` do catálogo — muda em planos.ts e muda aqui. */
+  const chamadaPreco = `A partir de ${MOEDA} ${planoDeEntrada.mensal}/mês · ${planos.length} planos publicados`;
 
   return new ImageResponse(
     (
@@ -92,17 +117,35 @@ export default async function OpengraphImage() {
           </div>
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            maxWidth: 950,
-            fontSize: 56,
-            fontWeight: 800,
-            lineHeight: 1.15,
-            color: TINTA,
-          }}
-        >
-          {hero.titulo}
+        <div style={{ display: "flex", flexDirection: "column", gap: 26 }}>
+          <div
+            style={{
+              display: "flex",
+              maxWidth: 950,
+              fontSize: 54,
+              fontWeight: 800,
+              lineHeight: 1.12,
+              letterSpacing: -1,
+              color: TINTA,
+            }}
+          >
+            {hero.titulo}
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              alignSelf: "flex-start",
+              padding: "12px 22px",
+              borderRadius: 999,
+              backgroundColor: AZUL,
+              color: "#ffffff",
+              fontSize: 24,
+              fontWeight: 800,
+            }}
+          >
+            {chamadaPreco}
+          </div>
         </div>
 
         <div
@@ -121,8 +164,15 @@ export default async function OpengraphImage() {
     {
       ...size,
       fonts: montserrat
-        ? [{ name: "Montserrat", data: montserrat, weight: 800, style: "normal" }]
-        : undefined,
+        ? [
+            {
+              name: "Montserrat",
+              data: montserrat,
+              weight: 800 as const,
+              style: "normal" as const,
+            },
+          ]
+        : [],
     },
   );
 }

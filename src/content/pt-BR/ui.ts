@@ -20,9 +20,9 @@ export const ui = {
     descricao:
       "Sistemas web, aplicativos e automação para empresas do Brasil e do Paraguai.",
     navegacaoAria: "Navegação do rodapé",
-    solucoesAria: "Soluções",
+    solucoesAria: "Produtos",
     colunaNavegacao: "Navegação",
-    colunaSolucoes: "Soluções",
+    colunaSolucoes: "Produtos",
     colunaContato: "Contato",
     sufixoWhatsApp: "WhatsApp",
     sufixoParaguai: "Paraguai",
@@ -39,6 +39,18 @@ export const ui = {
   },
   whatsappFlutuante: {
     aria: "Conversar com a Syntax pelo WhatsApp",
+  },
+  voltarAoTopo: {
+    aria: "Voltar ao topo da página",
+  },
+  /**
+   * Rótulos do seletor de idioma. Cada um fica NO IDIOMA DE DESTINO de
+   * propósito: quem não lê a página atual precisa reconhecer o próprio idioma
+   * na opção. Por isso são iguais nos dois locales.
+   */
+  idioma: {
+    "es-PY": "Ver en español",
+    "pt-BR": "Ver em português",
   },
   naoEncontrada: {
     codigo: "Erro 404",

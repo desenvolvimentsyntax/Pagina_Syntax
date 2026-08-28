@@ -1,5 +1,6 @@
 import { buttonVariants } from "@heroui/react";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 import type { ReactNode } from "react";
 
 /**
@@ -49,23 +50,48 @@ export function CtaLink({
      desktop cai para h-10 — abaixo dos 44px de alvo de toque (§7/§9). Acima de
      md o pointer é fino e a altura volta à do tema, que é a que o `Button` do
      formulário também usa. */
+  /* `group`: a seta desliza no hover do botão inteiro, não só do ícone. */
   const classes = [
-    "relative min-h-11 overflow-hidden md:min-h-0",
+    "group relative min-h-11 overflow-hidden md:min-h-0",
     modificador,
     larguraTotal ? "w-full sm:w-auto" : undefined,
   ]
     .filter(Boolean)
     .join(" ");
 
+  const conteudo = (
+    <>
+      {children}
+      {comSeta ? (
+        <ArrowRight
+          aria-hidden
+          className="size-4 transition-transform duration-200 group-hover:translate-x-0.5"
+        />
+      ) : null}
+    </>
+  );
+
+  const className = buttonVariants({ variant, size: tamanho, class: classes });
+
+  /* Rota interna do site (/planos) vai por next/link: com <a> nu o clique
+     recarrega a aplicação inteira e joga fora o prefetch. Âncora da mesma
+     página ("/#planos") continua em <a>, que é o que dá a rolagem nativa. */
+  if (!externo && href.startsWith("/") && !href.startsWith("/#")) {
+    return (
+      <Link href={href} data-ripple="" className={className}>
+        {conteudo}
+      </Link>
+    );
+  }
+
   return (
     <a
       href={href}
       data-ripple=""
-      className={buttonVariants({ variant, size: tamanho, class: classes })}
+      className={className}
       {...(externo ? { target: "_blank", rel: "noreferrer noopener" } : {})}
     >
-      {children}
-      {comSeta ? <ArrowRight aria-hidden className="size-4" /> : null}
+      {conteudo}
     </a>
   );
 }

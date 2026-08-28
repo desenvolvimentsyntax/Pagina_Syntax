@@ -1,0 +1,8 @@
+{
+  // Tailwind v4 configura em CSS com at-rules próprias (@theme, @utility…).
+  // O validador de CSS embutido do VSCode não as conhece e enche o painel
+  // Problems com "Unknown at rule @theme" — falso positivo: o build passa.
+  // A extensão Tailwind CSS IntelliSense (bradlc.vscode-tailwindcss) também
+  // resolve, e ainda dá autocomplete dos tokens do @theme.
+  "css.lint.unknownAtRules": "ignore"
+}

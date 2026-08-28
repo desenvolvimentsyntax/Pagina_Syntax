@@ -111,6 +111,39 @@
   --color-semaforo-vermelho: #f87171;
   --color-semaforo-ambar: #fbbf24;
 
+  /* Família de produtos — cores dos lockups oficiais (E-Syntax).
+     A cor base é a do arquivo de marca e serve só para PREENCHIMENTO E TRAÇO
+     (os três quadradinhos do ícone), nunca para texto.
+
+     `forte` é a pílula do lockup, que leva rótulo branco. Ali a base reprova
+     o AA em três dos cinco casos (#059669 dá 3,77:1 com branco; #0ea5e9,
+     2,77:1; #f59e0b, 2,15:1), então esses três descem UM passo de escala — o
+     mínimo para passar, para o matiz continuar vivo: 5,48:1, 5,93:1 e 5,02:1.
+     Violeta e rosa já passam na cor original (5,70:1 e 4,70:1) e ficam como
+     estão. §9 vence fidelidade de hex, igual ao precedente do --muted.
+
+     Descer os cinco até o tom 800 também passaria, mas transformava o âmbar
+     do PREMIUM num marrom que não é a marca. */
+  --color-produto-fact: #059669;
+  --color-produto-fact-forte: #047857;
+  --color-produto-fact-tint: #ecfdf5;
+
+  --color-produto-pro: #0ea5e9;
+  --color-produto-pro-forte: #0369a1;
+  --color-produto-pro-tint: #f0f9ff;
+
+  --color-produto-premium: #f59e0b;
+  --color-produto-premium-forte: #b45309;
+  --color-produto-premium-tint: #fffbeb;
+
+  --color-produto-erp: #7c3aed;
+  --color-produto-erp-forte: #7c3aed;
+  --color-produto-erp-tint: #f5f3ff;
+
+  --color-produto-mobile: #e11d48;
+  --color-produto-mobile-forte: #e11d48;
+  --color-produto-mobile-tint: #fff1f2;
+
   /* Sombras do design */
   --shadow-topo: 0 12px 40px -20px rgb(15 23 42 / 0.35);
   --shadow-painel: 0 20px 50px -30px rgb(31 78 121 / 0.45);
@@ -141,6 +174,33 @@
   .button {
     border-radius: 0.5rem;
     font-weight: 600;
+
+    /* Hover por hierarquia (fatia 3.9): o primário sobe e ganha sombra, o
+       secundário ganha contorno — ver as regras :hover abaixo. 160ms fica
+       dentro do teto do §10; prefers-reduced-motion zera tudo no bloco
+       global do fim do arquivo. */
+    transition:
+      background-color 160ms ease,
+      transform 160ms ease,
+      box-shadow 160ms ease;
+  }
+
+  /* O primário é o único que levanta: é o clique que a página quer.
+     `:active` devolve ao chão — o botão "assenta" sob o dedo. */
+  .button--primary:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-cartao);
+  }
+
+  .button--primary:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+
+  /* O secundário não levanta: responde com contorno da marca, um degrau
+     abaixo do primário na hierarquia de clique. */
+  .button--secondary:hover {
+    box-shadow: inset 0 0 0 1px var(--color-marca);
   }
 
   /* Alturas e paddings do handoff. A base do HeroUI (h-10, md:h-9, px-4) é
@@ -195,6 +255,106 @@
     border-radius: 0.625rem;
     font-weight: 700;
   }
+
+  /* Terceiro degrau da hierarquia de clique: link de texto com sublinhado que
+     desliza da esquerda no hover. Vai num <span> DENTRO da âncora (o hover é
+     lido no <a> pai), para o traço cobrir só o texto, não o py estendido do
+     alvo de toque. */
+  .link-deslizante {
+    padding-bottom: 2px;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% 1.5px;
+    transition: background-size 200ms ease;
+  }
+
+  a:hover > .link-deslizante,
+  a:focus-visible > .link-deslizante {
+    background-size: 100% 1.5px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Marquee dos cases (§10, desvio registrado).
+
+   O trilho anda até -50% porque a lista é renderizada duas vezes: nesse ponto
+   a segunda metade está exatamente onde a primeira começou, então o retorno
+   do keyframe é invisível. `linear` de propósito — qualquer curva daria a
+   impressão de que a faixa acelera e freia a cada volta.
+
+   A duração vem do componente por --marquee-duracao, calculada a partir da
+   quantidade de tiles, para a velocidade em px/s não mudar quando a lista
+   crescer.
+--------------------------------------------------------------------------- */
+.marquee-cases {
+  overflow: hidden;
+  /* Esmaece as pontas: os tiles entram e saem em vez de aparecerem cortados. */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 6%,
+    #000 94%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 6%,
+    #000 94%,
+    transparent
+  );
+}
+
+.marquee-cases__trilho {
+  animation: marqueeCases var(--marquee-duracao, 90s) linear infinite;
+  will-change: transform;
+}
+
+/* Pausa para quem quer ler um nome — inclusive por teclado. */
+.marquee-cases:hover .marquee-cases__trilho,
+.marquee-cases:focus-within .marquee-cases__trilho {
+  animation-play-state: paused;
+}
+
+@keyframes marqueeCases {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* A faixa roda SEMPRE, inclusive sob prefers-reduced-motion — decisão do
+   Roger em 28/08/2026: parada ela lia como bloco morto, e a versão com
+   rolagem manual punha uma barra cinza no meio da página.
+
+   O !important é obrigatório: o bloco global de reduced-motion no fim deste
+   arquivo zera duração e iterações de TUDO, e sem ele o trilho congelaria em
+   -50% (mostrando só a segunda cópia da lista).
+
+   A trava de acessibilidade que sobra é a pausa no hover/foco, acima — é o
+   mecanismo que o WCAG 2.2.2 pede para conteúdo em movimento. */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-cases__trilho {
+    animation: marqueeCases var(--marquee-duracao, 90s) linear infinite !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Brilho da palavra ativa do rotor de segmentos (§10, desvio registrado).
+   Duas sombras difusas nas cores do próprio degradê — azul por baixo, um
+   toque violeta mais perto — para a palavra "acender" sem virar neon.
+   Vive aqui (e não em classe arbitrária no JSX) porque usa os tokens.
+--------------------------------------------------------------------------- */
+.brilho-rotor {
+  /* Uma sombra só, deslocada para BAIXO: lê como a palavra flutuando sobre o
+     painel. Duas sombras sobrepostas viravam mancha retangular atrás do
+     texto — o blur por glifo se acumula rápido em palavra longa. */
+  filter: drop-shadow(
+    0 4px 10px color-mix(in srgb, var(--color-azul-vivo) 28%, transparent)
+  );
 }
 
 /* ---------------------------------------------------------------------------

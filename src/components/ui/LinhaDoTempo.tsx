@@ -1,6 +1,7 @@
 import { Card } from "@heroui/react";
 
-import { sobre } from "@/content/pt-BR/home";
+import { conteudoDe } from "@/content";
+import type { Locale } from "@/lib/routes";
 
 /**
  * Trajetória da empresa, ao lado do texto do Sobre. O container é o Card do
@@ -12,7 +13,8 @@ import { sobre } from "@/content/pt-BR/home";
  * que varia com a quebra de linha. Estática de propósito: o design não anima
  * a trajetória.
  */
-export function LinhaDoTempo() {
+export function LinhaDoTempo({ locale }: { locale: Locale }) {
+  const { sobre } = conteudoDe(locale).home;
   const { label, marcos } = sobre.timeline;
 
   return (

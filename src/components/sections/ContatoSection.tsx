@@ -3,11 +3,8 @@ import { Check } from "lucide-react";
 import { FormContato } from "@/components/ui/FormContato";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { contatoSecao } from "@/content/pt-BR/home";
-import { contato, empresa } from "@/content/pt-BR/site";
-import { ui } from "@/content/pt-BR/ui";
-
-const { form } = contatoSecao;
+import { conteudoDe } from "@/content";
+import type { Locale } from "@/lib/routes";
 
 /** py estendido: a linha de 14,5px tem 26px — o alvo de toque precisa de 44px (§9). */
 const CANAL = "inline-block py-2.5 transition-colors hover:text-ondark-soft";
@@ -18,13 +15,20 @@ const CANAL = "inline-block py-2.5 transition-colors hover:text-ondark-soft";
  * `sobre-escuro` troca o anel de foco pelo azul claro (o institucional some
  * sobre #0f172a).
  */
-export function ContatoSection() {
+export function ContatoSection({ locale }: { locale: Locale }) {
+  const conteudo = conteudoDe(locale);
+  const { contatoSecao } = conteudo.home;
+  const { contato, empresa } = conteudo.site;
+  const { ui } = conteudo.ui;
+  const { form } = contatoSecao;
+
   return (
     <section id="contato" className="sobre-escuro bg-escuro py-16 md:py-18">
       <div className="mx-auto grid max-w-7xl items-center gap-14 px-5 md:px-8 lg:grid-cols-2 lg:px-12">
         <Reveal>
           <SectionHeading
             tom="escuro"
+            etapa="10"
             overline={contatoSecao.overline}
             titulo={contatoSecao.titulo}
             subtitulo={contatoSecao.subtitulo}
@@ -79,7 +83,11 @@ export function ContatoSection() {
             <p className="mt-1 text-[14.5px] text-muted">{form.subtitulo}</p>
 
             <div className="mt-6">
-              <FormContato />
+              <FormContato
+                form={form}
+                validacao={ui.validacao}
+                whatsappHref={contato.whatsappHref}
+              />
             </div>
           </div>
         </Reveal>
