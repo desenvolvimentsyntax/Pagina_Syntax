@@ -12,7 +12,7 @@
  * de runtime com o português.
  */
 
-export type { CaseCliente } from "@/content/pt-BR/cases";
+export type { CaseCliente } from "@/content/clientes";
 export type { IconeCobertura } from "@/content/pt-BR/home";
 export type { ChaveProduto, ChavePlano, Plano } from "@/content/pt-BR/planos";
 export type { ItemNav } from "@/content/pt-BR/site";
