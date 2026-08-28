@@ -3,19 +3,14 @@ import { notFound } from "next/navigation";
 
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
-import { PageShell } from "@/components/layout/PageShell";
 import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 import { ContatoSection } from "@/components/sections/ContatoSection";
-import { DiferenciaisSection } from "@/components/sections/DiferenciaisSection";
-import { EcossistemaSection } from "@/components/sections/EcossistemaSection";
-import { FaqSection } from "@/components/sections/FaqSection";
 import { HeroSection } from "@/components/sections/HeroSection";
-import { MetodoSection } from "@/components/sections/MetodoSection";
-import { ProblemasSection } from "@/components/sections/ProblemasSection";
-import { ProvaSection } from "@/components/sections/ProvaSection";
-import { ProvaSocialSection } from "@/components/sections/ProvaSocialSection";
-import { QuemSomosSection } from "@/components/sections/QuemSomosSection";
+import { ProdutosSection } from "@/components/sections/ProdutosSection";
+import { SloganSection } from "@/components/sections/SloganSection";
+import { SobreSection } from "@/components/sections/SobreSection";
 import { SolucoesSection } from "@/components/sections/SolucoesSection";
+import { Ripple } from "@/components/ui/Ripple";
 import { meta } from "@/content/pt-BR/home";
 import {
   OG_LOCALE,
@@ -69,26 +64,23 @@ export default async function HomePage({
     <>
       <Header />
 
-      {/* Ordem = os 10 atos da narrativa (§7). A faixa de prova social é
-          gated: só monta quando houver material real no content (§11). */}
-      <PageShell>
-        <main>
-          <HeroSection />
-          <ProvaSocialSection />
-          <QuemSomosSection />
-          <ProblemasSection />
-          <SolucoesSection />
-          <ProvaSection />
-          <MetodoSection />
-          <EcossistemaSection />
-          <DiferenciaisSection />
-          <FaqSection />
-          <ContatoSection />
-        </main>
-      </PageShell>
+      {/* Ordem = as seis dobras do handoff de design: hero, faixa do slogan,
+          soluções, produtos, sobre e captação. Cada seção pinta o próprio
+          fundo (branco / #f4f6fa / #0f172a), então o <main> não tem wrapper. */}
+      <main>
+        <HeroSection />
+        <SloganSection />
+        <SolucoesSection />
+        <ProdutosSection />
+        <SobreSection />
+        <ContatoSection />
+      </main>
 
       <Footer />
       <WhatsAppButton />
+
+      {/* Um único listener de pointerdown para todos os [data-ripple] da página. */}
+      <Ripple />
     </>
   );
 }

@@ -16,6 +16,10 @@ export const empresa = {
   fundacao: "2006",
   matriz: "Sorocaba · SP · Brasil",
   filial: "Pedro Juan Caballero · Paraguai",
+  /* Formas curtas para linhas que já usam "·" como separador entre as duas
+     cidades — com as longas o leitor vê cinco itens em vez de dois. */
+  matrizCurta: "Sorocaba SP",
+  filialCurta: "Pedro Juan Caballero PY",
   atuacao: "Mercosul",
   endereco: "R. Júlio César Iorio, 48 — Jd. Res. Villa Amato, Sorocaba - SP",
   mapaHref:
@@ -43,34 +47,25 @@ export interface ItemNav {
   secao: string;
 }
 
-/*
- * Seis itens é o teto: com sete o menu estoura em 1024px. A ordem segue os
- * 9 atos da narrativa (§7); Ecossistema (virou faixa) e Projetos (fundido em
- * Produtos) saíram — as âncoras continuam navegáveis pelo footer.
- */
+/** Os quatro itens do menu do design, na ordem das seções da home. */
 export const navPrincipal: readonly ItemNav[] = [
-  { rotulo: "Quem somos", href: "#quem-somos", secao: "quem-somos" },
-  { rotulo: "Segmentos", href: "#segmentos", secao: "segmentos" },
   { rotulo: "Soluções", href: "#solucoes", secao: "solucoes" },
   { rotulo: "Produtos", href: "#produtos", secao: "produtos" },
-  { rotulo: "Método", href: "#metodo", secao: "metodo" },
-  { rotulo: "Diferenciais", href: "#diferenciais", secao: "diferenciais" },
+  { rotulo: "Sobre", href: "#sobre", secao: "sobre" },
+  { rotulo: "Contato", href: "#contato", secao: "contato" },
 ] as const;
 
 export const navAcoes = {
+  /** CTA do header: vai direto ao WhatsApp, não à âncora de contato. */
+  whatsapp: { rotulo: "Falar no WhatsApp", href: contato.whatsappHref },
   contato: { rotulo: "Solicitar demonstração", href: "#contato" },
 } as const;
 
-/** O rodapé navega os 10 atos completos — inclusive os que saíram do menu. */
+/** O rodapé repete a navegação da home mais os canais diretos. */
 export const navRodape = [
-  { rotulo: "Quem somos", href: "#quem-somos" },
-  { rotulo: "Segmentos", href: "#segmentos" },
   { rotulo: "Soluções", href: "#solucoes" },
   { rotulo: "Produtos", href: "#produtos" },
-  { rotulo: "Método", href: "#metodo" },
-  { rotulo: "Ecossistema", href: "#ecossistema" },
-  { rotulo: "Diferenciais", href: "#diferenciais" },
-  { rotulo: "Perguntas frequentes", href: "#faq" },
+  { rotulo: "Sobre", href: "#sobre" },
   { rotulo: "Contato", href: "#contato" },
 ] as const;
 
@@ -79,7 +74,7 @@ export const navRodape = [
  * cada uma vira a rota própria de /solucoes/<slug> (§18).
  */
 export const navSolucoes = [
-  { rotulo: "Sistema para restaurantes", href: "#produtos" },
+  { rotulo: "Sistema para restaurantes", href: "#solucoes" },
   { rotulo: "Sistema administrativo", href: "#produtos" },
   { rotulo: "Desenvolvimento sob medida", href: "#solucoes" },
   { rotulo: "Sites e landing pages", href: "#solucoes" },

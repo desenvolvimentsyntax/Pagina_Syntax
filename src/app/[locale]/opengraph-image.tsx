@@ -9,43 +9,25 @@ export const contentType = "image/png";
 export const alt = meta.ogAlt;
 
 /*
- * Mosaico da marca (components/ui/MarcaSyntax.tsx) reproduzido em divs
- * absolutos: o Satori não resolve CSS vars nem o SVG gerado, então a
- * geometria (ângulo/raio no viewBox 64) é recalculada aqui com as cores
- * resolvidas do tema (§4 / @theme do globals.css).
+ * O Satori não resolve CSS vars, não lê arquivo local por caminho relativo e
+ * não rasteriza o SVG do mosaico — então a marca aqui é só o lettering, e as
+ * cores do tema (@theme do globals.css) vêm resolvidas em hex neste arquivo.
  */
-const MOSAICO = [
-  { angulo: 48, raio: 23, lado: 7.5, cor: "#3b82f6" },
-  { angulo: 76, raio: 23, lado: 8.5, cor: "#60a5fa" },
-  { angulo: 104, raio: 23, lado: 7.5, cor: "#8fa0b5" },
-  { angulo: 132, raio: 23, lado: 8.5, cor: "#3b82f6" },
-  { angulo: 160, raio: 23, lado: 7.5, cor: "#8fa0b5" },
-  { angulo: 188, raio: 23, lado: 8.5, cor: "#60a5fa" },
-  { angulo: 216, raio: 23, lado: 7.5, cor: "#8fa0b5" },
-  { angulo: 244, raio: 23, lado: 8.5, cor: "#3b82f6" },
-  { angulo: 272, raio: 23, lado: 7.5, cor: "#8fa0b5" },
-  { angulo: 300, raio: 23, lado: 6.5, cor: "#60a5fa" },
-  { angulo: 62, raio: 13, lado: 5.5, cor: "#8fa0b5" },
-  { angulo: 98, raio: 13, lado: 6.5, cor: "#3b82f6" },
-  { angulo: 134, raio: 13, lado: 5.5, cor: "#60a5fa" },
-  { angulo: 170, raio: 13, lado: 6.5, cor: "#8fa0b5" },
-  { angulo: 206, raio: 13, lado: 5.5, cor: "#3b82f6" },
-  { angulo: 242, raio: 13, lado: 6.5, cor: "#60a5fa" },
-  { angulo: 278, raio: 13, lado: 5.5, cor: "#8fa0b5" },
-] as const;
-
-/** Fator sobre o viewBox 64 da marca. */
-const ESCALA = 2.1;
+const AZUL = "#1f4e79";
+const TINTA = "#1f2937";
+const APOIO = "#646c7a";
 
 /**
- * Sora 600 buscada no build. Sem User-Agent de navegador o Google Fonts
+ * Montserrat 800 buscada no build. Sem User-Agent de navegador o Google Fonts
  * devolve TTF, que o Satori aceita. Build sem rede não quebra: sem a fonte,
  * a ImageResponse cai na fonte padrão embutida (Noto Sans).
  */
-async function fonteSora(): Promise<ArrayBuffer | undefined> {
+async function fonteMontserrat(): Promise<ArrayBuffer | undefined> {
   try {
     const css = await (
-      await fetch("https://fonts.googleapis.com/css2?family=Sora:wght@600&display=swap")
+      await fetch(
+        "https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=swap",
+      )
     ).text();
     const url = css.match(/src: url\((.+?)\) format\('(?:truetype|opentype)'\)/)?.[1];
     if (!url) return undefined;
@@ -56,9 +38,10 @@ async function fonteSora(): Promise<ArrayBuffer | undefined> {
 }
 
 export default async function OpengraphImage() {
-  const sora = await fonteSora();
-  const headline = `${hero.tituloInicio}${hero.tituloDestaque}${hero.tituloFim}`;
-  const rodape = `${SITE_URL.replace("https://", "")} · desde ${empresa.fundacao} · Brasil e Paraguai`;
+  const montserrat = await fonteMontserrat();
+  // Só o domínio: "desde 2006 · BR & PY" já está no eyebrow, e conector
+  // escrito aqui seria texto visível fora do content (regra 1 do handoff).
+  const rodape = SITE_URL.replace("https://", "");
 
   return new ImageResponse(
     (
@@ -70,79 +53,64 @@ export default async function OpengraphImage() {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "72px 80px",
-          backgroundImage: "linear-gradient(160deg, #12141f 8%, #0b1018 72%)",
-          color: "#ffffff",
-          fontFamily: '"Sora"',
+          // Aproximação do radial do hero (.fundo-hero): o Satori resolve
+          // linear-gradient com muito mais fidelidade que radial em imagem
+          // estática. As três paradas são as mesmas do gradiente do design.
+          backgroundImage: "linear-gradient(135deg, #dbeafe 0%, #f4f7fc 42%, #e8eef7 100%)",
+          color: TINTA,
+          fontFamily: '"Montserrat"',
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 28 }}>
-          <div
-            style={{
-              position: "relative",
-              width: 64 * ESCALA,
-              height: 64 * ESCALA,
-              display: "flex",
-            }}
-          >
-            {MOSAICO.map(({ angulo, raio, lado, cor }) => {
-              const radianos = (angulo * Math.PI) / 180;
-              const x = (32 + raio * Math.cos(radianos) - lado / 2) * ESCALA;
-              const y = (32 - raio * Math.sin(radianos) - lado / 2) * ESCALA;
-
-              return (
-                <div
-                  key={`${angulo}-${raio}`}
-                  style={{
-                    position: "absolute",
-                    left: x,
-                    top: y,
-                    width: lado * ESCALA,
-                    height: lado * ESCALA,
-                    borderRadius: lado * ESCALA * 0.22,
-                    backgroundColor: cor,
-                  }}
-                />
-              );
-            })}
-          </div>
-
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ fontSize: 46, fontWeight: 600, letterSpacing: -1 }}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 16 }}>
+            <div style={{ fontSize: 46, fontWeight: 800, letterSpacing: -1, color: AZUL }}>
               {empresa.nome}
             </div>
             <div
               style={{
                 fontSize: 17,
                 letterSpacing: 9,
-                color: "#7d8aa0",
-                marginTop: 8,
+                color: APOIO,
                 textTransform: "uppercase",
               }}
             >
               {empresa.sobrenome}
             </div>
           </div>
+
+          <div
+            style={{
+              display: "flex",
+              marginTop: 28,
+              fontSize: 20,
+              letterSpacing: 2.4,
+              color: AZUL,
+              textTransform: "uppercase",
+            }}
+          >
+            {hero.eyebrow}
+          </div>
         </div>
 
         <div
           style={{
             display: "flex",
-            maxWidth: 940,
-            fontSize: 58,
-            fontWeight: 600,
-            letterSpacing: -1.8,
-            lineHeight: 1.16,
+            maxWidth: 950,
+            fontSize: 56,
+            fontWeight: 800,
+            lineHeight: 1.15,
+            color: TINTA,
           }}
         >
-          {headline}
+          {hero.titulo}
         </div>
 
         <div
           style={{
             display: "flex",
             fontSize: 20,
-            letterSpacing: 4,
-            color: "#7d8aa0",
+            letterSpacing: 3.5,
+            color: APOIO,
             textTransform: "uppercase",
           }}
         >
@@ -152,8 +120,8 @@ export default async function OpengraphImage() {
     ),
     {
       ...size,
-      fonts: sora
-        ? [{ name: "Sora", data: sora, weight: 600, style: "normal" }]
+      fonts: montserrat
+        ? [{ name: "Montserrat", data: montserrat, weight: 800, style: "normal" }]
         : undefined,
     },
   );

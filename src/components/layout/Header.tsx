@@ -6,13 +6,14 @@ import { useEffect, useState } from "react";
 
 import { CtaLink } from "@/components/ui/CtaLink";
 import { MarcaSyntax } from "@/components/ui/MarcaSyntax";
-import { navAcoes, navPrincipal, empresa, contato } from "@/content/pt-BR/site";
+import { contato, empresa, navAcoes, navPrincipal } from "@/content/pt-BR/site";
 import { ui } from "@/content/pt-BR/ui";
 
 /**
  * Menu de topo. A v3 não tem Navbar (CLAUDE.md §3.1), então o header é layout
- * próprio: sticky com blur ao rolar, scrollspy marcando a seção ativa e
- * Drawer do HeroUI no mobile. Client component pelo estado de scroll/menu.
+ * próprio: barra branca sticky com hairline embaixo, scrollspy marcando a
+ * seção ativa e Drawer do HeroUI no mobile. Client component pelo estado de
+ * scroll e do menu.
  */
 export function Header() {
   const [rolado, setRolado] = useState(false);
@@ -47,51 +48,45 @@ export function Header() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 px-0 pt-0 md:px-5 md:pt-4 lg:px-8">
-      {/* Pill de vidro flutuante em md+; no mobile vira barra full-bleed,
-          coerente com a folha sem moldura. O fundo translúcido só ganha corpo
-          ao rolar, senão o blur come o glow do hero logo abaixo. */}
-      <div
-        className={`mx-auto flex h-14 max-w-[1360px] items-center justify-between pr-3 pl-5 transition-[background-color,box-shadow] duration-300 md:h-[66px] md:rounded-full md:pr-4 md:pl-6 ${
-          rolado
-            ? "bg-surface-secondary shadow-[inset_0_1px_0_rgb(255_255_255/0.08),0_18px_40px_-24px_rgb(0_0_0/0.85)] backdrop-blur-[14px]"
-            : "bg-surface shadow-[inset_0_1px_0_rgb(255_255_255/0.06)] backdrop-blur-[14px]"
-        }`}
-      >
-        <div className="flex items-center gap-8 xl:gap-10">
-          <a
-            href="#topo"
-            aria-label={ui.header.paginaInicialAria}
-            className="flex min-h-11 items-center"
-          >
-            <MarcaSyntax />
-          </a>
+    <header
+      className={`bg-background border-border sticky top-0 z-40 border-b transition-shadow duration-300 ${
+        rolado ? "shadow-topo" : "shadow-none"
+      }`}
+    >
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-4 md:px-8 lg:px-12">
+        <a
+          href="#topo"
+          aria-label={ui.header.paginaInicialAria}
+          className="flex shrink-0 items-center"
+        >
+          <MarcaSyntax tamanho="header" />
+        </a>
 
-          <nav
-            aria-label={ui.header.navPrincipalAria}
-            className="hidden items-center gap-6 text-[14.5px] lg:flex"
-          >
-            {navPrincipal.map((item) => (
+        <nav
+          aria-label={ui.header.navPrincipalAria}
+          className="hidden items-center gap-7 text-[15px] lg:flex"
+        >
+          {navPrincipal.map((item) => {
+            const ativo = secaoAtiva === item.secao;
+            return (
               <a
                 key={item.rotulo}
                 href={item.href}
-                aria-current={secaoAtiva === item.secao ? "true" : undefined}
-                className={`whitespace-nowrap transition-colors ${
-                  secaoAtiva === item.secao
-                    ? "text-accent-soft-foreground font-medium"
-                    : "text-foreground-base/70 hover:text-foreground"
+                aria-current={ativo ? "true" : undefined}
+                className={`text-marca hover:text-marca-hover flex min-h-11 items-center whitespace-nowrap transition-colors ${
+                  ativo ? "font-semibold" : "font-medium"
                 }`}
               >
                 {item.rotulo}
               </a>
-            ))}
-          </nav>
-        </div>
+            );
+          })}
+        </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex shrink-0 items-center gap-2">
           <span className="hidden sm:inline-flex">
-            <CtaLink href={navAcoes.contato.href} tamanho="md">
-              {navAcoes.contato.rotulo}
+            <CtaLink href={navAcoes.whatsapp.href} tamanho="md" externo>
+              {navAcoes.whatsapp.rotulo}
             </CtaLink>
           </span>
 
@@ -134,13 +129,16 @@ function MenuMobile({
             </Drawer.Header>
 
             <Drawer.Body>
-              <nav aria-label={ui.header.navPrincipalAria} className="flex flex-col gap-1">
+              <nav
+                aria-label={ui.header.navPrincipalAria}
+                className="flex flex-col gap-1"
+              >
                 {navPrincipal.map((item) => (
                   <a
                     key={item.rotulo}
                     href={item.href}
                     onClick={aoNavegar}
-                    className="text-foreground-base hover:bg-surface-secondary rounded-lg px-3 py-3 text-base transition-colors"
+                    className="text-foreground-base hover:bg-surface-secondary hover:text-marca rounded-lg px-3 py-3 text-base font-medium transition-colors"
                   >
                     {item.rotulo}
                   </a>
@@ -162,11 +160,18 @@ function MenuMobile({
                   ref não é compatível com <a>. Mesmas classes, via
                   buttonVariants — e aqui ela precisa fechar o Drawer. */}
               <a
-                href={navAcoes.contato.href}
+                href={navAcoes.whatsapp.href}
+                target="_blank"
+                rel="noreferrer noopener"
                 onClick={aoNavegar}
-                className={buttonVariants({ variant: "primary", size: "md" })}
+                data-ripple
+                className={buttonVariants({
+                  variant: "primary",
+                  size: "md",
+                  class: "relative overflow-hidden",
+                })}
               >
-                {navAcoes.contato.rotulo}
+                {navAcoes.whatsapp.rotulo}
               </a>
             </Drawer.Footer>
           </Drawer.Dialog>

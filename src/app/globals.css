@@ -3,170 +3,230 @@
 @import "@heroui/styles";
 
 /* ---------------------------------------------------------------------------
-   Tema escuro — identidade do site inteiro (CLAUDE.md §4).
-   O <html> carrega data-theme="dark", então o bloco escuro do HeroUI
-   (@layer theme) entra primeiro e nos dá color-scheme, --surface-shadow zerado
-   e os status clareados. Este bloco vem SEM @layer de propósito: CSS sem
-   camada vence qualquer camada, então sobrescreve os tokens do HeroUI sem
-   precisar de !important nem de especificidade inflada.
+   Tema claro — identidade do site (CLAUDE.md §4).
+   O <html> carrega data-theme="light", então o bloco claro do HeroUI entra
+   primeiro e nos dá color-scheme, --surface-shadow e os status calibrados.
+   Este bloco vem SEM @layer de propósito: CSS sem camada vence qualquer
+   camada, então sobrescreve os tokens do HeroUI sem !important.
 --------------------------------------------------------------------------- */
 :root,
-[data-theme="dark"] {
-  color-scheme: dark;
+[data-theme="light"] {
+  color-scheme: light;
 
-  --background: oklch(0.1947 0.0225 276.15); /* #12141F */
-  --foreground: oklch(1 0 0); /* branco — só títulos */
-  --foreground-base: oklch(0.9449 0.0133 262.38); /* #E8EDF6 — corpo */
-  --muted: oklch(0.7025 0.0342 260.01); /* #93A0B5 */
+  --background: #ffffff;
+  --foreground: #1f2937; /* títulos e texto forte — 14,70:1 no branco */
+  --foreground-base: #4b5563; /* corpo — 7,56:1 no branco */
 
-  --sheet: oklch(0.1719 0.0186 259.66); /* #0B1018 — folha central */
-  --slate: oklch(0.7107 0.0351 256.79); /* #94A3B8 — base das translucidezes */
+  /* Design entrega #6b7280 para o texto de apoio. Ele passa no branco (4,83:1)
+     mas reprova sobre a superfície #f4f6fa (4,42:1) e sobre os tiles #e8f0f8
+     (4,20:1) — e é ali que ele mais aparece (intro de Produtos, legendas da
+     timeline, rótulos do dashboard). Dois pontos mais escuro resolve os três
+     casos (4,84:1 / 4,60:1) sem diferença perceptível. §9 > fidelidade de hex. */
+  --muted: #646c7a;
 
-  /* Superfícies TRANSLÚCIDAS: é o que mantém Card visível sobre a folha.
-     Opacas na cor da folha, os cards sumiriam. */
-  --surface: color-mix(in oklab, var(--slate) 5%, transparent);
-  --surface-foreground: var(--foreground-base);
-  --surface-secondary: color-mix(in oklab, var(--slate) 9%, transparent);
-  --surface-tertiary: color-mix(in oklab, var(--slate) 12%, transparent);
+  /* Superfícies OPACAS: aqui as seções têm fundo próprio (branco / #f4f6fa /
+     #0f172a) e os cards se destacam por borda, não por translucidez. */
+  --surface: #ffffff;
+  --surface-foreground: var(--foreground);
+  --surface-secondary: #f4f6fa;
+  --surface-secondary-foreground: var(--foreground);
+  --surface-tertiary: #e8f0f8;
+  --surface-tertiary-foreground: var(--accent);
 
-  /* Overlay é OPACO — Modal, Drawer, Tooltip e Popover flutuam sobre conteúdo
-     arbitrário; translúcido aqui deixaria o texto ilegível. */
-  --overlay: oklch(0.2153 0.0311 267.09); /* #131928 */
-  --overlay-foreground: var(--foreground-base);
+  --overlay: #ffffff;
+  --overlay-foreground: var(--foreground);
 
-  --accent: oklch(0.5461 0.2152 262.88); /* #2563EB — só preenchimento */
-  --accent-foreground: oklch(1 0 0);
-  /* #60A5FA: o accent para TEXTO. #2563EB sobre a folha dá 3,69:1 e reprova. */
-  --accent-soft-foreground: oklch(0.7137 0.1434 254.62);
-  --focus: var(--accent-soft-foreground);
-  --link: var(--accent-soft-foreground);
+  /* Sombra dos Card do HeroUI zerada: no design o card é definido por borda
+     hairline, e a sombra só entra no hover (--shadow-cartao). */
+  --surface-shadow: 0 0 0 0 transparent;
 
-  --border: color-mix(in oklab, var(--slate) 14%, transparent);
-  /* Sobrescrito de propósito: no escuro do HeroUI ele deriva de --surface, que
-     aqui é translúcido — o color-mix resultante seria invisível. */
-  --border-secondary: color-mix(in oklab, var(--slate) 18%, transparent);
-  --separator: var(--border);
+  --accent: #1f4e79; /* azul institucional — 8,66:1 no branco, texto E fundo */
+  --accent-foreground: #ffffff;
+  --accent-soft-foreground: var(--accent);
+  --focus: var(--accent);
+  --link: var(--accent);
 
-  --radius: 0.75rem;
+  --border: #e5e9f0;
+  --border-secondary: #dbe3ee;
+  --separator: #e5e9f0;
 
-  /* Cor de glow por cena (§4): componentes brilham com var(--glow-color) e a
-     seção decide o tom — o fio violeta seta [--glow-color:var(--color-accent-indigo)]
-     no <section> e tudo dentro muda junto. */
-  --glow-color: var(--accent);
+  /* Campos do formulário: fundo #f4f6fa, borda hairline, raio 9px (design). */
+  --field-background: #f4f6fa;
+  --field-foreground: var(--foreground);
+  --field-placeholder: var(--muted);
+  --field-border: var(--border);
+  --field-border-width: 1px;
+
+  --radius: 0.5rem; /* botões 8px */
+  --field-radius: 0.5625rem; /* 9px */
 }
 
 /* Tokens semânticos próprios expostos ao Tailwind. Os do HeroUI (accent,
    surface, muted, border…) já vêm mapeados pelo @theme inline do pacote. */
 @theme inline {
-  --color-sheet: var(--sheet);
   --color-foreground-base: var(--foreground-base);
 }
 
 /* ---------------------------------------------------------------------------
-   Tokens de marca fora da escala do Tailwind (CLAUDE.md §3.6 — nada de hex
-   solto no JSX).
+   Tokens de marca fora da escala semântica (CLAUDE.md §4 — nada de hex solto
+   no JSX). Valores finais do handoff de design.
 --------------------------------------------------------------------------- */
 @theme {
-  --font-display: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
-  --font-sans: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-ibm-plex-mono), ui-monospace, Menlo, monospace;
+  --font-display: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, Menlo, monospace;
 
-  /* Azuis de marca usados nos gradientes (o --accent é o meio da escala) */
-  --color-accent-2: #3b82f6;
-  --color-accent-strong: #1d4ed8;
-  --color-accent-violet: #a78bfa;
-  --color-accent-indigo: #818cf8;
+  /* Azul institucional e seus apoios */
+  --color-marca: #1f4e79;
+  --color-marca-hover: #16395a;
+  --color-marca-suave: #e8f0f8; /* tiles e botão secundário */
+  --color-marca-chip: #f0f5fa; /* chip "Na prática:" */
 
-  /* Texto de apoio muito discreto (rótulos, monospace pequeno) */
-  --color-micro: #7d8aa0;
+  /* Azul vivo — a "nova geração" (PDV Web, último marco da timeline) */
+  --color-azul-vivo: #2563eb;
+  --color-azul-vivo-hover: #1d4ed8;
+  --color-azul-claro: #93c5fd;
+  --color-azul-palido: #dbeafe;
+  --color-azul-barra: #3b82c4; /* barra final do gráfico do hero */
 
-  /* Cinza dos quadrados do mosaico da marca (MarcaSyntax) */
-  --color-slate-mark: #8fa0b5;
+  /* Painéis escuros (faixa do slogan, card do PDV, banda de contato) */
+  --color-escuro: #0f172a;
+  --color-escuro-raised: #1e293b;
+  --color-ondark: #f8fafc;
+  --color-ondark-soft: #e2e8f0;
+  --color-ondark-muted: #94a3b8; /* 7,10:1 sobre #0f172a */
 
-  /* Rodapé: cobre os stops claros do gradiente da página */
-  --color-footer: #1f1f1f;
-  --color-footer-foreground: #c9c9c9;
-  --color-footer-muted: #a5a5a5;
+  /* Linhas */
+  --color-linha: #e5e9f0;
+  --color-linha-timeline: #dbe3ee;
 
-  /* WhatsApp: green-500 dá 2,28:1 com o glifo branco e reprova o SC 1.4.11 */
-  --color-whatsapp: #16a34a;
-  --color-whatsapp-hover: #15803d;
+  /* WhatsApp — glifo/rótulo em --color-escuro dá 9,08:1; em branco daria 2,01:1 */
+  --color-whatsapp: #25d366;
+  --color-whatsapp-hover: #1fb959;
 
-  /* Painéis de mockup — agora escuros DENTRO de um site escuro: precisam
-     ficar acima da folha, não abaixo. */
-  --color-panel: #131928;
-  --color-panel-raised: #1a2233;
+  /* Verde do selo "Demonstração aberta" — 8,03:1 sobre o chip translúcido */
+  --color-verde: #4ade80;
 
-  /* Texto sobre os painéis de mockup */
-  --color-ondark: #e8edf6;
-  --color-ondark-soft: #a3b0c4;
-  --color-ondark-dim: #7d8aa0;
-  --color-ondark-link: #93b4fd;
+  /* Semáforo da barra falsa de navegador */
+  --color-semaforo-vermelho: #f87171;
+  --color-semaforo-ambar: #fbbf24;
 
-  /* Estado positivo sobre escuro */
-  --color-positive: #6ee7a0;
-
-  /* Contornos sobre painel escuro */
-  --color-hairline: rgb(148 163 184 / 0.14);
-  --color-hairline-strong: rgb(148 163 184 / 0.24);
-
-  /* Glow em três níveis (§4). A cor resolve em uso, por elemento — é o que
-     permite à seção trocar o tom via --glow-color sem tocar em componente. */
-  --shadow-glow-sm:
-    0 0 0 1px color-mix(in oklab, var(--glow-color) 22%, transparent),
-    0 8px 28px -12px color-mix(in oklab, var(--glow-color) 30%, transparent);
-  --shadow-glow-md: 0 0 44px color-mix(in oklab, var(--glow-color) 40%, transparent);
-  --shadow-glow-lg: 0 0 110px -20px color-mix(in oklab, var(--glow-color) 50%, transparent);
+  /* Sombras do design */
+  --shadow-topo: 0 12px 40px -20px rgb(15 23 42 / 0.35);
+  --shadow-painel: 0 20px 50px -30px rgb(31 78 121 / 0.45);
+  --shadow-cartao: 0 10px 30px -22px rgb(31 78 121 / 0.5);
+  --shadow-form: 0 30px 70px -40px rgb(0 0 0 / 0.7);
 
   /* Animações de entrada — §10: nada acima de 400ms */
   --animate-rise: synRise 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  --animate-rise-slow: synRise 400ms 80ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  --animate-grow: synGrow 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
 
-  /* Pulso do indicador de rolagem do hero — 2 iterações, nunca infinito (§10) */
-  --animate-pulso: synPulso 1400ms ease-in-out 2 both;
+  /* Pulso do selo de demonstração aberta — 2 iterações, nunca infinito (§10).
+     SEM fill-mode de propósito: com `both` o elemento congela no último
+     keyframe (40% de opacidade) e o ponto verde termina APAGADO em vez de
+     sólido — inclusive já nasce apagado sob prefers-reduced-motion. */
+  --animate-pulso: synPulso 1400ms ease-in-out 2;
 }
 
 /* ---------------------------------------------------------------------------
-   Botão primário em gradiente.
+   Botões.
 
-   Fica em @layer components (não sem camada) para que uma classe utilitária
-   do Tailwind — camada `utilities`, precedência maior — ainda consiga
-   sobrepor pontualmente.
+   O raio vem do design (8px), não do pill do tema escuro anterior.
 
-   Pegadinha: .button--primary não declara background-color; ela só define
-   --button-bg / --button-bg-hover, e é a .button base que aplica
-   `background-color: var(--button-bg)`. Um gradiente é background-IMAGE, então
-   o hover também tem que trocar a imagem. Efeito colateral bem-vindo: a cor
-   sólida continua embaixo e serve de fallback (5,17:1 com o branco).
+   Pegadinha herdada da v3: .button--primary não declara background-color; ela
+   só define --button-bg / --button-bg-hover, e é a .button base que aplica
+   `background-color: var(--button-bg)`. Como aqui o primário é cor sólida (e
+   não gradiente), basta redefinir as duas variáveis.
 --------------------------------------------------------------------------- */
 @layer components {
   .button {
-    border-radius: 9999px;
+    border-radius: 0.5rem;
+    font-weight: 600;
+  }
+
+  /* Alturas e paddings do handoff. A base do HeroUI (h-10, md:h-9, px-4) é
+     mais baixa e estreita que o design — e os 36px do md reprovavam o alvo de
+     toque de 44px do §9. Mesma especificidade da regra do pacote, declarada
+     depois dela: vence por ordem de cascata, sem !important. */
+  .button--md {
+    height: 2.75rem; /* 44px */
+    padding-inline: 1.25rem; /* 20px */
+    font-size: 0.9375rem; /* 15px */
+  }
+
+  .button--lg {
+    height: 3.25rem; /* 52px */
+    padding-inline: 1.75rem; /* 28px */
+    font-size: 1rem; /* 16px */
   }
 
   .button--primary {
-    background-image: linear-gradient(180deg, var(--color-accent-2), var(--accent));
-    box-shadow:
-      0 0 44px color-mix(in oklab, var(--accent) 55%, transparent),
-      inset 0 1px 0 rgb(255 255 255 / 0.28);
+    --button-bg: var(--color-marca);
+    --button-bg-hover: var(--color-marca-hover);
+    --button-bg-pressed: var(--color-marca-hover);
+    --button-fg: #ffffff;
   }
 
-  .button--primary:hover,
-  .button--primary[data-hovered="true"] {
-    background-image: linear-gradient(180deg, var(--accent), var(--color-accent-strong));
+  /* Secundário do design: azul institucional sobre o azul pálido (7,53:1). */
+  .button--secondary {
+    --button-bg: var(--color-marca-suave);
+    --button-bg-hover: #dbe7f3;
+    --button-bg-pressed: #dbe7f3;
+    --button-fg: var(--color-marca);
   }
 
-  /* CTA sobre painel colorido (a faixa .cta-gradiente): ali as variantes do
-     tema somem, porque foram calibradas contra a folha e não contra o azul. */
-  .button--inverso {
-    --button-bg: #ffffff;
-    --button-bg-hover: #e8edf6;
-    --button-bg-pressed: #e8edf6;
-    --button-fg: #101099;
+  /* CTA da demonstração aberta, dentro do card escuro do PDV Web. */
+  .button--vivo {
+    --button-bg: var(--color-azul-vivo);
+    --button-bg-hover: var(--color-azul-vivo-hover);
+    --button-bg-pressed: var(--color-azul-vivo-hover);
+    --button-fg: #ffffff;
 
-    background-image: none;
-    box-shadow: 0 10px 30px -12px rgb(0 0 0 / 0.5);
+    border-radius: 0.5625rem;
+    font-weight: 700;
+  }
+
+  /* Envio do formulário: verde WhatsApp com rótulo escuro (9,08:1). */
+  .button--whatsapp {
+    --button-bg: var(--color-whatsapp);
+    --button-bg-hover: var(--color-whatsapp-hover);
+    --button-bg-pressed: var(--color-whatsapp-hover);
+    --button-fg: var(--color-escuro);
+
+    border-radius: 0.625rem;
+    font-weight: 700;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Fundo do hero: radial do design, do azul pálido ao cinza-azulado.
+--------------------------------------------------------------------------- */
+.fundo-hero {
+  background-image: radial-gradient(
+    circle at 15% 20%,
+    var(--color-azul-palido) 0%,
+    #f4f7fc 42%,
+    #e8eef7 100%
+  );
+}
+
+/* ---------------------------------------------------------------------------
+   Ripple — "marca de dedo em vidro" no pointerdown dos CTAs (§10, desvio
+   autorizado: 650ms, acima do teto de 400ms, porque é a interação assinada do
+   handoff). O componente Ripple monta o <span>; aqui fica só a keyframe.
+   Transform + opacity apenas, então roda no compositor. Sob
+   prefers-reduced-motion o bloco global no fim do arquivo zera a duração.
+--------------------------------------------------------------------------- */
+@keyframes rippleFx {
+  0% {
+    transform: scale(0);
+    opacity: 0.7;
+  }
+  70% {
+    opacity: 0.35;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
   }
 }
 
@@ -181,200 +241,13 @@
   }
 }
 
-@keyframes synGrow {
-  from {
-    transform: scaleY(0.15);
-  }
-  to {
-    transform: scaleY(1);
-  }
-}
-
-/* Linha que se desenha (§10) — horizontal e vertical. */
-@keyframes synTraco {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
-}
-
-@keyframes synTracoY {
-  from {
-    transform: scaleY(0);
-  }
-  to {
-    transform: scaleY(1);
-  }
-}
-
 @keyframes synPulso {
   0%,
   100% {
-    opacity: 0.35;
+    opacity: 0.4;
   }
   50% {
     opacity: 1;
-  }
-}
-
-/* ---------------------------------------------------------------------------
-   Fundo da página: a folha do PageShell flutua sobre este gradiente. O stop
-   final é claro de propósito — quem o cobre é o rodapé (--color-footer), por
-   isso nenhum texto pode encostar nele.
---------------------------------------------------------------------------- */
-.fundo-pagina {
-  background-image: linear-gradient(
-    180deg,
-    var(--background) 0%,
-    var(--color-panel) 42%,
-    #8b93ae 100%
-  );
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-}
-
-/* ---------------------------------------------------------------------------
-   Faixa de fechamento do ContatoSection. Azul profundo o bastante para o
-   branco passar em qualquer ponto: 6,98:1 no stop mais claro (#1D3BF5).
---------------------------------------------------------------------------- */
-.cta-gradiente {
-  background-image: linear-gradient(
-    100deg,
-    #1e1b4b 0%,
-    #0a0a5c 18%,
-    #101099 45%,
-    #1b2adb 75%,
-    #1d3bf5
-  );
-}
-
-/* ---------------------------------------------------------------------------
-   Texto com gradiente (H1 do hero, §7). A cor sólida vem antes do clip: se o
-   background-clip falhar, o texto continua legível em vez de sumir.
---------------------------------------------------------------------------- */
-.texto-gradiente {
-  color: var(--foreground-base);
-  background-image: linear-gradient(
-    94deg,
-    var(--accent-soft-foreground),
-    var(--color-accent-indigo) 55%,
-    var(--color-accent-violet)
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* ---------------------------------------------------------------------------
-   Borda em gradiente (tiles de ícone e cartão-capa). O padding do ::before é
-   a espessura; a máscara recorta o miolo e sobra só o anel. A cor acompanha
-   --glow-color da cena.
---------------------------------------------------------------------------- */
-@utility borda-gradiente {
-  position: relative;
-
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(
-      135deg,
-      color-mix(in oklab, var(--glow-color) 45%, transparent),
-      var(--color-hairline) 60%
-    );
-    -webkit-mask:
-      linear-gradient(#fff 0 0) content-box,
-      linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask:
-      linear-gradient(#fff 0 0) content-box,
-      linear-gradient(#fff 0 0);
-    mask-composite: exclude;
-    pointer-events: none;
-  }
-}
-
-/* ---------------------------------------------------------------------------
-   Spotlight que segue o ponteiro (§10) — o PointerGlow escreve --mx/--my nos
-   cartões [data-spotlight]. Todo o custo fica atrás de (pointer: fine) +
-   sem reduced-motion: em touch o pseudo-elemento nem existe, então o :hover
-   emulado do toque não gruda glow em posição nenhuma.
---------------------------------------------------------------------------- */
-@media (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  [data-spotlight] {
-    position: relative;
-  }
-
-  [data-spotlight]::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: radial-gradient(
-      260px circle at var(--mx, 50%) var(--my, 50%),
-      color-mix(in oklab, var(--glow-color) 12%, transparent),
-      transparent 65%
-    );
-    opacity: 0;
-    transition: opacity 200ms ease;
-    pointer-events: none;
-  }
-
-  [data-pointer-glow]:hover [data-spotlight]::after {
-    opacity: 1;
-  }
-}
-
-/* ---------------------------------------------------------------------------
-   Parallax decorativo leve (§10): CSS scroll-driven, roda no compositor, sem
-   JS e sem listener. Amplitude ≤24px, transform-only, só em camada decorativa
-   (nunca em texto). Sem suporte (Firefox estável), o elemento fica estático —
-   o fallback é o estado final.
---------------------------------------------------------------------------- */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .parallax-suave {
-      animation: synParallax linear both;
-      animation-timeline: view();
-      animation-range: entry 0% exit 100%;
-    }
-
-    .parallax-suave--lento {
-      animation: synParallaxLento linear both;
-      animation-timeline: view();
-      animation-range: entry 0% exit 100%;
-    }
-
-    /* Trilho da LinhaDoTempo: se desenha conforme a seção entra na tela.
-       Fora do @supports, o fallback é o trilho completo. */
-    .traco-scroll-y {
-      transform-origin: top;
-      animation: synTracoY linear both;
-      animation-timeline: view();
-      animation-range: entry 0% cover 45%;
-    }
-  }
-}
-
-@keyframes synParallax {
-  from {
-    transform: translateY(24px);
-  }
-  to {
-    transform: translateY(-24px);
-  }
-}
-
-@keyframes synParallaxLento {
-  from {
-    transform: translateY(12px);
-  }
-  to {
-    transform: translateY(-12px);
   }
 }
 
@@ -390,7 +263,6 @@
     transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Variantes de entrada (§10): só muda o estado inicial; o destino é o mesmo. */
 .reveal[data-efeito="lado"] {
   transform: translateX(-16px);
 }
@@ -409,8 +281,7 @@
 }
 
 /* Stagger orquestrado (§10): passos de 60ms, teto de 300ms. O atraso vem do
-   contêiner, não de prop manual por item. Inline style (prop `atraso`) ainda
-   vence, como escape pontual. */
+   contêiner, não de prop manual por item. */
 .reveal-stagger > .reveal:nth-child(2) {
   transition-delay: 60ms;
 }
@@ -461,60 +332,28 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Âncoras param abaixo do header — que muda de altura no mobile. */
+/* Âncoras param abaixo do header sticky, que muda de altura no mobile:
+   py-4 + marca de 52px + hairline = 85px; em md+ a marca vai a 72px = 105px.
+   Os valores abaixo são essas alturas com ~7px de respiro. */
 section[id] {
-  scroll-margin-top: 4.5rem;
+  scroll-margin-top: 5.75rem;
 }
 
 @media (min-width: 768px) {
   section[id] {
-    scroll-margin-top: 6.5rem;
+    scroll-margin-top: 7rem;
   }
 }
 
-/* ---------------------------------------------------------------------------
-   Numerais vazados do Método: contorno hairline que se preenche com a cor da
-   cena no hover. Sem suporte a text-stroke, o fallback é o numeral sólido em
-   hairline-strong — nunca invisível.
---------------------------------------------------------------------------- */
-.numeral-vazado {
-  color: var(--color-hairline-strong);
-  transition: color 300ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@supports (-webkit-text-stroke: 1px black) {
-  .numeral-vazado {
-    color: transparent;
-    -webkit-text-stroke: 1.5px var(--color-hairline-strong);
-    transition:
-      color 300ms cubic-bezier(0.16, 1, 0.3, 1),
-      -webkit-text-stroke-color 300ms cubic-bezier(0.16, 1, 0.3, 1);
-  }
-}
-
-.etapa-metodo:hover .numeral-vazado {
-  color: var(--glow-color);
-  -webkit-text-stroke-color: color-mix(in oklab, var(--glow-color) 55%, transparent);
-}
-
-.etapa-metodo .etapa-corpo {
-  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.etapa-metodo:hover .etapa-corpo {
-  transform: translateY(-2px);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .etapa-metodo:hover .etapa-corpo {
-    transform: none;
-  }
-}
-
-/* Foco visível em tudo que é interativo (CLAUDE.md §9).
-   var(--focus), não var(--accent): #2563EB sobre a folha dá 3,69:1. */
+/* Foco visível em tudo que é interativo (CLAUDE.md §9). */
 :focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
   border-radius: 4px;
+}
+
+/* Sobre painel escuro o azul institucional some — ali o anel é o azul claro
+   (10,10:1 sobre #0f172a). */
+.sobre-escuro :focus-visible {
+  outline-color: var(--color-azul-claro);
 }

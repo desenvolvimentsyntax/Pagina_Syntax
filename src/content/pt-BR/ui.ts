@@ -1,11 +1,14 @@
 /**
  * Strings de interface — pt-BR. Rótulos, aria-labels e microcopy que não
- * pertencem a nenhuma seção da home (header, rodapé, 404, mockups,
- * validação). Nada de texto solto no JSX (§18): tudo que o visitante lê ou
- * o leitor de tela anuncia sai daqui, para a fatia es-PY trocar num lugar só.
+ * pertencem a nenhuma seção da home (header, rodapé, 404, validação). Nada de
+ * texto solto no JSX (§18): tudo que o visitante lê ou o leitor de tela
+ * anuncia sai daqui, para a fatia es-PY trocar num lugar só.
  */
 
 export const ui = {
+  marca: {
+    alt: "Syntax Sistemas",
+  },
   header: {
     paginaInicialAria: "Página inicial",
     navPrincipalAria: "Navegação principal",
@@ -37,18 +40,6 @@ export const ui = {
   whatsappFlutuante: {
     aria: "Conversar com a Syntax pelo WhatsApp",
   },
-  /**
-   * Os painéis são demonstração desenhada em código, com nomes de empresa
-   * fictícios — o rótulo visível "dados ilustrativos" evita que sejam lidos
-   * como clientes reais (§11/§13).
-   */
-  mockups: {
-    dadosIlustrativos: "dados ilustrativos",
-    dashboardAria:
-      "Painel do Syntax ERP com dados ilustrativos: pedidos do dia, faturamento e volume de pedidos ao longo do ano.",
-    painelFiscalAria:
-      "Painel de documentos fiscais do E-Syntax com dados ilustrativos: NF-e, NFC-e e CT-e emitidos e status de autorização.",
-  },
   naoEncontrada: {
     codigo: "Erro 404",
     titulo: "Página não encontrada",
@@ -57,14 +48,15 @@ export const ui = {
     voltarHome: "Voltar para a home",
     falarEspecialista: "Falar com especialista",
   },
-  /** Mensagens do schema do formulário (§12) — humanas, em português. */
+  /**
+   * Mensagens do schema do formulário (§12) — humanas, em português.
+   * O handoff pede envio sem validação bloqueante: campo vazio simplesmente
+   * sai da mensagem. Estas mensagens só aparecem quando o campo FOI
+   * preenchido e está mal formado (ver lib/schemas/contato.ts).
+   */
   validacao: {
-    nome: "Informe seu nome",
-    empresa: "Informe o nome da empresa",
     email: "Informe um e-mail válido",
     telefone: "Informe um telefone válido com DDD",
-    segmento: "Selecione o segmento",
-    mensagem: "Conte em poucas palavras o que você precisa",
   },
 } as const;
 
