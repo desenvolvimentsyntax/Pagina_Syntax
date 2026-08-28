@@ -109,16 +109,13 @@ Estas regras têm prioridade sobre qualquer outra consideração de estilo.
 | Cards de produto/segmento | `Card.Header` / `.Title` / `.Description` / `.Content` / `.Footer` |
 | CTAs | `Button` — `variant="primary"` e `variant="outline"` |
 | Tags de tecnologia | `Chip` |
-| FAQ | `Accordion` (ou `DisclosureGroup`) |
-| Abas de produto | `Tabs` |
-| Formulário de contato | `Form`, `TextField`, `TextArea`, `Select`, `FieldError` |
-| Modal de demonstração | `Modal` |
+| Timeline / trajetória | layout próprio (`components/ui/LinhaDoTempo.tsx`) |
+| Formulário de contato | `Form`, `TextField`, `Input`, `Select`, `ListBox`, `FieldError`, `Alert` |
 | Menu mobile | `Drawer` |
 | Seletor de idioma | `Dropdown` |
 | Divisórias | `Separator` |
 | Carregamento | `Skeleton`, `Spinner` |
-| Depoimentos | `Avatar`, `Card` |
-| Trilha de navegação | `Breadcrumbs` |
+| Trilha de navegação | `Breadcrumbs` (páginas internas, fatia 4) |
 
 ### §3.1 — O que a v3 NÃO tem (e como resolver)
 
@@ -142,91 +139,103 @@ Antes de assumir que um componente não existe, confira:
 
 ## §4 — Design tokens
 
-**O site é escuro.** Não existe versão clara — o `<html>` carrega
-`data-theme="dark"` fixo e não há alternância de tema.
+**O site é claro.** Não existe versão escura — o `<html>` carrega
+`data-theme="light"` fixo e não há alternância de tema.
 
-A v3 tematiza por **variáveis CSS semânticas em `oklch`** — não por objeto de
-tema JS e não por hex. Os tokens abaixo sobrescrevem os do HeroUI em
+> Até a fatia 3.6 o site era escuro (folha `#0B1018`, tokens em `oklch`, glow
+> por cena). A fatia 3.7 trocou a direção de arte inteira pelo handoff
+> `design_handoff_landing_syntax`. **Conhecimento do tema escuro está errado
+> aqui** — `--sheet`, `--slate`, `--glow-color`, `--color-panel*`,
+> `--color-micro`, `--color-hairline*` e `--shadow-glow-*` não existem mais.
+
+A v3 tematiza por **variáveis CSS semânticas** — não por objeto de tema JS e
+não por hex no JSX. Os tokens abaixo sobrescrevem os do HeroUI em
 `app/globals.css`, **depois** dos dois `@import` do §2:
 
 ```css
 :root,
-[data-theme="dark"] {
-  color-scheme: dark;
+[data-theme="light"] {
+  color-scheme: light;
 
-  --background: oklch(0.1947 0.0225 276.15); /* #12141F — topo do gradiente */
-  --foreground: oklch(1 0 0);                /* branco — só títulos         */
-  --foreground-base: oklch(0.9449 0.0133 262.38); /* #E8EDF6 — corpo        */
-  --muted: oklch(0.7025 0.0342 260.01);      /* #93A0B5 — texto de apoio    */
+  --background: #ffffff;
+  --foreground: #1f2937;        /* títulos — 14,70:1 no branco       */
+  --foreground-base: #4b5563;   /* corpo — 7,56:1                    */
+  --muted: #646c7a;             /* apoio — ver nota de contraste     */
 
-  --sheet: oklch(0.1719 0.0186 259.66);      /* #0B1018 — a folha central   */
-  --slate: oklch(0.7107 0.0351 256.79);      /* base das translucidezes     */
+  --surface: #ffffff;
+  --surface-secondary: #f4f6fa;
+  --surface-tertiary: #e8f0f8;
+  --overlay: #ffffff;
+  --surface-shadow: 0 0 0 0 transparent;
 
-  --surface: color-mix(in oklab, var(--slate) 5%, transparent);
-  --surface-secondary: color-mix(in oklab, var(--slate) 9%, transparent);
-  --overlay: oklch(0.2153 0.0311 267.09);    /* OPACO — ver abaixo          */
+  --accent: #1f4e79;            /* texto E fundo — 8,66:1 no branco  */
+  --accent-foreground: #ffffff;
+  --accent-soft-foreground: var(--accent);
+  --focus: var(--accent);
+  --link: var(--accent);
 
-  --accent: oklch(0.5461 0.2152 262.88);     /* #2563EB — só preenchimento  */
-  --accent-soft-foreground: oklch(0.7137 0.1434 254.62); /* #60A5FA — texto */
-  --focus: var(--accent-soft-foreground);
-  --link: var(--accent-soft-foreground);
+  --border: #e5e9f0;
+  --field-background: #f4f6fa;
+  --field-border: var(--border);
+  --field-border-width: 1px;
 
-  --border: color-mix(in oklab, var(--slate) 14%, transparent);
-  --radius: 0.75rem;                         /* base dos raios, ver §3.7    */
+  --radius: 0.5rem;             /* botões 8px                        */
+  --field-radius: 0.5625rem;    /* inputs 9px                        */
 }
 ```
 
 Regras que caem desse bloco — quebrar qualquer uma delas quebra o tema:
 
-- **O bloco entra SEM `@layer`.** O HeroUI importa suas variáveis em
-  `@layer theme`, a camada de menor precedência; CSS sem camada vence qualquer
-  camada. Não use `!important` nem infle especificidade para "ganhar" dele.
-- **`data-theme="dark"` no `<html>` é obrigatório**, e não é decoração: é o que
-  traz do HeroUI o `color-scheme`, o `--surface-shadow` zerado (sem ele todo
-  `Card` ganha um halo preto) e os status clareados. Redefinir só o `:root` com
-  valores escuros herdaria tudo isso errado.
-- **As superfícies são translúcidas.** É o que mantém `Card` visível sobre a
-  folha; opacas na cor dela, os cards sumiriam.
-- **`--overlay` é OPACO.** `Modal`, `Drawer`, `Tooltip` e `Popover` flutuam
-  sobre conteúdo arbitrário — translúcido ali deixa o texto ilegível.
-- **`text-accent` não existe na prática.** `#2563EB` sobre a folha dá 3,69:1 e
-  reprova. Todo accent em TEXTO é `text-accent-soft-foreground` (7,50:1).
-  `bg-accent` continua valendo para preenchimento.
+- **O bloco entra SEM `@layer`.** O HeroUI importa suas variáveis dentro de
+  camada; CSS sem camada vence qualquer camada. Não use `!important` nem infle
+  especificidade para "ganhar" dele.
+- **`data-theme="light"` no `<html>` é obrigatório**: é o que traz do HeroUI o
+  `color-scheme`, os status e os `--field-*` calibrados para o claro.
+- **As superfícies são OPACAS.** Aqui a seção tem fundo próprio e o card se
+  destaca por borda hairline, não por translucidez — o inverso do tema escuro.
+- **`--surface-shadow` é zerado.** No design o `Card` é definido pela borda; a
+  sombra (`shadow-cartao`) só entra no hover.
+- **`--muted` é `#646c7a`, não o `#6b7280` do handoff.** O `#6b7280` passa no
+  branco (4,83:1) mas reprova sobre `#f4f6fa` (4,42:1) e sobre os tiles
+  `#e8f0f8` (4,20:1) — e é ali que ele mais aparece (intro de Produtos,
+  legendas da timeline, rótulos do painel do hero). Dois pontos mais escuro
+  resolve os três casos sem diferença perceptível. §9 vence fidelidade de hex.
+- **`text-accent` FUNCIONA aqui**, ao contrário do tema escuro: `#1f4e79` dá
+  8,66:1 no branco e serve para texto e para preenchimento.
 - **`primary` é variante de Button, não cor.** `bg-primary` não existe.
 
 Tokens de marca fora da escala semântica ficam no `@theme` do `globals.css`:
-`--color-accent-2`, `--color-accent-strong`, `--color-accent-violet`,
-`--color-sheet`, `--color-micro`, `--color-panel*` (mockups), `--color-footer*`,
-`--color-whatsapp`, `--color-ondark*`, `--color-hairline*`,
-`--shadow-glow-sm/md/lg` (glow em níveis).
+`--color-marca`, `--color-marca-hover/suave/chip`, `--color-azul-vivo`,
+`--color-azul-claro/palido/barra`, `--color-escuro`, `--color-escuro-raised`,
+`--color-ondark`, `--color-ondark-soft/muted`, `--color-linha`,
+`--color-linha-timeline`, `--color-whatsapp*`, `--color-verde`,
+`--color-semaforo-*`, `--shadow-topo/painel/cartao/form`.
 
-**Sistema de glow por cena:** todo glow usa `var(--glow-color)` (default
-`var(--accent)`, definido no `:root`). A seção muda o tom com
-`[--glow-color:var(--color-accent-indigo)]` no `<section>` — nunca recolora
-componente por componente.
+**Azul vivo (`#2563eb`) é a cor da "nova geração"** e aparece em exatamente
+dois pontos da narrativa: o card do PDV Web e o último marco da timeline. Fora
+deles, o azul é sempre `--color-marca` (`#1f4e79`) — é o que mantém o fio
+legível.
 
-**Violeta/indigo são a cor da "nova geração"** e aparecem exatamente em três
-pontos da narrativa: H1 do hero, ato Prova e CTA final. Não use fora deles —
-é o que mantém o fio legível.
-
-`--surface-tertiary` e `--border-secondary` têm uso: são o hover e a borda do
-`cartaoSyntax` peso "capa" (`components/ui/CartaoSyntax.tsx`).
+**Sobre painel escuro (`#0f172a`)** o anel de foco `#1f4e79` some. Envolva a
+seção na classe `.sobre-escuro`, que troca `--focus` por `--color-azul-claro`
+(10,10:1). O texto de apoio ali é `--color-ondark-muted` (7,10:1), nunca
+`--muted`.
 
 **Tipografia:**
-- Display / H1 / H2 de seção: **Sora** (`font-display`), 600, `tracking-[-0.03em]`
-- Corpo: **Instrument Sans** (`font-sans`), 400, `leading-relaxed`
-- Label / overline / números: **IBM Plex Mono** (`font-mono`), 500, `uppercase`,
-  `tracking-[0.1em]`, `text-xs`
+- Display / H1 / H2 / títulos de card: **Montserrat** (`font-display`), 700–800
+- Corpo: **Inter** (`font-sans`), 400–600, `leading-relaxed`
+- Label / overline / domínios: **JetBrains Mono** (`font-mono`), 500–600,
+  `uppercase`, `tracking-[0.1em]`, `text-[13px]`
 
-Sora e Instrument Sans são variáveis: **não passe `weight`** no `next/font`, ou
-os pesos 600/800 somem. IBM Plex Mono não é variável — ali `weight` é obrigatório.
+As três são variáveis no Google Fonts: **não passe `weight`** no `next/font`,
+ou os pesos 700/800 somem.
 
-**Ritmo de seção:** `py-24` no desktop, `py-16` no mobile. **Não alterne fundo
-entre seções** — todas flutuam sobre a folha do `PageShell` e a separação vem de
-hairline (`border-border`) e translucidez. Seção com `bg-background` ou
-`bg-surface` própria abre um retângulo visível na folha.
-
----
+**Ritmo de seção:** `py-14 md:py-16` nas seções de conteúdo, `py-16 md:py-18`
+nas de peso (hero, sobre, contato) e `py-6 md:py-7` na faixa do slogan.
+**Cada seção TEM fundo próprio** — branco, `bg-surface-secondary` ou
+`bg-escuro` — e a separação vem da alternância mais `border-t border-border`.
+Isto é o inverso da regra do tema escuro: não existe mais folha central nem
+`PageShell`.
 
 ## §5 — Estrutura de pastas
 
@@ -242,8 +251,8 @@ src/
     sitemap.ts
     robots.ts
   components/
-    layout/                 # Header (menu de topo, ver §3.1), Footer
-    sections/               # Hero, Produtos, ComoFunciona, CTA...
+    layout/                 # Header (menu de topo, ver §3.1), Footer, WhatsAppButton
+    sections/               # Hero, Slogan, Solucoes, Produtos, Sobre, Contato
     ui/                     # wrappers finos sobre HeroUI, se necessário
   lib/
     metadata.ts             # helper de SEO, ver §8
@@ -277,52 +286,45 @@ seções no mesmo componente.
 Toda seção da home segue esta estrutura. Não improvise variações.
 
 ```tsx
-<section id="produtos" className="py-16 md:py-24">
-  <div className="mx-auto max-w-7xl px-5 md:px-6">
+<section
+  id="produtos"
+  className="bg-surface-secondary border-border border-t py-14 md:py-16"
+>
+  <div className="mx-auto max-w-7xl px-5 md:px-8 lg:px-12">
     {/* Cabeçalho: use o SectionHeading, não recrie a hierarquia */}
     <SectionHeading overline="Produtos" titulo="..." subtitulo="..." />
 
     {/* Conteúdo */}
-    <div className="mt-10 md:mt-16">...</div>
+    <div className="mt-10 md:mt-12">...</div>
   </div>
 </section>
 ```
 
 `SectionHeading` (`components/ui/`) já monta overline em `font-mono`
-`text-accent-soft-foreground`, H2 em `font-display` e subtítulo em
-`text-foreground-base/70`. Não duplique isso à mão.
+`text-marca`, H2 em `font-display` e intro em `text-muted`. `tom="escuro"`
+inverte tudo para as bandas `bg-escuro`. Não duplique isso à mão.
 
-**A seção não tem fundo próprio** (§4): quem dá o fundo é o `PageShell`, que
-envolve o `<main>` em `app/[locale]/page.tsx`.
+**A seção TEM fundo próprio** (§4) — é ele que a separa da vizinha.
 
 ### Sistema de espaçamento (escala 8px) — vale para o site inteiro
 
-- Container: `max-w-7xl` sempre. Padding lateral: **`px-5` mobile, `md:px-6`**
-  — o MESMO em toda seção, header e footer. Nenhuma seção pode parecer mais
+- Container: `max-w-7xl` sempre. Padding lateral **`px-5 md:px-8 lg:px-12`** —
+  o MESMO em toda seção, header e footer. Nenhuma seção pode parecer mais
   apertada que outra.
-- Ritmo vertical: `py-16 md:py-24` em toda seção, com duas exceções nomeadas:
-  o **hero preenche a dobra** (`lg:min-h-[calc(100svh-66px)]`) e **seções-faixa**
-  usam `py-10 md:py-14` — Ecossistema com `border-y`; a faixa gated de prova
-  social (`ProvaSocialSection`, só monta com material real no content) sem
-  `border-y`, de propósito, para não clonar a vizinha. Gaps internos em
-  múltiplos de 8 (com 4 como meio passo).
-- A home segue a **curva de pesos dos 10 atos** (5·3·2·4·5·2·1·3·2·5 — forte,
-  médio, leve…; as faixas não contam como ato). Seção nova declara seu peso e
-  **não repete o formato da vizinha** — nem no desktop nem no mobile.
-- Card: `p-4 sm:p-6` — nunca `p-6` fixo (em 320px o padding triplo
-  folha+seção+card desperdiça ~20% da largura).
-- **A folha (`PageShell`) e o header são full-bleed abaixo de `md`** (sem
-  radius, sem borda lateral): moldura de 12px não lê em 320px.
+- Ritmo vertical: ver §4. Gaps internos em múltiplos de 8 (4 como meio passo).
+- Card: `p-6 sm:p-7` (soluções, 28px do design) e `p-6 sm:p-9` (produtos,
+  36px) — nunca padding grande fixo: em 320px o padding duplo desperdiça a
+  largura útil.
+- Raio: cards de solução `rounded-[14px]`; cards grandes, timeline e form
+  `rounded-2xl` (16px); pills `rounded-full`. Botões (8px) e inputs (9px)
+  herdam do tema — não carimbe `rounded` em cima deles.
 - **Alvo de toque mínimo: 44px.** Link de texto pequeno ganha `py` estendido;
   CTAs de dobra usam `larguraTotal` do `CtaLink` no mobile.
-- Mobile não é desktop encolhido: cada dobra tem um formato próprio
-  (mostruário em camadas → editorial+timeline → acordeão de segmentos →
-  capas+índice → mostruário empilhado → banda de numerais → faixa deslizante →
-  banda numerada+mapa → acordeão de perguntas → gradiente). **Nenhuma dobra
-  repete o formato da vizinha**; antes de criar seção nova, escolha um formato
-  que ainda não esteja em uso ao lado.
-
----
+- Mobile não é desktop encolhido. As seis dobras da home, em ordem: hero
+  (grid texto + painel) → faixa do slogan → grade 2×2 de soluções → dois cards
+  de produto (um claro, um escuro) → editorial + timeline → banda escura com
+  formulário. **Nenhuma dobra repete o formato da vizinha**; antes de criar
+  seção nova, escolha um formato que ainda não esteja em uso ao lado.
 
 ## §8 — SEO (obrigatório em toda página)
 
@@ -375,43 +377,35 @@ Meta: Lighthouse Performance > 95.
 
 - Animação permitida: fade in; slide leve em **qualquer eixo** (≤24px); escala
   de entrada (≥0.96); hover em card; scroll reveal com **stagger** (passos de
-  60ms via `.reveal-stagger`, atraso acumulado ≤300ms); contador animado;
-  linha que se desenha (`synTraco`/`synTracoY`, ≤400ms); pulso do indicador de
-  rolagem do hero (2 iterações, nunca infinito). **Nada mais.**
-- **Spotlight que segue o ponteiro: só via `PointerGlow`** (`components/ui/`).
-  Travas: só monta sob `pointer: fine` e sem `prefers-reduced-motion`;
-  rAF-throttled; escreve CSS vars direto no style, sem estado React. Não
-  reimplemente o efeito fora dele.
-- **Parallax decorativo leve: só via CSS scroll-driven animation**
-  (`.parallax-suave*`), dentro de `@supports (animation-timeline: view())` +
-  `@media (prefers-reduced-motion: no-preference)`. Amplitude ≤24px,
-  transform-only, **nunca em texto de leitura** — só camada decorativa
-  `aria-hidden`. Fallback obrigatório = elemento estático. Nada de biblioteca.
-- Animação regida por tempo: ≤400ms. Regida por scroll: a régua é a amplitude
-  (≤24px), não a duração.
-- Respeitar `prefers-reduced-motion` sempre.
+  60ms via `.reveal-stagger`, atraso acumulado ≤300ms); pulso de indicador
+  (`animate-pulso`, 2 iterações, **nunca infinito**); ripple de toque nos CTAs.
+  **Nada mais.**
+- Animação regida por tempo: ≤400ms, com a única exceção do ripple.
+- Respeitar `prefers-reduced-motion` sempre. O bloco global no fim do
+  `globals.css` já zera duração e iteração — **não reimplemente por componente**.
 - **Animação é CSS por padrão** (transition/keyframes + `IntersectionObserver`
   para scroll reveal). A v3 não usa `framer-motion` e o projeto também não —
   ver §2. Se uma animação específica não sair em CSS, justifique antes de
   instalar; e então só em componente client, só na seção que precisa.
-
-**Desvio autorizado — `ParticleCanvas`.** A rede de partículas atrás do hero é
-a única animação do site em `<canvas>`: nós com posição própria e linhas entre
-vizinhos não saem em CSS. Foi aprovada no redesign do tema escuro, com estas
-travas — mexer nelas exige nova decisão:
-
-- não monta sob `prefers-reduced-motion: reduce`;
-- não monta abaixo de 768px;
-- só monta depois da hidratação, então fica fora do caminho do LCP;
-- `cancelAnimationFrame` no cleanup e em `visibilitychange: hidden`;
-- `aria-hidden`, fora da ordem de leitura.
-
-Não use esse desvio como precedente para outras animações.
-- Nada de biblioteca de parallax pesada.
+- Nada de biblioteca de parallax, de partículas ou de scroll.
 - Sem layout shift: toda imagem com `width`/`height` ou `fill` + container
   com aspecto definido.
 
----
+**Desvio autorizado — o ripple.** A "marca de dedo em vidro" no `pointerdown`
+dos CTAs dura 650ms, acima do teto de 400ms. É interação assinada do handoff de
+design e foi aprovada na fatia 3.7, com estas travas — mexer nelas exige nova
+decisão:
+
+- keyframe `rippleFx` no `globals.css`, só `transform` + `opacity`, então roda
+  no compositor;
+- um único listener no `document`, montado uma vez por `components/ui/Ripple.tsx`
+  na página — não um listener por botão, e sem estado React;
+- não monta sob `prefers-reduced-motion: reduce`;
+- o `<span>` é removido em 700ms, então não vaza nó no DOM;
+- `removeEventListener` no cleanup do `useEffect`.
+
+Elementos entram no efeito só com `data-ripple` + `relative overflow-hidden` —
+o `CtaLink` já emite os dois. Não reimplemente o efeito fora dele.
 
 ## §11 — Imagens e assets
 
@@ -423,14 +417,14 @@ Não use esse desvio como precedente para outras animações.
   do mapa oficial de atuação) entram no conteúdo com comentário
   `⚠️ conferir antes de publicar` e **não vão a produção sem confirmação da
   Syntax**. Números inventados não entram nunca (§13).
-- **Logo:** use `components/ui/MarcaSyntax.tsx` — mosaico de quadrados em SVG
-  inline + lettering em tipografia do site. É desvio consciente do "não alterar
-  o logo": o PNG oficial
-  (`syntaxsistemas.com.br/template/pw-images/syntax-sistemas.png`) tem o
-  lettering em cinza-escuro sobre fundo claro e fica ilegível sobre a folha
-  `#0B1018`. O mosaico azul, que é a parte reconhecível da marca, foi
-  preservado. Quando existir a versão clara oficial, a troca é local a esse
-  arquivo — não espalhe `<img>` de logo pelo código.
+- **Logo:** use `components/ui/MarcaSyntax.tsx` — `next/image` do PNG oficial
+  em `public/images/syntax-logo.png` (1019×656, fundo transparente, sem
+  tagline). Dois tamanhos: `header` (112×72) e `rodape` (87×56).
+  O lettering é escuro, então ele lê bem sobre branco e **some sobre
+  `#0f172a`**: no rodapé a marca vai dentro de um bloco claro. O mosaico SVG
+  desenhado à mão que existia no tema escuro foi aposentado na fatia 3.7 —
+  agora que o site é claro, o PNG oficial é o certo. Não espalhe `<img>` de
+  logo pelo código: a troca é local a esse arquivo.
 - Fontes via `next/font/google`, com `display: "swap"` e `subsets: ["latin"]`.
   Ver §4 para quais aceitam `weight` e quais não.
 
@@ -439,9 +433,17 @@ Não use esse desvio como precedente para outras animações.
 ## §12 — Formulários
 
 - React Hook Form + Zod, schema em `src/lib/schemas/`.
-- Campos do formulário de orçamento: nome, empresa, e-mail, telefone,
-  segmento (select), mensagem.
-- Validação de telefone em formato brasileiro.
+- Campos do formulário de contato: nome, e-mail, telefone, tamanho da empresa
+  (select). **Nenhum é obrigatório** — o handoff de design é explícito que não
+  há validação bloqueante: é abertura de conversa, não cadastro. O schema em
+  `lib/schemas/contato.ts` valida só o FORMATO do que foi preenchido, para não
+  montar uma mensagem de WhatsApp com e-mail quebrado. Campo vazio é omitido
+  da mensagem.
+- Validação de telefone em formato brasileiro (quando preenchido).
+- O envio não tem backend: monta o texto e abre `wa.me`. O `window.open` vem
+  **antes de qualquer `await`** — fora da pilha do gesto do usuário o
+  bloqueador de popup mata a abertura. Se ele devolver `null`, o popup foi
+  bloqueado e o link vira o CTA primário.
 - Estados obrigatórios: idle, loading (`Button` com **`isPending`** — na v3 não
   existe `isLoading`), sucesso, erro. Nunca deixe o usuário sem feedback.
 - Os campos da v3 são React Aria. Ao integrar com React Hook Form, use
@@ -467,6 +469,11 @@ Não use esse desvio como precedente para outras animações.
 - Longevidade sempre como **"desde 2006"** — nunca "vinte anos" nem "há X
   anos", que desatualizam sozinhos. "15+ anos" só para experiência da equipe,
   nunca como idade da empresa.
+  **Exceção registrada (fatia 3.7):** a copy do handoff de design usa
+  "Há quase 20 anos", "20 anos" e "Quase 20 anos" em três pontos (título de
+  Sobre, faixa de números, provas de Contato). Foi mantida por decisão de
+  fidelidade ao hifi, com o alerta no topo de `content/pt-BR/home.ts`. Rever
+  com a Syntax quando "quase 20" virar falso. Copy nova continua sob a regra.
 
 ---
 
@@ -497,6 +504,7 @@ codar nada.**
 | 3 | Redesign das 8 seções + Método + Ecossistema | ✅ |
 | 3.5 | Direção de arte da home: 9 atos, sistema de glow, componentes de marca | ✅ |
 | 3.6 | FAQ (ato 07) + prova social gated + poda de copy + form + OG/viewport + copy centralizada em `content/` | ✅ |
+| 3.7 | **Troca da direção de arte**: home clara do handoff `design_handoff_landing_syntax` — 6 dobras, Montserrat/Inter/JetBrains, tokens claros, marca em PNG oficial | ✅ |
 | 4 | Páginas de solução (SEO) | ⬜ |
 | 5 | Conteúdo `es-PY` (§18) — hoje `src/content/es-PY/` não existe | ⬜ |
 | 6 | Lighthouse: Performance > 95, Acessibilidade 100 | ⬜ |
@@ -532,36 +540,38 @@ Os casos já conhecidos estão no §3.1 (`Navbar`, `Divider`, `Textarea`).
 **Clique não dispara / não funciona pelo teclado**
 Você usou `onClick`. Na v3 é `onPress` (§3, regra 4).
 
-**Tudo virou claro / os `Card` ganharam halo preto**
-Sumiu o `data-theme="dark"` do `<html>` (§4). Ele não é decoração: é o que traz
-do HeroUI o `color-scheme`, o `--surface-shadow` zerado e os status clareados.
+**Tudo virou escuro / os `Card` ganharam sombra que não estava no design**
+Sumiu o `data-theme="light"` do `<html>` (§4), ou alguém removeu o
+`--surface-shadow: 0 0 0 0 transparent`. Nenhum dos dois é decoração.
 
-**Um `Card` (ou uma caixa) sumiu dentro da folha**
-Foi pintado com fundo opaco na cor da folha. As superfícies do tema são
-translúcidas de propósito (§4) — use `bg-surface` / `bg-surface-secondary` e
-deixe a folha aparecer por baixo, ou apoie na `--border`.
-
-**Uma seção abriu um retângulo visível na folha**
-Ela tem `bg-background` ou `bg-surface` própria. Seção não tem fundo (§7): quem
-dá o fundo é o `PageShell`.
+**Duas seções vizinhas viraram uma mancha só**
+Faltou fundo próprio numa delas. Aqui seção TEM fundo (§4/§7): branco,
+`bg-surface-secondary` ou `bg-escuro`, mais `border-t border-border`. Não
+existe mais `PageShell`.
 
 **O hover do `Button` primário não muda nada**
 `.button--primary` não declara `background-color` — declara `--button-bg` /
-`--button-bg-hover`, e é a `.button` base que aplica a cor. O gradiente do tema
-é `background-image`, então o hover precisa trocar a **imagem**, não a cor.
+`--button-bg-hover`, e é a `.button` base que aplica a cor. Mexa nas variáveis,
+não na propriedade.
 
-**Texto azul ilegível sobre a folha**
-É `text-accent` (`#2563EB`, 3,69:1). Troque por `text-accent-soft-foreground`
-(`#60A5FA`, 7,50:1) — §4.
+**O anel de foco sumiu dentro da banda escura**
+`--focus` é `#1f4e79`, que não lê sobre `#0f172a`. Falta a classe
+`.sobre-escuro` no wrapper da seção (§4).
+
+**A marca sumiu no rodapé**
+O PNG oficial tem lettering escuro (§11). No `#0f172a` ela precisa do bloco
+claro por trás — não troque a imagem, ajuste o contêiner.
 
 **`Chip` saiu sem fundo, parecendo texto solto**
 É `variant="tertiary"` — ela define `--chip-bg: transparent` por design. Para
 pílula visível use `secondary` (o padrão) ou `soft` com `color`.
 
 **Uma classe de cor simplesmente não aplica**
-O token não existe mais. Os `--color-ink*` foram substituídos por
-`--color-panel*` quando o site virou escuro. O Tailwind v4 não acusa erro:
-a classe só não é gerada.
+O token não existe mais. Os `--color-panel*`, `--color-micro`,
+`--color-hairline*`, `--shadow-glow-*`, `--sheet` e `--glow-color` saíram na
+fatia 3.7, quando o site virou claro. O Tailwind v4 não acusa erro: a classe
+só não é gerada e o estilo some em silêncio. Confira o nome contra o `@theme`
+do `globals.css`.
 
 **`next/image` com imagem externa quebrando**
 Domínio precisa estar em `images.remotePatterns` no `next.config`.

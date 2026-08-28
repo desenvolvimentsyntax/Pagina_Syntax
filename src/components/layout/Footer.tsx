@@ -1,62 +1,67 @@
 import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 
-import { CtaLink } from "@/components/ui/CtaLink";
 import { MarcaSyntax } from "@/components/ui/MarcaSyntax";
 import {
   contato,
   empresa,
-  navAcoes,
   navRodape,
   navSolucoes,
 } from "@/content/pt-BR/site";
 import { ui } from "@/content/pt-BR/ui";
 
 /**
- * Rodapé em quatro colunas: marca, navegação dos 9 atos, soluções (âncoras
- * hoje; viram as rotas da fatia 4 do §15) e contato completo. Dados reais do
- * site atual. CNPJ só renderiza quando `empresa.cnpj` for confirmado (§11).
+ * Rodapé em quatro colunas: marca, navegação da home, soluções (âncoras hoje;
+ * viram as rotas da fatia 4 do §15) e canais diretos. Dados reais do site
+ * atual — o CNPJ só renderiza quando `empresa.cnpj` for confirmado (§11).
  *
- * Fundo próprio (--color-footer), mais escuro que a folha: é ele que cobre os
- * stops claros do gradiente da página, onde nenhum texto poderia encostar.
+ * Não é uma seção nova: repete o `bg-escuro` da banda de contato e se separa
+ * dela só por um hairline, para a página fechar numa única massa escura em vez
+ * de ganhar mais um bloco. Por isso também não há CTA aqui — o formulário
+ * logo acima já é a captação.
+ *
+ * `sobre-escuro` troca o anel de foco para o azul claro: o azul institucional
+ * do `--focus` desaparece sobre #0f172a (§9).
  */
+
+/* text-sm tem entrelinha de 20px; py-3 (24px) fecha o alvo de toque de 44px.
+   Sem utilitário de display: quem usa escolhe, para não empilhar `inline-block`
+   e `flex` na mesma âncora. */
+const LINK = "py-3 text-ondark-muted transition-colors hover:text-ondark";
+
+/* Mesma receita de eyebrow do SectionHeading tom="escuro": sobre #0f172a o
+   rótulo mono é sempre `text-azul-claro` (10,10:1). Em `text-ondark-muted` ele
+   ficava na cor exata dos links da coluna e a hierarquia sumia. */
+const CABECALHO_COLUNA =
+  "font-mono text-xs font-semibold uppercase tracking-[0.1em] text-azul-claro";
+
+const ICONE = "size-4 shrink-0 text-azul-claro";
+
 export function Footer() {
   const ano = new Date().getFullYear();
 
   return (
-    <footer className="bg-footer text-footer-foreground">
-      <div className="mx-auto max-w-7xl px-5 py-12 md:px-6 md:py-16">
-        {/* Hairline com o nó técnico — a marcação dos atos fecha a página. */}
-        <div aria-hidden className="mb-10 flex items-center md:mb-12">
-          <span className="bg-accent-soft-foreground/60 size-1 shrink-0 rounded-full" />
-          <span className="h-px flex-1 bg-white/10" />
-        </div>
-
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.5fr)_1fr_1.1fr_1.3fr]">
+    <footer className="sobre-escuro bg-escuro border-t border-white/10">
+      <div className="mx-auto max-w-7xl px-5 py-12 md:px-8 md:py-14 lg:px-12">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1.2fr_1.4fr] lg:gap-8">
           <div>
-            <MarcaSyntax tamanho="lg" />
+            {/* O PNG da marca tem o lettering escuro e sumiria no #0f172a. Em
+                vez de recolorir o logo, ele ganha um apoio claro do tamanho do
+                conteúdo — mesma lógica do §11 do CLAUDE.md. */}
+            <div className="bg-surface inline-flex w-fit rounded-xl px-4 py-3">
+              <MarcaSyntax tamanho="rodape" />
+            </div>
 
-            <p className="mt-5 max-w-sm text-sm leading-relaxed">
+            <p className="text-ondark-muted mt-5 max-w-sm text-sm leading-relaxed">
               {ui.rodape.descricao}
             </p>
-
-            <div className="mt-6">
-              <CtaLink href={navAcoes.contato.href} tamanho="md">
-                {navAcoes.contato.rotulo}
-              </CtaLink>
-            </div>
           </div>
 
           <nav aria-label={ui.rodape.navegacaoAria}>
-            <h2 className="text-footer-muted font-mono text-xs font-medium tracking-[0.1em] uppercase">
-              {ui.rodape.colunaNavegacao}
-            </h2>
-            <ul className="mt-2 grid grid-cols-2 gap-x-6 text-sm lg:flex lg:flex-col lg:gap-1">
+            <h2 className={CABECALHO_COLUNA}>{ui.rodape.colunaNavegacao}</h2>
+            <ul className="mt-2 grid grid-cols-2 text-sm sm:grid-cols-1">
               {navRodape.map((item) => (
                 <li key={item.rotulo}>
-                  <a
-                    href={item.href}
-                    className="text-footer-muted inline-block py-2.5 transition-colors hover:text-footer-foreground"
-                  >
+                  <a href={item.href} className={`${LINK} inline-block`}>
                     {item.rotulo}
                   </a>
                 </li>
@@ -65,16 +70,11 @@ export function Footer() {
           </nav>
 
           <nav aria-label={ui.rodape.solucoesAria}>
-            <h2 className="text-footer-muted font-mono text-xs font-medium tracking-[0.1em] uppercase">
-              {ui.rodape.colunaSolucoes}
-            </h2>
-            <ul className="mt-2 flex flex-col gap-1 text-sm">
+            <h2 className={CABECALHO_COLUNA}>{ui.rodape.colunaSolucoes}</h2>
+            <ul className="mt-2 flex flex-col text-sm">
               {navSolucoes.map((item) => (
                 <li key={item.rotulo}>
-                  <a
-                    href={item.href}
-                    className="text-footer-muted inline-block py-2.5 transition-colors hover:text-footer-foreground"
-                  >
+                  <a href={item.href} className={`${LINK} inline-block`}>
                     {item.rotulo}
                   </a>
                 </li>
@@ -83,16 +83,14 @@ export function Footer() {
           </nav>
 
           <div>
-            <h2 className="text-footer-muted font-mono text-xs font-medium tracking-[0.1em] uppercase">
-              {ui.rodape.colunaContato}
-            </h2>
-            <ul className="mt-2 flex flex-col gap-1 text-sm">
+            <h2 className={CABECALHO_COLUNA}>{ui.rodape.colunaContato}</h2>
+            <ul className="mt-2 flex flex-col text-sm">
               <li>
                 <a
                   href={contato.telefoneHref}
-                  className="text-footer-muted inline-flex items-center gap-2 py-2.5 transition-colors hover:text-footer-foreground"
+                  className={`${LINK} flex items-center gap-2.5`}
                 >
-                  <Phone aria-hidden className="text-accent-soft-foreground size-4 shrink-0" />
+                  <Phone aria-hidden className={ICONE} />
                   {contato.telefone}
                 </a>
               </li>
@@ -101,27 +99,27 @@ export function Footer() {
                   href={contato.whatsappHref}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="text-footer-muted inline-flex items-center gap-2 py-2.5 transition-colors hover:text-footer-foreground"
+                  className={`${LINK} flex items-center gap-2.5`}
                 >
-                  <MessageCircle aria-hidden className="text-accent-soft-foreground size-4 shrink-0" />
+                  <MessageCircle aria-hidden className={ICONE} />
                   {contato.celular} · {ui.rodape.sufixoWhatsApp}
                 </a>
               </li>
               <li>
                 <a
                   href={contato.telefonePyHref}
-                  className="text-footer-muted inline-flex items-center gap-2 py-2.5 transition-colors hover:text-footer-foreground"
+                  className={`${LINK} flex items-center gap-2.5`}
                 >
-                  <Phone aria-hidden className="text-accent-soft-foreground size-4 shrink-0" />
+                  <Phone aria-hidden className={ICONE} />
                   {contato.telefonePy} · {ui.rodape.sufixoParaguai}
                 </a>
               </li>
               <li>
                 <a
                   href={contato.emailHref}
-                  className="text-footer-muted inline-flex items-center gap-2 py-2.5 break-all transition-colors hover:text-footer-foreground"
+                  className={`${LINK} flex items-center gap-2.5 break-all`}
                 >
-                  <Mail aria-hidden className="text-accent-soft-foreground size-4 shrink-0" />
+                  <Mail aria-hidden className={ICONE} />
                   {contato.email}
                 </a>
               </li>
@@ -130,23 +128,20 @@ export function Footer() {
                   href={empresa.mapaHref}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="text-footer-muted inline-flex items-start gap-2 py-2.5 transition-colors hover:text-footer-foreground"
+                  className={`${LINK} flex items-start gap-2.5 leading-relaxed`}
                 >
-                  <MapPin aria-hidden className="text-accent-soft-foreground mt-0.5 size-4 shrink-0" />
-                  <span>
-                    {empresa.endereco}
-                    <br />
-                    {ui.rodape.filialPrefixo} {empresa.filial}
-                  </span>
+                  <MapPin aria-hidden className={`${ICONE} mt-0.5`} />
+                  <span>{empresa.endereco}</span>
                 </a>
+                <p className="text-ondark-muted pb-3 pl-6 text-sm">
+                  {ui.rodape.filialPrefixo} {empresa.filial}
+                </p>
               </li>
             </ul>
           </div>
         </div>
 
-        {/* Slots aguardando confirmação: política de privacidade (linkar quando
-            a página existir) e seletor de idioma (§18, fatia 5). */}
-        <div className="text-footer-muted mt-12 flex flex-col gap-1.5 border-t border-white/10 pt-6 text-xs sm:flex-row sm:items-center sm:justify-between">
+        <div className="text-ondark-muted mt-12 flex flex-col gap-1.5 border-t border-white/10 pt-6 text-xs sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {ano} {empresa.razaoSocial}. {ui.rodape.direitos}
           </p>

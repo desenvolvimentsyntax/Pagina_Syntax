@@ -1,60 +1,53 @@
 /**
- * Cabeçalho padrão de seção (anatomia do §7): overline, título e subtítulo.
- * Compartilhado por todas as seções para não duplicar a hierarquia.
+ * Cabeçalho padrão de seção: overline mono, h2 e intro, alinhados à esquerda.
+ * Compartilhado por todas as seções para não duplicar a hierarquia (§7).
  *
- * Com `indice`, o overline vira marcação técnica do ato — "01 / Quem somos" —
- * seguido da linha com nó que ancora a seção na "planta" do fundo (§4).
+ * O tom `escuro` é a banda de contato: o overline clareia para passar sobre
+ * #0f172a e o h2 sobe de 30px para os 34px extrabold do handoff.
  */
 
 interface SectionHeadingProps {
-  overline?: string;
+  overline: string;
   titulo: string;
   subtitulo?: string;
-  /** Índice do ato na narrativa ("01"–"08"). */
-  indice?: string;
-  centralizado?: boolean;
+  tom?: "claro" | "escuro";
 }
 
 export function SectionHeading({
   overline,
   titulo,
   subtitulo,
-  indice,
-  centralizado = false,
+  tom = "claro",
 }: SectionHeadingProps) {
-  return (
-    <div className={centralizado ? "mx-auto max-w-3xl text-center" : undefined}>
-      {overline ? (
-        <p
-          className={`text-accent-soft-foreground flex items-center gap-3 font-mono text-xs font-medium tracking-[0.1em] uppercase ${
-            centralizado ? "justify-center" : ""
-          }`}
-        >
-          {indice ? (
-            <span className="text-micro">
-              {indice}
-              <span aria-hidden> /</span>
-            </span>
-          ) : null}
-          <span>{overline}</span>
-          {indice && !centralizado ? (
-            <span aria-hidden className="flex max-w-36 flex-1 items-center">
-              <span className="bg-accent-soft-foreground/60 size-1 shrink-0 rounded-full" />
-              <span className="bg-hairline h-px flex-1" />
-            </span>
-          ) : null}
-        </p>
-      ) : null}
+  const escuro = tom === "escuro";
 
-      <h2 className="text-foreground font-display mt-4 text-3xl font-semibold tracking-[-0.028em] text-balance md:text-[42px] md:leading-[1.1]">
+  return (
+    <div>
+      <p
+        className={`font-mono text-[13px] font-semibold tracking-[0.1em] uppercase ${
+          escuro ? "text-azul-claro" : "text-marca"
+        }`}
+      >
+        {overline}
+      </p>
+
+      <h2
+        className={
+          escuro
+            ? "font-display text-ondark mt-3.5 text-[34px] leading-[1.2] font-extrabold text-pretty"
+            : "font-display text-foreground mt-2.5 text-[30px] leading-[1.25] font-bold text-pretty"
+        }
+      >
         {titulo}
       </h2>
 
       {subtitulo ? (
         <p
-          className={`text-foreground-base/70 mt-4 max-w-2xl text-lg leading-relaxed text-pretty ${
-            centralizado ? "mx-auto" : ""
-          }`}
+          className={
+            escuro
+              ? "text-ondark-muted mt-3.5 max-w-[620px] text-[17.5px] leading-[1.65] text-pretty"
+              : "text-muted mt-2.5 max-w-[620px] text-[17px] leading-[1.55] text-pretty"
+          }
         >
           {subtitulo}
         </p>
