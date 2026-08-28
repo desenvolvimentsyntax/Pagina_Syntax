@@ -7,9 +7,9 @@ import { LOCALES_PUBLICADOS, urlDe, type ChaveRota } from "@/lib/routes";
  * Só entram locales publicados — §18 não deixa indexar rota sem revisão
  * humana, então hoje sai apenas pt-BR.
  *
- * Hoje só a home existe; toda rota nova criada pelo §17 deve ser listada aqui.
+ * Toda rota nova criada pelo §17 deve ser listada aqui.
  */
-const ROTAS_EXISTENTES: readonly ChaveRota[] = ["home"];
+const ROTAS_EXISTENTES: readonly ChaveRota[] = ["home", "planos"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return ROTAS_EXISTENTES.flatMap((chave) =>

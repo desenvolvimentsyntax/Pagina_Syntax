@@ -15,7 +15,8 @@ import { schemaLocalBusiness, schemaOrganization } from "@/lib/schema";
  * Tipografia do §4 (§11: display swap + subset latin).
  * As três são fontes variáveis no Google Fonts — passar `weight` aqui as
  * congelaria num peso só e mataria os 700/800 dos títulos e os 500/600 das
- * labels técnicas.
+ * labels técnicas. (A Tenor Sans, que foi o H1 do hero até a fatia 3.9, saiu:
+ * só existia em 400 e o título de um funil precisa de peso.)
  */
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -66,7 +67,7 @@ export default async function LocaleLayout({
    */
   const atual: Locale = ehLocale(locale) ? locale : LOCALE_PADRAO;
 
-  const jsonLd = [schemaOrganization(), schemaLocalBusiness()];
+  const jsonLd = [schemaOrganization(atual), schemaLocalBusiness(atual)];
 
   return (
     <html lang={HTML_LANG[atual]} data-theme="light" suppressHydrationWarning>

@@ -1,7 +1,7 @@
 import { MessageCircle } from "lucide-react";
 
-import { contato } from "@/content/pt-BR/site";
-import { ui } from "@/content/pt-BR/ui";
+import { conteudoDe } from "@/content";
+import type { Locale } from "@/lib/routes";
 
 /**
  * Botão flutuante de WhatsApp (§12) — alternativa permanente ao formulário.
@@ -18,7 +18,10 @@ import { ui } from "@/content/pt-BR/ui";
  * atributo é inerte. O par que o ripple exige é posição + `overflow-hidden`, e
  * aqui o `fixed` já cria o bloco de contenção — `relative` seria conflito.
  */
-export function WhatsAppButton() {
+export function WhatsAppButton({ locale }: { locale: Locale }) {
+  const conteudo = conteudoDe(locale);
+  const { contato } = conteudo.site;
+  const { ui } = conteudo.ui;
   const href = `${contato.whatsappHref}?text=${encodeURIComponent(contato.whatsappTexto)}`;
 
   return (

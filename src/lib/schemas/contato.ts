@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { ui, type MensagensValidacao } from "@/content/pt-BR/ui";
+import type { MensagensValidacao } from "@/content/tipos";
 
 /**
  * Schema do formulário de contato (CLAUDE.md §12: React Hook Form + Zod).
@@ -11,8 +11,9 @@ import { ui, type MensagensValidacao } from "@/content/pt-BR/ui";
  * o FORMATO do que foi preenchido, para não montar uma mensagem de WhatsApp
  * com e-mail ou telefone quebrado. Campo vazio passa e some da mensagem.
  *
- * Factory: as mensagens são copy e vêm do content — a fatia es-PY (§18) cria
- * o schema dela trocando só o objeto de mensagens (lá o telefone é +595).
+ * Factory: as mensagens são copy e vêm do content. Quem monta o formulário
+ * chama `criarContatoSchema(ui.validacao)` com as mensagens do locale — não
+ * existe mais um schema pré-montado, porque não existe mais um idioma só.
  */
 export function criarContatoSchema(mensagens: MensagensValidacao) {
   const vazio = (valor: string) => valor.trim() === "";
@@ -40,6 +41,4 @@ export function criarContatoSchema(mensagens: MensagensValidacao) {
   });
 }
 
-export const contatoSchema = criarContatoSchema(ui.validacao);
-
-export type ContatoForm = z.infer<typeof contatoSchema>;
+export type ContatoForm = z.infer<ReturnType<typeof criarContatoSchema>>;

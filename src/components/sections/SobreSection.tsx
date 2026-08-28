@@ -1,14 +1,18 @@
 import { LinhaDoTempo } from "@/components/ui/LinhaDoTempo";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { sobre } from "@/content/pt-BR/home";
+import { conteudoDe } from "@/content";
+import type { Locale } from "@/lib/routes";
 
 /**
  * Sobre a Syntax: história à esquerda, trajetória à direita. A faixa de
  * números fecha a coluna de texto sem caixa — só a hairline a separa dos
  * parágrafos, para não competir com o card da timeline ao lado.
  */
-export function SobreSection() {
+export function SobreSection({ locale }: { locale: Locale }) {
+  const conteudo = conteudoDe(locale);
+  const { sobre } = conteudo.home;
+
   return (
     <section
       id="sobre"
@@ -16,7 +20,7 @@ export function SobreSection() {
     >
       <div className="mx-auto grid max-w-7xl items-start gap-14 px-5 md:px-8 lg:grid-cols-2 lg:px-12">
         <Reveal>
-          <SectionHeading overline={sobre.overline} titulo={sobre.titulo} />
+          <SectionHeading etapa="08" overline={sobre.overline} titulo={sobre.titulo} />
 
           <div className="mt-5 space-y-4">
             {sobre.paragrafos.map((paragrafo) => (
@@ -42,7 +46,7 @@ export function SobreSection() {
         </Reveal>
 
         <Reveal efeito="lado">
-          <LinhaDoTempo />
+          <LinhaDoTempo locale={locale} />
         </Reveal>
       </div>
     </section>

@@ -132,6 +132,14 @@ Verificado contra os 71 componentes da v3.0.5:
 - **`Header` existe na v3.2.2 mas NÃO é navbar** — é o primitivo de cabeçalho
   de lista do React Aria (para `ListBox`/`Menu`). Não o use no menu de topo.
 
+- **`Table` existe, mas a comparação de planos NÃO usa ele.** O `Table` da v3
+  é o data grid do React Aria (grade de foco, seleção, ordenação) e monta a
+  coleção com chaves de um contador global: numa página estática as chaves do
+  servidor não batem com as do cliente e a hidratação quebra
+  ("Cell count must match column count"). `components/ui/TabelaPlanos.tsx` é
+  `<table>` nativa — desvio autorizado e documentado no próprio arquivo. Se um
+  dia a tabela precisar ordenar ou selecionar, o `Table` volta.
+
 Antes de assumir que um componente não existe, confira:
 `node .agents/skills/heroui-react/scripts/list_components.mjs`
 
@@ -204,6 +212,15 @@ Regras que caem desse bloco — quebrar qualquer uma delas quebra o tema:
   8,66:1 no branco e serve para texto e para preenchimento.
 - **`primary` é variante de Button, não cor.** `bg-primary` não existe.
 
+**Família de produtos (E-Syntax).** Cinco identidades — FACT, PRO, PREMIUM,
+ERP e MOBILE — com dois tokens cada em `@theme`:
+`--color-produto-<chave>` é a cor do arquivo de marca e serve **só para
+preenchimento e traço** (os três quadradinhos do ícone); como texto ou como
+fundo de rótulo branco ela reprova o AA em três dos cinco casos (#0ea5e9 dá
+2,77:1 no branco; #f59e0b, 2,15:1). `--color-produto-<chave>-forte` é o mesmo
+matiz um passo abaixo — o mínimo para passar (5,02:1 no pior caso) — e é ela
+que preenche a pílula do lockup. `-tint` é a tinta de apoio.
+
 Tokens de marca fora da escala semântica ficam no `@theme` do `globals.css`:
 `--color-marca`, `--color-marca-hover/suave/chip`, `--color-azul-vivo`,
 `--color-azul-claro/palido/barra`, `--color-escuro`, `--color-escuro-raised`,
@@ -222,13 +239,19 @@ seção na classe `.sobre-escuro`, que troca `--focus` por `--color-azul-claro`
 `--muted`.
 
 **Tipografia:**
-- Display / H1 / H2 / títulos de card: **Montserrat** (`font-display`), 700–800
+- H1 (hero e /planos): **Montserrat** (`font-display`), 800, `tracking-tight`
+- H2 / títulos de card: **Montserrat** (`font-display`), 700–800
 - Corpo: **Inter** (`font-sans`), 400–600, `leading-relaxed`
 - Label / overline / domínios: **JetBrains Mono** (`font-mono`), 500–600,
   `uppercase`, `tracking-[0.1em]`, `text-[13px]`
 
 As três são variáveis no Google Fonts: **não passe `weight`** no `next/font`,
 ou os pesos 700/800 somem.
+
+> A **Tenor Sans** (H1 da fatia 3.7) saiu na fatia 3.9: só existia em 400 e o
+> título de um funil precisa de peso — além de custar uma quarta família no
+> carregamento. `--font-hero` não existe mais; não a reintroduza sem decisão
+> nova. O `opengraph-image.tsx` acompanha: headline e marca em Montserrat 800.
 
 **Ritmo de seção:** `py-14 md:py-16` nas seções de conteúdo, `py-16 md:py-18`
 nas de peso (hero, sobre, contato) e `py-6 md:py-7` na faixa do slogan.
@@ -246,20 +269,25 @@ src/
   app/
     [locale]/
       layout.tsx            # fontes, metadata base, JSON-LD (sem provider)
-      page.tsx              # home
+      page.tsx              # home (landing de funil, ver §7)
+      planos/page.tsx       # planos e preços — destino de todo CTA de preço
       (rotas traduzidas por locale — ver §18)
     sitemap.ts
     robots.ts
   components/
     layout/                 # Header (menu de topo, ver §3.1), Footer, WhatsAppButton
-    sections/               # Hero, Slogan, Solucoes, Produtos, Sobre, Contato
-    ui/                     # wrappers finos sobre HeroUI, se necessário
+    sections/               # as nove dobras da home, na ordem do §7
+    ui/                     # wrappers finos sobre HeroUI e peças de marca
+                            #   CartaoPlano, TabelaPlanos, MarcaProduto…
   lib/
     metadata.ts             # helper de SEO, ver §8
     schema.ts               # JSON-LD, ver §8
     routes.ts               # mapa de slugs por locale, ver §18
   content/
-    pt-BR/                  # textos em português
+    pt-BR/
+      home.ts               # copy das nove dobras
+      planos.ts             # CATÁLOGO: preços, recursos e identidade dos planos
+      site.ts / ui.ts       # dados institucionais e rótulos de interface
     es-PY/                  # textos em espanhol
 public/
   images/
@@ -320,11 +348,56 @@ inverte tudo para as bandas `bg-escuro`. Não duplique isso à mão.
   herdam do tema — não carimbe `rounded` em cima deles.
 - **Alvo de toque mínimo: 44px.** Link de texto pequeno ganha `py` estendido;
   CTAs de dobra usam `larguraTotal` do `CtaLink` no mobile.
-- Mobile não é desktop encolhido. As seis dobras da home, em ordem: hero
-  (grid texto + painel) → faixa do slogan → grade 2×2 de soluções → dois cards
-  de produto (um claro, um escuro) → editorial + timeline → banda escura com
-  formulário. **Nenhuma dobra repete o formato da vizinha**; antes de criar
-  seção nova, escolha um formato que ainda não esteja em uso ao lado.
+- Mobile não é desktop encolhido. **Nenhuma dobra repete o formato da
+  vizinha**; antes de criar seção nova, escolha um formato que ainda não
+  esteja em uso ao lado.
+
+**A home é uma landing de funil, e a ordem das dobras É o funil.** Cada uma
+responde à objeção que sobra da anterior — mexer na ordem sem olhar esta
+coluna quebra a página:
+
+| # | Seção | Formato | Objeção que responde |
+|---|---|---|---|
+| 01 | `HeroSection` | promessa + âncora de preço + 3 cards de plano | — (é a oferta) |
+| 02 | `ComparacaoSection` | seletor por plano (Tabs) + faixa do MOBILE | "qual dos três é o meu?" |
+| 03 | `DemoSection` | banda escura centrada e calma — o descanso visual da página | "isso existe mesmo?" |
+| 04 | `ComoFuncionaSection` | 4 passos numerados com fio | "dá trabalho começar?" |
+| 05 | `SegmentosSection` | banda escura + rotor de segmentos | o laço "esse sou eu" |
+| 06 | `ErpSection` | promessa + painel de cobertura | "meu caso não é loja" |
+| 07 | `CasesSection` | marquee horizontal de clientes | "quem já usa isso?" |
+| 08 | `SobreSection` | editorial + timeline | "posso confiar?" |
+| 09 | `DuvidasSection` | título fixo + accordion | as objeções que travam |
+| 10 | `ContatoSection` | banda escura + formulário | captação |
+
+O slogan ("Soluções que conectam. Tecnologia que transforma.") não tem mais
+faixa própria: é a assinatura do rodapé, sob a marca (`slogan` em
+`content/pt-BR/site.ts`).
+
+**As dobras 06 e 07 são um argumento só e não se separam.** Todas as empresas
+do carrossel de cases operam com o Syntax ERP (confirmado em 28/08/2026): a 06
+apresenta o produto e a 07 mostra as logos que o comprovam. Pôr qualquer seção
+entre as duas quebra o par — foi o que a fatia 3.12 desfez.
+
+**O ERP é o carro-chefe, não "outra linha".** Até a 3.11 ele vivia numa seção
+chamada "Outras linhas", empilhando oito blocos de informação num card só.
+Hoje tem dobra própria, com uma promessa à esquerda e uma prova à direita; sob
+medida e sites viraram UM card leve no rodapé da dobra. Não volte a somar
+conteúdo ali: a seção adoeceu exatamente por acúmulo.
+
+**As overlines são numeradas** ("01 · Planos publicados" … "08 · Contato") via
+prop `etapa` do `SectionHeading` — é o tour da página. Seção nova entra na
+numeração. A numeração de referência é a coluna `#` da tabela acima.
+
+**A comparação completa vive só em /planos.** A home tem o seletor enxuto
+(`SeletorPlanos`, Tabs); a tabela recurso a recurso (`TabelaPlanos`) fica em
+/planos, que é a página de decisão (guia "qual plano é o meu?" + condições de
+cobrança). Não duplique a tabela na home — foi exatamente a repetição que a
+fatia 3.9 removeu.
+
+**Preço aparece acima da primeira dobra em qualquer tela.** No desktop são os
+três cards; no celular eles caem abaixo da linha, então a âncora
+"Planos a partir de Gs. X por mês" fica acima dos CTAs. Não remova a âncora
+para "limpar" o hero — ela é o motivo da página.
 
 ## §8 — SEO (obrigatório em toda página)
 
@@ -341,7 +414,10 @@ Este é o motivo de o projeto ser Next.js. Nenhuma página entra sem isso.
 **JSON-LD obrigatório:**
 - `Organization` no `layout.tsx` raiz
 - `LocalBusiness` no `layout.tsx` raiz
-- `SoftwareApplication` em cada página de solução
+- `SoftwareApplication` + `AggregateOffer` em `/planos` (`schemaPlanos()`) e
+  em cada página de solução
+- `FAQPage` na home (`schemaFaq()`), alimentado pelo mesmo `content` da
+  `DuvidasSection` — resposta editada no content vale nos dois lugares
 - `BreadcrumbList` em páginas internas
 
 **Também obrigatório:**
@@ -391,6 +467,42 @@ Meta: Lighthouse Performance > 95.
 - Sem layout shift: toda imagem com `width`/`height` ou `fill` + container
   com aspecto definido.
 
+**Desvio autorizado — o marquee dos cases.** A dobra 08 roda uma faixa
+horizontal infinita de logos (`components/ui/CarrosselCases.tsx`), aprovada na
+fatia 3.11. Ao contrário do rotor, é CSS puro (Server Component, zero runtime):
+a lista é renderizada duas vezes e o trilho anda até -50%, então a emenda é
+invisível. A faixa roda SEMPRE, inclusive sob
+`prefers-reduced-motion` (decisão do Roger em 28/08/2026: parada ela lia como
+bloco morto, e a versão com rolagem manual punha uma barra cinza no meio da
+página) — por isso a regra do reduced-motion re-declara a animação com
+`!important`, senão o bloco global do fim do arquivo a congelaria. A trava que
+sobra é a pausa no `hover`/`focus-within`, que é o mecanismo do WCAG 2.2.2.
+Anima só `transform`. Os tiles não têm card: logo (ou monograma de iniciais)
+sobre o fundo da seção, altura fixa para alinhar marcas de proporções
+diferentes. A velocidade é declarada em px/s e a duração sai da
+quantidade de tiles — ao crescer a lista, a sensação de velocidade não muda.
+
+**Desvio autorizado — o rotor de segmentos.** A dobra 05 tem uma lista em
+loop contínuo (`components/ui/RotorSegmentos.tsx`), fora da lista permitida
+acima. Aprovado na fatia 3.10, com estas travas — mexer nelas exige decisão
+nova: o movimento é CONTÍNUO, tipo outdoor — `requestAnimationFrame` a
+velocidade fixa escrevendo o `transform` direto no DOM, sem transição, sem
+easing e sem pausa (é a única forma de não haver atrito: curva de transição
+sempre acelera e freia, e isso lê como pausa). Animação infinita, exceção ao
+§10 aprovada em 28/08/2026. O destaque é POR ZONA, não por palavra: a faixa é
+renderizada duas vezes — apagada embaixo, no degradê em cima — e a de cima é
+revelada por máscara em degradê na linha central, com o brilho
+`.brilho-rotor`. Máscara e não `clip-path`: com corte reto a palavra que
+atravessa aparece serrada ao meio. Dá para girar com o dedo (pointer events,
+`touch-action: pan-x`): o fluxo congela no toque, segue 1:1 e retoma ao
+soltar, sem encaixe. Sob
+`prefers-reduced-motion` a troca é SECA — sem deslize nem escala, a palavra
+muda num ritmo mais lento (4s), porque reduce pede menos movimento, não
+conteúdo congelado; pausa fora da viewport e com a aba oculta; anima só
+`transform`/`opacity`; o
+carrossel é `aria-hidden` e o conteúdo real é um parágrafo `sr-only`. Não
+reutilize o padrão em outra seção sem nova aprovação.
+
 **Desvio autorizado — o ripple.** A "marca de dedo em vidro" no `pointerdown`
 dos CTAs dura 650ms, acima do teto de 400ms. É interação assinada do handoff de
 design e foi aprovada na fatia 3.7, com estas travas — mexer nelas exige nova
@@ -417,6 +529,20 @@ o `CtaLink` já emite os dois. Não reimplemente o efeito fora dele.
   do mapa oficial de atuação) entram no conteúdo com comentário
   `⚠️ conferir antes de publicar` e **não vão a produção sem confirmação da
   Syntax**. Números inventados não entram nunca (§13).
+- **Logos de clientes:** ficam em `public/images/cases/<slug>.webp`, e o
+  `temLogo` de `content/pt-BR/cases.ts` é que decide entre a logo e o
+  monograma de iniciais — decisão do servidor, não `onError` no cliente (que
+  pisca). Os arquivos originais chegam em `R:Syntaxlogos empresas`. **Abra
+  a imagem antes de copiar**: já veio anúncio de terceiro com marca d'água no
+  lugar da logo, e isso não vai para página comercial.
+- **Marca dos produtos:** use `components/ui/MarcaProduto.tsx`. O ícone é
+  reconstruído em SVG inline (quadrado em gradiente CSS + a geometria exata da
+  fita do arquivo oficial + pontos em `currentColor`) e o lettering
+  "SYNTAX + pílula" é TEXTO. Os PNGs de ~930 KB e os SVGs oficiais não entram:
+  os cinco repetem os mesmos `<linearGradient id="bg">`, que colidem quando dois
+  produtos aparecem na mesma página, e trazem a tagline em espanhol — o que
+  travaria a tradução da fatia es-PY. O nome acessível sai de um `sr-only`,
+  porque o lettering quebrado em pedaços é lido como "syntaxerp".
 - **Logo:** use `components/ui/MarcaSyntax.tsx` — `next/image` do PNG oficial
   em `public/images/syntax-logo.png` (1019×656, fundo transparente, sem
   tagline). Dois tamanhos: `header` (112×72) e `rodape` (87×56).
@@ -464,6 +590,11 @@ o `CtaLink` já emite os dois. Não reimplemente o efeito fora dele.
 - Proibido: "solução inovadora", "sinergia", "revolucionário", "disruptivo".
 - Todo CTA é verbo no imperativo: "Solicitar demonstração", "Falar com
   especialista". Nunca "Saiba mais" sozinho.
+- **Preço nunca é texto solto.** Mensalidade, instalação, ponto adicional e
+  lista de recursos moram só em `src/content/pt-BR/planos.ts`, transcritos da
+  página publicada em `pdv-syntax.vercel.app/pt/pricing` (fonte anotada no
+  topo do arquivo). Card, tabela comparativa, âncora do hero, card social e
+  JSON-LD leem todos de lá. Mudou o preço? Muda num lugar.
 - Números concretos > adjetivos. "Mais de X restaurantes atendidos" vale
   mais que "referência no mercado".
 - Longevidade sempre como **"desde 2006"** — nunca "vinte anos" nem "há X
@@ -505,8 +636,14 @@ codar nada.**
 | 3.5 | Direção de arte da home: 9 atos, sistema de glow, componentes de marca | ✅ |
 | 3.6 | FAQ (ato 07) + prova social gated + poda de copy + form + OG/viewport + copy centralizada em `content/` | ✅ |
 | 3.7 | **Troca da direção de arte**: home clara do handoff `design_handoff_landing_syntax` — 6 dobras, Montserrat/Inter/JetBrains, tokens claros, marca em PNG oficial | ✅ |
+| 3.8 | **Home de funil**: produto e preço na primeira dobra, catálogo em `content/pt-BR/planos.ts`, marca da família E-Syntax, rota `/planos` com tabela comparativa, FAQ de objeção e JSON-LD de oferta | ✅ |
+| 3.9 | **Refino do funil**: Premium completo (16 recursos) + realce dourado, seletor de planos por Tabs na home, /planos como página de decisão (guia + condições), demo calma, hover por hierarquia, copy de prova social, overlines numeradas, voltar-ao-topo, H1 em Montserrat 800 (Tenor Sans sai) | ✅ |
+| 3.10 | **Laço de segmentos**: dobra "Qual o seu segmento?" com rotor no lugar da faixa do slogan (que virou assinatura do rodapé); renumeração do tour 05–09 | ✅ |
+| 3.11 | **Cases de sucesso**: marquee horizontal de clientes (dobra 08) com logo ou monograma, catálogo em `content/pt-BR/cases.ts`; correção do fantasma no rotor (as duas camadas precisam de peso de fonte idêntico) | ✅ |
+| 5 | **i18n**: espanhol como padrão na raiz, português em `/pt`, seletor de bandeiras com cookie, domínio `.com.py`, conteúdo es-PY completo e desacoplamento de 29 arquivos do `content/pt-BR` | ✅ |
+| 3.12 | **ERP em dobra própria**: sai de "Outras linhas", ganha painel de cobertura e a contagem de clientes derivada dos cases (que passam a vir logo abaixo, como prova); "sob consulta" vira compromisso de diagnóstico; sob medida e sites fundidos num card | ✅ |
 | 4 | Páginas de solução (SEO) | ⬜ |
-| 5 | Conteúdo `es-PY` (§18) — hoje `src/content/es-PY/` não existe | ⬜ |
+
 | 6 | Lighthouse: Performance > 95, Acessibilidade 100 | ⬜ |
 
 Uma fatia por branch: `feat/fatia-1-hero`.
@@ -573,6 +710,56 @@ fatia 3.7, quando o site virou claro. O Tailwind v4 não acusa erro: a classe
 só não é gerada e o estilo some em silêncio. Confira o nome contra o `@theme`
 do `globals.css`.
 
+**Uma rota devolve 404 e o proxy parece não rodar**
+Confira o escape do `matcher` no fim de `src/proxy.ts`: num literal
+TypeScript `"\."` chega na regex como `.` (escapa o ponto). Escrito com uma
+barra só, `"."` vira `"."` e o lookahead passa a excluir qualquer caminho com
+pelo menos um caractere — o proxy roda só na raiz e todo o resto 404. Aconteceu
+na fatia 5.
+
+**`/planes` 404, mas `/pt/planos` funciona**
+Falta a rota em `PASTA` ou em `SLUGS` (§18). O slug é traduzido, a pasta é
+uma só, e `pastaDoCaminho()` faz a ponte — rota nova entra nos dois mapas.
+
+**O site abre em português para quem nunca escolheu**
+O cookie `syntax_locale` ficou de visitas anteriores. Limpe-o: primeira visita
+sem cookie é sempre espanhol (§18). Não é bug — é a memória da escolha.
+
+**Falta tradução e nada quebra**
+Não deveria: a trava de paridade em `content/index.ts` transforma chave
+faltando em erro de `typecheck`. Se passou, alguém alargou o tipo — o
+`Espelho` só pode alargar TEXTO, nunca a forma.
+
+**O seletor de planos (Tabs) dá erro de hidratação**
+Sumiu o `id` explícito de algum `Tabs.Tab`/`Tabs.Panel` do `SeletorPlanos`.
+Sem id o React Aria numera a coleção com contador global, que não bate entre
+servidor e cliente numa página estática — a mesma doença do `Table` (abaixo).
+
+**A tabela de planos remonta no navegador / "Cell count must match column count"**
+Alguém trocou a `<table>` nativa do `TabelaPlanos` pelo `Table` do HeroUI. O
+data grid do React Aria não hidrata numa página estática (§3.1). Passar `id`
+em coluna, linha e célula estabiliza as chaves, mas não o resto do ciclo.
+
+**Texto de apoio ilegível no hero**
+`--muted` (#646c7a) sobre o miolo #dbeafe do `.fundo-hero` dá 4,34:1 e reprova
+o AA. Em cima do radial o texto de apoio é `--foreground-base` (6,19:1 no pior
+ponto). Vale para a trilha do `Breadcrumbs` também — por isso ela fica numa
+faixa branca em /planos, e não dentro do gradiente.
+
+**O link /planos#pro para com o card debaixo do header**
+O `scroll-margin-top` do `globals.css` mira `section[id]`, e a âncora do plano
+está no `Card`. O `CartaoPlano` carrega `scroll-mt-23 sm:scroll-mt-28` para
+isso — não remova ao mexer nas classes do card.
+
+**A lista de recursos do Básico sai com o dobro do espaçamento do Premium**
+Sumiu o `content-start` do `Card.Content` ou do `<ul>`. Com cards de mesma
+altura e listas de 6 a 12 itens, um grid que sobra altura distribui a folga
+entre as linhas em vez de deixá-la no fim.
+
+**O nome do produto é lido como "syntaxerp"**
+O lockup desenha "SYNT" + "A" + "X" + pílula em pedaços. O nome de verdade sai
+do `sr-only` do `MarcaProduto`, e o desenho é `aria-hidden` (§11).
+
 **`next/image` com imagem externa quebrando**
 Domínio precisa estar em `images.remotePatterns` no `next.config`.
 
@@ -611,29 +798,52 @@ Quase sempre: falta de `description`, falta de `canonical`, ou mais de um
 2. Se tiver, use direto; não crie wrapper sem motivo
 3. Se precisar de wrapper, coloque em `components/ui/` e documente por quê
 
+**Novo plano, ou preço que mudou:**
+1. Editar `src/content/pt-BR/planos.ts` — é a única cópia dos valores
+2. Se for recurso novo, incluí-lo também no grupo certo de `gruposComparacao`,
+   senão ele existe no card e some da tabela
+3. Card, tabela, âncora do hero, card social e JSON-LD se atualizam sozinhos
+4. Conferir se o `⚠️ conferir` do topo do arquivo ainda vale
+
 **Nova dependência:**
 Justifique antes de instalar. Se HeroUI ou Tailwind resolvem, não instale.
 
 ---
 
-## §18 — Internacionalização (pt-BR + es-PY)
+## §18 — Internacionalização (es-PY padrão + pt-BR)
 
-O site atende Brasil **e Paraguai**. Duas versões completas: português do
-Brasil e espanhol paraguaio. Não é tradução automática de plugin — é conteúdo
-versionado.
+**O ESPANHOL É O PADRÃO.** O produto que o site vende (PDV em guaranis,
+integrado ao SIFEN) e os 31 clientes do carrossel são paraguaios. Duas versões
+completas: espanhol paraguaio e português do Brasil. Não é tradução automática
+de plugin — é conteúdo versionado.
+
+> Até a fatia 4 o pt-BR era o padrão na raiz e o domínio era o
+> `syntaxsistemas.com.br`. **Conhecimento disso está errado aqui.** A fatia 5
+> inverteu tudo: se encontrar código ou doc dizendo que português é o padrão,
+> está desatualizado.
 
 ### Roteamento
 
-- Locales: `pt-BR` (padrão) e `es-PY`.
+- Locales: `es-PY` (padrão) e `pt-BR`.
+- Domínio: `syntaxsistemas.com.py`, na constante `SITE_URL`. Este site
+  **substitui** o `.com.br` — que precisa de 301 rota a rota para cá, ou o SEO
+  acumulado desde 2006 se perde (configuração de DNS, fora deste repositório).
 - Estrutura: `src/app/[locale]/...`
-- `pt-BR` **sem prefixo** na URL (`/solucoes/...`), `es-PY` **com** (`/es/soluciones/...`).
-  Isso preserva o SEO já existente do domínio em português.
-- `src/proxy.ts` (antigo `middleware.ts` — renomeado no Next 16) detecta o
-  locale por `Accept-Language` e faz **rewrite**, mantendo a URL limpa.
-  **A escolha manual do usuário tem prioridade** e é persistida em cookie.
-  Nunca force o idioma por geolocalização sem deixar trocar.
-- Locale sem revisão humana não vai ao ar: `LOCALES_PUBLICADOS` em
-  `src/lib/routes.ts` controla isso, e a rota responde 404 até ser liberada.
+- `es-PY` **sem prefixo** (`/planes`), `pt-BR` **com** (`/pt/planos`).
+- **Primeira visita é sempre em espanhol**, venha de onde vier. A detecção por
+  `Accept-Language` foi REMOVIDA do `src/proxy.ts` na fatia 5: navegador em
+  português não é motivo para desviar quem chega num site paraguaio.
+- A escolha manual (clique na bandeira) grava o cookie `syntax_locale` e passa
+  a valer — inclusive na raiz, que aí redireciona para `/pt`. É o único jeito
+  de sair do espanhol.
+- **O slug público é traduzido, mas a pasta do App Router é uma só.** O mapa
+  `PASTA` + `pastaDoCaminho()` em `routes.ts` fazem a ponte: `/planes` e
+  `/pt/planos` caem os dois em `app/[locale]/planos`. Caminho que não é rota
+  NAQUELE idioma vira 404 — sem isso `/planos` serviria a home espanhola numa
+  segunda URL, que o Google lê como conteúdo duplicado.
+- `LOCALES_PUBLICADOS` ainda existe para um locale futuro, mas **não pode
+  excluir o `LOCALE_PADRAO`**: a página gateada responde 404, e o padrão é a
+  raiz do site.
 
 ### Slugs traduzidos (SEO)
 
@@ -670,8 +880,19 @@ que apontar de volta. Sem isso o Google ignora as duas.
 
 ### Conteúdo
 
-- Textos em `src/content/pt-BR/` e `src/content/es-PY/`, mesma estrutura de
-  chaves nos dois. Chave que existe num e não no outro é erro de build.
+- Textos em `src/content/es-PY/` e `src/content/pt-BR/`, mesma estrutura de
+  chaves nos dois.
+- **Nenhum componente importa `content/<locale>/` direto.** Quem renderiza
+  chama `conteudoDe(locale)` de `src/content/index.ts`; as seções recebem
+  `locale` por prop, vindo do `params` da página.
+- **Client component NÃO importa `@/content`** — o barril traz os dois idiomas
+  e tudo que um client component importa vai para o bundle do navegador. Eles
+  recebem a copy por prop (ver `Cabecalho.tsx`, que é a ponte servidor →
+  `Header`). Import de TIPO é permitido: some no build.
+- A trava de paridade em `content/index.ts` obriga os dois pacotes a terem as
+  mesmas chaves: **falta uma tradução e o `typecheck` falha**, apontando o
+  locale e a chave. Tipos de estrutura compartilhados ficam em
+  `content/tipos.ts`.
 - **Nunca traduza automaticamente e publique.** Conteúdo traduzido por máquina
   e não revisado ranqueia mal e queima credibilidade em página comercial.
   Se não houver revisão humana para uma seção, marque como pendente e não
@@ -710,6 +931,17 @@ projeto que ninguém quer fazer.
 
 ### Troca de idioma na UI
 
-Seletor no menu de topo (§3.1), à direita, usando `Dropdown` do HeroUI. Mostrar idioma,
-não bandeira — bandeira representa país, não língua, e Paraguai/Espanha/
-Argentina compartilham o mesmo idioma. Rótulos: `PT` e `ES`.
+`components/ui/SeletorIdioma.tsx`, no menu de topo, à direita: **as duas
+bandeiras lado a lado**, a ativa em cor cheia com anel e a outra esmaecida. Um
+clique troca — sem menu.
+
+> Isto REVOGA a regra anterior ("mostrar idioma, não bandeira, porque bandeira
+> representa país e não língua"). A regra valia para escolher entre variantes
+> do mesmo espanhol; aqui são dois PAÍSES com produto, preço e canal de
+> atendimento diferentes, e a bandeira informa mais que "ES/PT". Decisão de
+> 28/08/2026.
+
+As bandeiras são SVG inline (§3 proíbe emoji em produção), desenhadas
+simplificadas: em 20×14 o brasão do Paraguai e a esfera celeste do Brasil
+viram borrão. O clique grava o cookie antes de navegar; sem JavaScript o link
+continua funcionando, só não memoriza.

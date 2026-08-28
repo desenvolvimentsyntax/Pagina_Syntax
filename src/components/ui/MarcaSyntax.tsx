@@ -1,7 +1,5 @@
 import Image from "next/image";
 
-import { ui } from "@/content/pt-BR/ui";
-
 /**
  * Marca da Syntax — o PNG oficial, agora que o site é claro.
  *
@@ -22,6 +20,8 @@ import { ui } from "@/content/pt-BR/ui";
 interface MarcaSyntaxProps {
   /** `header` (72px de altura) ou `rodape` (56px). */
   tamanho?: "header" | "rodape";
+  /** Texto alternativo, do content do locale (§18: nada solto no JSX). */
+  alt: string;
 }
 
 const TAMANHOS = {
@@ -33,13 +33,13 @@ const TAMANHOS = {
   rodape: { largura: 87, altura: 56, classe: "block" },
 } as const;
 
-export function MarcaSyntax({ tamanho = "header" }: MarcaSyntaxProps) {
+export function MarcaSyntax({ tamanho = "header", alt }: MarcaSyntaxProps) {
   const { largura, altura, classe } = TAMANHOS[tamanho];
 
   return (
     <Image
       src="/images/syntax-logo.png"
-      alt={ui.marca.alt}
+      alt={alt}
       width={largura}
       height={altura}
       priority={tamanho === "header"}

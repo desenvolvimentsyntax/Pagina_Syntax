@@ -1,155 +1,204 @@
 /**
- * Copy da home — pt-BR. Textos finais do handoff de design
- * (`design_handoff_landing_syntax`), fidelidade alta: nada aqui é reescrita
- * livre. §6: texto longo não mora no JSX.
+ * Copy da home — pt-BR. §6: texto longo não mora no JSX.
  *
- * ⚠️ Ressalva de copy registrada: o §13 do CLAUDE.md pede longevidade sempre
- * como "desde 2006", nunca "há X anos" — que desatualiza sozinho. O design
- * entrega "Há quase 20 anos" / "20 anos" / "Quase 20 anos" como copy final e
- * foi mantido por decisão de fidelidade. Revisar com a Syntax em 2026/2027,
- * quando "quase 20" vira falso.
+ * A home é uma landing de funil, não uma vitrine institucional: a primeira
+ * dobra mostra produto e preço, e cada dobra seguinte responde à objeção que o
+ * visitante teria naquele ponto (funciona mesmo? / dá trabalho começar? / e se
+ * meu caso for outro? / posso confiar? / mas e a minha dúvida específica?).
+ * Mexer na ordem das seções sem olhar essa sequência quebra o funil.
+ *
+ * Números e recursos dos planos NÃO ficam aqui — moram em `planos.ts`, com a
+ * fonte anotada. Aqui só entra copy.
+ *
+ * ⚠️ Ressalva de copy registrada: o §13 pede longevidade sempre como
+ * "desde 2006", nunca "há X anos". O handoff de design entrega "Há quase 20
+ * anos" / "20 anos" / "Quase 20 anos" em três pontos e foi mantido por
+ * fidelidade. Revisar com a Syntax em 2026/2027, quando "quase 20" vira falso.
  */
 
 export const meta = {
-  title: "Syntax Sistemas — Sistemas web e automação para empresas",
+  title: "PDV e gestão a partir de Gs. 200.000/mês | Syntax Sistemas",
   description:
-    "Sistemas web, ERP e PDV para varejo, distribuição, indústria e food service. Software house em Sorocaba e Pedro Juan Caballero, desde 2006.",
-  ogAlt: "Syntax Sistemas — sistemas web e automação para empresas",
+    "Ponto de venda integrado ao SIFEN, com estoque e financeiro. Três planos com preço publicado, demonstração aberta e atendimento de quem desenvolve.",
+  ogAlt: "Syntax Sistemas — planos de PDV e gestão com preço publicado",
 } as const;
 
 /* -------------------------------------------------------------------------- */
-/* 01 · Hero                                                                   */
+/* 01 · Hero — produto e preço na primeira dobra                               */
 /* -------------------------------------------------------------------------- */
 
 export const hero = {
-  eyebrow: "Software house · desde 2006 · BR & PY",
-  titulo:
-    "Sistemas web e automação para sua empresa vender, faturar e controlar.",
+  /* Curto de propósito: em 390px o mono de 13px com tracking 0.1em quebra em
+     duas linhas acima de ~30 caracteres, e cada linha aqui empurra o preço
+     para fora da primeira tela. "Desde 2006" desceu para as provas. */
+  eyebrow: "PDV + faturamento eletrônico",
+  titulo: "O sistema que fatura, controla o estoque e fecha o caixa da sua empresa.",
   subtitulo:
-    "Do pedido à nota fiscal: soluções para varejo, distribuição, indústria e food service, sem planilha e sem retrabalho.",
-  ctaPrimario: "Solicitar demonstração",
-  ctaSecundario: "Conhecer soluções",
-  ctaSecundarioHref: "#solucoes",
-  /** Mensagem que abre no WhatsApp pelo CTA principal do hero. */
-  whatsappTexto: "Olá! Vim pelo site da Syntax e quero uma demonstração.",
-  painel: {
-    legenda: "Operação em tempo real · dados ilustrativos",
-    aria:
-      "Painel ilustrativo da operação: 148 pedidos no dia (alta de 12%), R$ 86,4 mil de faturamento (alta de 8%) e o volume de pedidos das últimas sete semanas em barras crescentes.",
-    tiles: [
-      { rotulo: "Pedidos do dia", valor: "148", variacao: "12%" },
-      { rotulo: "Faturamento", valor: "R$ 86,4 mil", variacao: "8%" },
-    ],
-    /** Altura relativa das barras, em %. A última é a destacada. */
-    barras: [40, 55, 48, 70, 62, 85, 100],
+    "Preço publicado, sem proposta por telefone. Compare os três planos, entre na demonstração e fale com a gente quando fizer sentido.",
+  /* Âncora de preço acima dos botões. No celular os cards de plano ficam
+     abaixo da primeira tela, e sem esta linha a dobra fecharia sem nenhum
+     valor à vista — que é justamente o que a página veio resolver. */
+  ancora: { prefixo: "Planos a partir de", sufixo: "por mês" },
+  ctaPrimario: "Ver planos e preços",
+  ctaSecundario: "Entrar na demonstração",
+  /** Três provas curtas ao lado dos CTAs. Cada uma se verifica na própria página. */
+  provas: ["Preço na tela", "Demonstração aberta", "Desde 2006, BR e PY"],
+  /** h2 da faixa de planos: o card renderiza h3 e não pode pular nível (§8). */
+  planosTitulo: "Planos publicados",
+  planosNota: "Ponto de venda · Paraguai",
+} as const;
+
+/* -------------------------------------------------------------------------- */
+/* 02 · Comparação — a objeção "qual deles é o meu?"                           */
+/* -------------------------------------------------------------------------- */
+
+export const comparacao = {
+  overline: "Compare",
+  titulo: "O plano certo para o tamanho da sua operação",
+  intro:
+    "Os três emitem fatura. O Profissional soma compras e estoque; o Premium leva tudo do Profissional e fecha o ciclo com o financeiro.",
+  /** Rótulo acessível do seletor de planos (Tabs). */
+  seletorAria: "Escolha um plano para ver o que ele inclui",
+  cta: "Abrir a página de planos",
+  ctaApoio: "Guia de escolha, tabela completa e condições de cobrança.",
+  /** Link de dentro do painel do seletor para a tabela recurso a recurso. */
+  linkTabela: "Ver a tabela recurso por recurso",
+  /** Faixa do app que acompanha os três planos. */
+  mobile: {
+    titulo: "Todo plano vem com o Syntax MOBILE",
+    texto:
+      "A mesma operação no celular: você acompanha venda, caixa e estoque de onde estiver, sem instalar nada no computador da loja.",
   },
 } as const;
 
 /* -------------------------------------------------------------------------- */
-/* 02 · Faixa do slogan                                                        */
+/* 03 · Demonstração aberta — a objeção "será que funciona mesmo?"             */
 /* -------------------------------------------------------------------------- */
 
-export const slogan = {
-  inicio: "Soluções que conectam.",
-  destaque: "Tecnologia que transforma.",
+export const demo = {
+  overline: "Demonstração aberta",
+  titulo: "O caixa que roda todos os dias, aberto para você testar",
+  texto:
+    "A demonstração é o sistema de verdade, o mesmo que opera lojas no Paraguai — sem cadastro e sem falar com vendedor.",
+  /** As três ações que a pessoa pode fazer agora — viram chips mono no card. */
+  acoes: ["Abra uma venda", "Feche um caixa", "Emita um documento"],
+  dominio: "pdv-syntax.vercel.app",
+  cta: "Entrar na demonstração ao vivo",
+  href: "https://pdv-syntax.vercel.app/pt",
+  selo: "Aberta agora",
 } as const;
 
 /* -------------------------------------------------------------------------- */
-/* 03 · Soluções                                                               */
+/* 04 · Como funciona — a objeção "dá trabalho começar?"                       */
+/* -------------------------------------------------------------------------- */
+
+export const comoFunciona = {
+  overline: "Como começa",
+  titulo: "Do plano escolhido à primeira fatura",
+  intro: "Quatro passos. Nenhum deles depende de você entender de tecnologia.",
+  passos: [
+    {
+      titulo: "Você escolhe o plano",
+      texto:
+        "Compara os três aqui mesmo, com o preço na tela. Nada de orçamento fechado por telefone.",
+    },
+    {
+      titulo: "A gente instala e configura",
+      texto:
+        "A instalação é cobrada uma vez e entrega a sua empresa configurada, com os cadastros no lugar.",
+    },
+    {
+      titulo: "Sua equipe começa a vender",
+      texto:
+        "O balcão vende pelo teclado e não depende da conexão: a venda é registrada e sincroniza depois.",
+    },
+    {
+      titulo: "O documento sai sozinho",
+      texto:
+        "O faturamento eletrônico tem ritmo próprio e não segura a fila do caixa.",
+    },
+  ],
+} as const;
+
+/* -------------------------------------------------------------------------- */
+/* 05 · Segmentos — o laço "esse sou eu"                                       */
+/* -------------------------------------------------------------------------- */
+
+export const segmentosSecao = {
+  overline: "Segmentos",
+  titulo: "Qual o seu segmento?",
+  texto:
+    "Do balcão da padaria ao caminhão da distribuidora: desde 2006 o sistema se adapta ao seu ramo — e não o contrário.",
+  /**
+   * Nichos que giram no rotor. Todos derivam da base declarada da Syntax
+   * (restaurantes, distribuidoras, indústrias, comércio, clínicas, food
+   * service, eventos — §1/§11): nada de segmento não confirmado aqui.
+   */
+  palavras: [
+    "Restaurantes",
+    "Distribuidoras",
+    "Padarias",
+    "Mercados",
+    "Indústrias",
+    "Lojas de roupa",
+    "Clínicas",
+    "Eventos",
+  ],
+  /** O rotor é decorativo (aria-hidden); esta é a frase do leitor de tela. */
+  listaAria:
+    "Atendemos restaurantes, distribuidoras, padarias, mercados, indústrias, lojas de roupa, clínicas e eventos.",
+} as const;
+
+/* -------------------------------------------------------------------------- */
+/* 06 · Syntax ERP — o carro-chefe, em dobra própria                           */
 /* -------------------------------------------------------------------------- */
 
 /** Chave do ícone Lucide — o componente resolve; content não importa React. */
-export type IconeSolucao = "navegador" | "sobMedida" | "caixa" | "integracao";
+export type IconeCobertura = "pedidos" | "estoque" | "financeiro" | "fiscal";
 
-export interface CartaoSolucao {
-  icone: IconeSolucao;
-  titulo: string;
-  descricao: string;
-  /** Exemplo concreto, no chip azul do design. */
-  naPratica: string;
-}
+export const erpSecao = {
+  overline: "Syntax ERP",
+  titulo: "O sistema que move indústrias e distribuidoras desde 2006",
+  texto:
+    "Enquanto você lê isso, tem pedido sendo faturado e caminhão saindo para entrega com o Syntax rodando por trás. Do pedido que o vendedor lança na rua à nota fiscal que fecha a venda.",
 
-export const solucoes = {
-  overline: "Soluções",
-  titulo: "Uma solução para cada parte da sua operação",
-  intro:
-    "Sem termos técnicos: cada card mostra o que o sistema faz e um exemplo real de como ajuda no dia a dia.",
-  cartoes: [
-    {
-      icone: "navegador",
-      titulo: "Sistema que abre no navegador",
-      descricao:
-        "Funciona como um site: você entra com seu login e pronto. Nada para instalar, nada para atualizar.",
-      naPratica: "Na prática: veja as vendas da loja pelo celular, de casa.",
-    },
-    {
-      icone: "sobMedida",
-      titulo: "Sistema feito sob medida",
-      descricao:
-        "Quando o jeito de trabalhar é só seu, a gente adapta o sistema à sua rotina, e não o contrário.",
-      naPratica: "Na prática: a tela mostra só o que a sua equipe usa.",
-    },
-    {
-      icone: "caixa",
-      titulo: "Caixa para restaurantes",
-      descricao:
-        "Mesas, comandas e delivery na tela do caixa. A conta fecha em segundos e a nota fiscal sai na hora.",
-      naPratica: "Na prática: o garçom lança o pedido e a cozinha já recebe.",
-    },
-    {
-      icone: "integracao",
-      titulo: "Sistemas conversando entre si",
-      descricao:
-        "Nota fiscal, pagamento e loja virtual trocam informação sozinhos. Ninguém digita a mesma coisa duas vezes.",
-      naPratica: "Na prática: a venda do site já entra no estoque e no financeiro.",
-    },
-  ] satisfies readonly CartaoSolucao[],
-} as const;
+  segmentos: ["Indústria", "Distribuição", "Comércio", "Food service"],
 
-/* -------------------------------------------------------------------------- */
-/* 04 · Produtos                                                               */
-/* -------------------------------------------------------------------------- */
+  coberturaTitulo: "Uma operação inteira, num sistema só",
+  cobertura: [
+    { icone: "pedidos", rotulo: "Pedidos" },
+    { icone: "estoque", rotulo: "Estoque" },
+    { icone: "financeiro", rotulo: "Financeiro" },
+    { icone: "fiscal", rotulo: "Notas fiscais" },
+  ] satisfies readonly { icone: IconeCobertura; rotulo: string }[],
 
-export const produtos = {
-  overline: "Produtos",
-  titulo: "Sistemas que movem operações de verdade",
-  intro:
-    "Não pedimos que você acredite: mostramos o sistema rodando. O ERP que move operações há quase 20 anos e a nova geração web com demonstração aberta.",
+  cta: "Pedir apresentação",
+  /**
+   * No lugar de "preço sob consulta": a página inteira vende preço na tela, e
+   * era a única seção que mandava ligar para descobrir. Aqui o compromisso é
+   * o mesmo que a seção de contato já assume — diagnóstico sem compromisso —,
+   * então não é promessa nova.
+   */
+  compromisso: "Diagnóstico gratuito da sua operação, sem compromisso.",
+  whatsappTexto: "Olá! Quero uma apresentação do Syntax ERP.",
 
-  erp: {
-    label: "Linha consolidada · desde 2006",
-    titulo: "Syntax ERP",
-    descricao:
-      "O sistema que sustenta a operação de indústrias, distribuidoras e comércios há quase 20 anos. Enquanto você lê isso, tem pedido sendo faturado e caminhão saindo para entrega com o Syntax rodando por trás.",
-    bullets: [
-      "Pedidos, estoque, financeiro e notas fiscais em um lugar só",
-      "Multi loja, com faturamento e estoque consolidados",
-      "Força de vendas integrada: o pedido da rua cai direto no faturamento",
-    ],
-    nota: "Em produção todos os dias, no Brasil e no Paraguai",
-    cta: "Pedir apresentação",
-    whatsappTexto: "Olá! Quero uma apresentação do Syntax ERP.",
-  },
-
-  pdv: {
-    label: "Nova geração web",
-    selo: "Demonstração aberta",
-    titulo: "PDV Web · Paraguai",
-    descricao:
-      "Nosso novo caixa que abre direto no navegador, no idioma e nas regras do Paraguai. E você não precisa acreditar na nossa palavra: a demonstração é aberta. Entre agora e use como se fosse da sua loja.",
-    bullets: [
-      "Sem instalação e sem servidor na loja",
-      "Venda, cobrança e documentos nas regras do país",
-      "Português e espanhol, dos dois lados da fronteira",
-    ],
-    dominio: "pdv-syntax.vercel.app",
-    cta: "Acessar a demonstração ao vivo",
-    href: "https://pdv-syntax.vercel.app/pt",
+  /**
+   * Sob medida e sites vinham em dois cards que repetiam o mesmo argumento
+   * ("não cabe em software de prateleira") e competiam com o ERP. Viraram um
+   * card só, deliberadamente mais leve: é rodapé da dobra, não protagonista.
+   */
+  projetos: {
+    titulo: "Projetos sob medida",
+    texto:
+      "O sistema que se adapta à sua rotina, ou o site que apresenta a sua empresa no Google. Os dois orçados por projeto, pela mesma equipe que atende depois.",
+    cta: "Falar sobre o meu caso",
+    whatsappTexto:
+      "Olá! Quero conversar sobre um projeto sob medida para a minha empresa.",
   },
 } as const;
 
 /* -------------------------------------------------------------------------- */
-/* 05 · Sobre                                                                  */
+/* 07 · Sobre — a objeção "posso confiar nessa empresa?"                       */
 /* -------------------------------------------------------------------------- */
 
 export const sobre = {
@@ -198,7 +247,51 @@ export const sobre = {
 } as const;
 
 /* -------------------------------------------------------------------------- */
-/* 06 · Contato                                                                */
+/* 08 · Dúvidas — as objeções que travam a assinatura                          */
+/* -------------------------------------------------------------------------- */
+
+export const duvidas = {
+  overline: "Antes de decidir",
+  titulo: "As perguntas que todo mundo faz",
+  intro:
+    "Se a sua não estiver aqui, o WhatsApp está logo abaixo — quem responde é quem desenvolve.",
+  cta: "Perguntar no WhatsApp",
+  itens: [
+    {
+      pergunta: "Preciso instalar alguma coisa no computador da loja?",
+      resposta:
+        "Não. O sistema abre no navegador, como um site: você entra com seu login e pronto. Não há servidor para manter na loja nem atualização para rodar na mão.",
+    },
+    {
+      pergunta: "E se a internet cair no meio do movimento?",
+      resposta:
+        "O balcão continua vendendo. A venda é registrada do mesmo jeito e sincroniza quando a conexão volta — o caixa não para por causa da rede.",
+    },
+    {
+      pergunta: "O preço muda se eu tiver mais de um caixa?",
+      resposta:
+        "A mensalidade do plano cobre o primeiro ponto de venda. Cada ponto adicional custa Gs. 100.000 por mês, à parte. A instalação é cobrada uma vez só.",
+    },
+    {
+      pergunta: "Qual a diferença real entre o Profissional e o Premium?",
+      resposta:
+        "É uma escada. O Profissional soma ao Básico o controle da mercadoria: compras, estoque, inventário e relatórios gerenciais. O Premium inclui tudo do Profissional e fecha o ciclo com o financeiro completo: contas a pagar e a receber, fluxo de caixa, lucratividade e despesas por centro de custo. Se a sua dor hoje é mercadoria, o Profissional resolve; se você também precisa enxergar o dinheiro, o Premium é o plano inteiro.",
+    },
+    {
+      pergunta: "Os valores estão em guarani. Atende empresa no Brasil?",
+      resposta:
+        "Atende. Os planos com preço publicado são do ponto de venda para o Paraguai. No Brasil a linha é o Syntax ERP, orçado por operação: a Syntax tem matriz em Sorocaba SP desde 2006 e sede própria em Pedro Juan Caballero.",
+    },
+    {
+      pergunta: "Consigo ver o sistema antes de contratar?",
+      resposta:
+        "Sim, e sem falar com vendedor. A demonstração é aberta e roda o sistema de verdade: você abre uma venda, fecha o caixa e emite um documento como se a loja fosse sua.",
+    },
+  ],
+} as const;
+
+/* -------------------------------------------------------------------------- */
+/* 09 · Contato                                                                */
 /* -------------------------------------------------------------------------- */
 
 export const contatoSecao = {
@@ -209,7 +302,7 @@ export const contatoSecao = {
   provas: [
     "Quem atende é quem desenvolve o sistema",
     "Quase 20 anos de operações rodando, no Brasil e no Paraguai",
-    "Você já viu o sistema rodando na demonstração aberta",
+    "Você já viu o preço e já pode ver o sistema rodando",
   ],
 
   form: {

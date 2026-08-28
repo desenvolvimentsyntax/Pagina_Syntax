@@ -17,9 +17,9 @@ import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import { CtaLink } from "@/components/ui/CtaLink";
-import { contatoSecao } from "@/content/pt-BR/home";
-import { contato } from "@/content/pt-BR/site";
-import { contatoSchema, type ContatoForm } from "@/lib/schemas/contato";
+import type { Conteudo } from "@/content";
+import type { MensagensValidacao } from "@/content/tipos";
+import { criarContatoSchema, type ContatoForm } from "@/lib/schemas/contato";
 
 /**
  * Formulário de captação (§12): React Hook Form + Zod, campos HeroUI via
@@ -31,15 +31,31 @@ import { contatoSchema, type ContatoForm } from "@/lib/schemas/contato";
  * mensagem, e o schema só valida o formato do que foi preenchido.
  */
 
-const { form } = contatoSecao;
+/**
+ * Client component: recebe a copy por prop em vez de importar o content, que
+ * traria os dois idiomas para o bundle do navegador. O `import type` acima é
+ * seguro — tipo some no build.
+ */
+type Formulario = Conteudo["home"]["contatoSecao"]["form"];
+
+interface FormContatoProps {
+  form: Formulario;
+  validacao: MensagensValidacao;
+  whatsappHref: string;
+}
 
 type Etapa = "formulario" | "enviada";
 
-export function FormContato() {
+export function FormContato({
+  form,
+  validacao,
+  whatsappHref,
+}: FormContatoProps) {
+  const contatoSchema = criarContatoSchema(validacao);
   const [etapa, setEtapa] = useState<Etapa>("formulario");
   const [popupBloqueado, setPopupBloqueado] = useState(false);
   const [linkWhatsApp, setLinkWhatsApp] = useState<string>(
-    contato.whatsappHref,
+    whatsappHref,
   );
   const painelRef = useRef<HTMLDivElement>(null);
 
@@ -76,7 +92,7 @@ export function FormContato() {
     const texto = linhas.length
       ? `${abertura}\n\n${linhas.join("\n")}`
       : abertura;
-    const url = `${contato.whatsappHref}?text=${encodeURIComponent(texto)}`;
+    const url = `${whatsappHref}?text=${encodeURIComponent(texto)}`;
     setLinkWhatsApp(url);
 
     // Invariante: o window.open vem ANTES de qualquer await — o bloqueador de

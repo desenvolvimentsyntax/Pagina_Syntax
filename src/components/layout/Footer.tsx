@@ -1,13 +1,8 @@
 import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 
 import { MarcaSyntax } from "@/components/ui/MarcaSyntax";
-import {
-  contato,
-  empresa,
-  navRodape,
-  navSolucoes,
-} from "@/content/pt-BR/site";
-import { ui } from "@/content/pt-BR/ui";
+import { conteudoDe } from "@/content";
+import type { Locale } from "@/lib/routes";
 
 /**
  * Rodapé em quatro colunas: marca, navegação da home, soluções (âncoras hoje;
@@ -36,7 +31,10 @@ const CABECALHO_COLUNA =
 
 const ICONE = "size-4 shrink-0 text-azul-claro";
 
-export function Footer() {
+export function Footer({ locale }: { locale: Locale }) {
+  const conteudo = conteudoDe(locale);
+  const { contato, empresa, navRodape, navSolucoes, slogan } = conteudo.site;
+  const { ui } = conteudo.ui;
   const ano = new Date().getFullYear();
 
   return (
@@ -48,10 +46,17 @@ export function Footer() {
                 vez de recolorir o logo, ele ganha um apoio claro do tamanho do
                 conteúdo — mesma lógica do §11 do CLAUDE.md. */}
             <div className="bg-surface inline-flex w-fit rounded-xl px-4 py-3">
-              <MarcaSyntax tamanho="rodape" />
+              <MarcaSyntax tamanho="rodape" alt={ui.marca.alt} />
             </div>
 
-            <p className="text-ondark-muted mt-5 max-w-sm text-sm leading-relaxed">
+            {/* Assinatura de marca — era a faixa própria da home até a fatia
+                3.10, quando a dobra de segmentos ocupou o lugar dela. */}
+            <p className="font-display text-ondark mt-5 text-[15px] leading-snug font-bold">
+              {slogan.inicio}{" "}
+              <span className="text-azul-claro">{slogan.destaque}</span>
+            </p>
+
+            <p className="text-ondark-muted mt-2.5 max-w-sm text-sm leading-relaxed">
               {ui.rodape.descricao}
             </p>
           </div>
