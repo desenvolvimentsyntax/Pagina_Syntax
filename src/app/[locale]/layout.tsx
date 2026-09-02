@@ -6,6 +6,7 @@ import {
   HTML_LANG,
   LOCALE_PADRAO,
   LOCALES,
+  SITE_URL,
   ehLocale,
   type Locale,
 } from "@/lib/routes";
@@ -36,8 +37,32 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
+/*
+ * `metadataBase` resolve as URLs relativas que o Next gera sozinho — hoje o
+ * og:image e o twitter:image das rotas de imagem em [locale]. Ele PRECISA ser
+ * o SITE_URL: ficou apontando para o syntaxsistemas.com.br depois da fatia 5,
+ * e o domínio antigo devolve 403 com certificado revogado, então todo link
+ * compartilhado do site saía sem imagem de preview. Canonical e hreflang não
+ * passam por aqui (vêm absolutos de `urlDe`), o que fez o bug sobreviver:
+ * o head parecia certo e só as imagens apontavam para o domínio morto.
+ */
 export const metadata: Metadata = {
-  metadataBase: new URL("https://syntaxsistemas.com.br"),
+  metadataBase: new URL(SITE_URL),
+  /*
+   * Verificação do Search Console pela tag HTML — o caminho que NÃO depende
+   * de DNS. O método por TXT cria propriedade de DOMÍNIO (cobre apex, www e
+   * os dois protocolos de uma vez) e é o preferido; este aqui cria só a
+   * propriedade de prefixo `https://www.syntaxsistemas.com.py/`, que já basta
+   * para submeter o sitemap e pedir indexação.
+   *
+   * ⚠️ o Google emite um token DIFERENTE por método. O valor abaixo é o que
+   * veio do método "Provedor do nome de domínio". Se a verificação por tag
+   * falhar, copie o token da aba "Tag HTML" do Search Console e troque aqui —
+   * é esta linha e mais nada.
+   */
+  verification: {
+    google: "lI1DXjqwvVDkKVElXtt-HTJbHGv2ZluXtcxFLoOFKhc",
+  },
 };
 
 export const viewport: Viewport = {
